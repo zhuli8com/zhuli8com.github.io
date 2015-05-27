@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-05-27T09:44:24.000Z</updated>
+  <updated>2015-05-27T09:46:05.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -19,11 +19,11 @@
     <link href="http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-%E7%AE%80%E4%BB%8B/"/>
     <id>http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-简介/</id>
     <published>2015-05-27T09:26:50.000Z</published>
-    <updated>2015-05-27T09:44:24.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="一、简介">一、简介</h1><p>The Internet Communications Engine (Ice) is a modern object-oriented toolkit that enables you to build distributed applications with minimal effort. Ice allows you to focus your efforts on your application logic, and it takes care of all interactions with low-level network programming interfaces. With Ice, there is no need to worry about details such as opening network connections, serializing and deserializing data for network transmission, or retrying failed connection attempts (to name but a few of dozens of such low-level details).</p>
-<h1 id="二、开发环境搭建">二、开发环境搭建</h1><p>ICE安装文件:<a href="http://www.zeroc.com/download.html" target="_blank" rel="external">http://www.zeroc.com/download.html</a><br>ICE编译插件：<a href="http://www.zeroc.com/vsaddin.html" target="_blank" rel="external">http://www.zeroc.com/vsaddin.html</a></p>
-<h1 id="三、相关文档">三、相关文档</h1><p>ICE官网：<a href="http://www.zeroc.com/ice.html" target="_blank" rel="external">http://www.zeroc.com/ice.html</a><br>官网文档：<a href="http://doc.zeroc.com/display/Doc/Home" target="_blank" rel="external">http://doc.zeroc.com/display/Doc/Home</a><br>性能评测：<a href="http://zeroc.com/articles/IcePerformanceWhitePaper.pdf" target="_blank" rel="external">http://zeroc.com/articles/IcePerformanceWhitePaper.pdf</a></p>
-<h1 id="四、ICE通讯框架基本原理">四、ICE通讯框架基本原理</h1><p>ICE的思路是，用一个中间语言，建立数据结构规范和接口规范，然后再用一个IDE编译插件，将中间语言数据结构规范和接口规范编译为当前的语言，譬如OC的.h/.m文件，接下来，你在客户端和服务端实现中间语言定义号的接口，再做一些其它处理，就可以实现一个分布式程序了。这个思路确实很Nice，值得我们借鉴。</p>
+    <updated>2015-05-27T09:46:05.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="简介">简介</h1><p>The Internet Communications Engine (Ice) is a modern object-oriented toolkit that enables you to build distributed applications with minimal effort. Ice allows you to focus your efforts on your application logic, and it takes care of all interactions with low-level network programming interfaces. With Ice, there is no need to worry about details such as opening network connections, serializing and deserializing data for network transmission, or retrying failed connection attempts (to name but a few of dozens of such low-level details).</p>
+<h1 id="开发环境搭建">开发环境搭建</h1><p>ICE安装文件:<a href="http://www.zeroc.com/download.html" target="_blank" rel="external">http://www.zeroc.com/download.html</a><br>ICE编译插件：<a href="http://www.zeroc.com/vsaddin.html" target="_blank" rel="external">http://www.zeroc.com/vsaddin.html</a></p>
+<h1 id="相关文档">相关文档</h1><p>ICE官网：<a href="http://www.zeroc.com/ice.html" target="_blank" rel="external">http://www.zeroc.com/ice.html</a><br>官网文档：<a href="http://doc.zeroc.com/display/Doc/Home" target="_blank" rel="external">http://doc.zeroc.com/display/Doc/Home</a><br>性能评测：<a href="http://zeroc.com/articles/IcePerformanceWhitePaper.pdf" target="_blank" rel="external">http://zeroc.com/articles/IcePerformanceWhitePaper.pdf</a></p>
+<h1 id="ICE通讯框架基本原理">ICE通讯框架基本原理</h1><p>ICE的思路是，用一个中间语言，建立数据结构规范和接口规范，然后再用一个IDE编译插件，将中间语言数据结构规范和接口规范编译为当前的语言，譬如OC的.h/.m文件，接下来，你在客户端和服务端实现中间语言定义号的接口，再做一些其它处理，就可以实现一个分布式程序了。这个思路确实很Nice，值得我们借鉴。</p>
 ]]></content>
     <summary type="html">
     <![CDATA[IM相关学习]]>

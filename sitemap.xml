@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.zhuli8.com/404.html</loc>
+    <lastmod>2015-05-29T22:57:03.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-%E7%AE%80%E4%BB%8B/</loc>
     <lastmod>2015-05-28T02:12:12.000Z</lastmod>
   </url>
@@ -34,11 +39,6 @@
   <url>
     <loc>http://www.zhuli8.com/2015/05/22/hello-world/</loc>
     <lastmod>2015-05-22T10:27:15.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.zhuli8.com/404.html</loc>
-    <lastmod>2015-05-22T09:33:10.000Z</lastmod>
   </url>
   
 </urlset>

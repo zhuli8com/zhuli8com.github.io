@@ -62,9 +62,9 @@
 					
 					<li>
  					
-						<form class="search">
-							<label>Search</label>
-						<input type="text" id="ts-search-input" name="q" size="30" placeholder="搜索"><br>
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-inpu" maxlength="20" placeholder="Search" />
 						</form>
 					
 					</li>
@@ -74,25 +74,38 @@
       </header>
       <div id="container">
         
-<div  id="main" class="page">
-  <div id='cse' style='width:100%;text-align:center'>正在加载搜索结果，请稍等。</div>
-</div>
-<script>
-var option = {
-  engineKey: 'c94afece9c471ee0ef19'
-};
-(function(w,d,t,u,n,s,e){
-  s = d.createElement(t);
-  s.src = u;
-  s.async = 1;
-  w[n] = function(r){
-    w[n].opts = r;
-  };
-  e = d.getElementsByTagName(t)[0];
-  e.parentNode.insertBefore(s, e);
-})(window,document,'script','//tinysou-cdn.b0.upaiyun.com/ts.js','_ts');
-_ts(option);
-</script>
+    <div  id="container" class="page">
+      <div id="st-results-container" style="width:70%; margin:1.5em auto">正在加载搜索结果，请稍等。</div>
+  <style>
+.st-result-text {
+     background: #fafafa;
+      display: block;
+      border-left: 0.5em solid #ccc;
+      -webkit-transition: border-left 0.45s;
+      -moz-transition: border-left 0.45s;
+      -o-transition: border-left 0.45s;
+      -ms-transition: border-left 0.45s;
+      transition: border-left 0.45s;
+      padding: 0.5em;
+    }
+@media only screen and (min-width: 768px) {
+  .st-result-text {
+    padding: 1em;
+      }
+}
+.st-result-text:hover {
+      border-left: 0.5em solid #ea6753;
+    }
+.st-result-text h3 a{
+      color: #2ca6cb;
+      line-height: 1.5;
+      font-size: 22px;
+    }
+.st-snippet em {
+      font-weight: bold;
+      color: #ea6753;
+    }
+</style>
 
       </div>
       <footer><div id="footer" >
@@ -144,7 +157,7 @@ _ts(option);
   e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
   })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
 
-  _st('install','jPLz2bkonXiayM_zF7cx','2.0.0');
+  _st('install','TqhyGfTT5KJKMHcgZnBF','2.0.0');
 </script>
 
 </div>
@@ -268,23 +281,6 @@ $(document).ready(function(){
 <!-- MathJax End -->
 
 <!-- Tiny_search Begin -->
-
-<script>
-var option = {
-  engineKey: 'c94afece9c471ee0ef19'
-};
-(function(w,d,t,u,n,s,e){
-  s = d.createElement(t);
-  s.src = u;
-  s.async = 1;
-  w[n] = function(r){
-    w[n].opts = r;
-  };
-  e = d.getElementsByTagName(t)[0];
-  e.parentNode.insertBefore(s, e);
-})(window,document,'script','//tinysou-cdn.b0.upaiyun.com/ts.js','_ts');
-_ts(option);
-</script>
 
 <!-- Tiny_search End -->
 

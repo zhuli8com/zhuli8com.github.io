@@ -255,6 +255,15 @@
 <h1 id="开发环境搭建">开发环境搭建</h1><p>ICE安装文件：<a href="https://zeroc.com/icetouch/download.html" target="_blank" rel="external">https://zeroc.com/icetouch/download.html</a><br>ICE编译插件：<a href="https://github.com/zeroc-ice/ice-builder-xcode" target="_blank" rel="external">https://github.com/zeroc-ice/ice-builder-xcode</a></p>
 <h1 id="相关文档">相关文档</h1><p>ICE官网：<a href="http://www.zeroc.com/ice.html" target="_blank" rel="external">http://www.zeroc.com/ice.html</a><br>官网文档：<a href="http://doc.zeroc.com/display/Doc/Home" target="_blank" rel="external">http://doc.zeroc.com/display/Doc/Home</a><br>性能评测：<a href="http://zeroc.com/articles/IcePerformanceWhitePaper.pdf" target="_blank" rel="external">http://zeroc.com/articles/IcePerformanceWhitePaper.pdf</a></p>
 <h1 id="ICE通讯框架基本原理">ICE通讯框架基本原理</h1><p>ICE的思路是，用一个中间语言，建立数据结构规范和接口规范，然后再用一个IDE编译插件，将中间语言数据结构规范和接口规范编译为当前的语言，譬如OC的.h/.m文件，接下来，你在客户端和服务端实现中间语言定义号的接口，再做一些其它处理，就可以实现一个分布式程序了。这个思路确实很Nice，值得我们借鉴。</p>
+<h1 id="通讯方式选择">通讯方式选择</h1><p>P2P（设备直连）</p>
+<p>通过服务器中转</p>
+<h1 id="网络连接方式">网络连接方式</h1><p>基于TCP的长连接</p>
+<p>基于HTTP短连接PULL的方式</p>
+<h1 id="协议选择">协议选择</h1><p>XMPP</p>
+<p>SIP</p>
+<p>MQTT</p>
+<p>私有协议（二进制协议）</p>
+<h1 id="其他">其他</h1><p>p2p视频聊天的过程：音视频数据采集—&gt;编码—&gt;发送—&gt;接收—&gt;解码—&gt;播放</p>
 
         
         

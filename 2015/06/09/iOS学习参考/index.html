@@ -4,23 +4,32 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>The Internet Communications (ice)-简介 | zhuli8’blog</title>
+    <title>iOS学习参考 | zhuli8’blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="朱利">
     
 
     
-    <meta name="description" content="IM相关学习">
+    <meta name="description" content="社区博客CocoaChina
+苹果开发中文站 - 最热的iPhone开发社区，最热的苹果开发社区，最热的iPad开发社区。
+Code4App
+Code4App是一个移动平台的代码库，是iOS开发好帮手。Code4App为移动开发程序员提供大量的开源代码，iOS代码实例搜索，iOS特效示例，iOS代码例子下载。所有的开源代码都经过严格测试，并且配有效果图和演示视频。你可以搜索并下载你需要的任意代码，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="The Internet Communications (ice)-简介">
-<meta property="og:url" content="http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-简介/index.html">
+<meta property="og:title" content="iOS学习参考">
+<meta property="og:url" content="http://www.zhuli8.com/2015/06/09/iOS学习参考/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
-<meta property="og:description" content="IM相关学习">
-<meta property="og:updated_time" content="2015-05-28T02:12:12.000Z">
+<meta property="og:description" content="社区博客CocoaChina
+苹果开发中文站 - 最热的iPhone开发社区，最热的苹果开发社区，最热的iPad开发社区。
+Code4App
+Code4App是一个移动平台的代码库，是iOS开发好帮手。Code4App为移动开发程序员提供大量的开源代码，iOS代码实例搜索，iOS特效示例，iOS代码例子下载。所有的开源代码都经过严格测试，并且配有效果图和演示视频。你可以搜索并下载你需要的任意代码，">
+<meta property="og:updated_time" content="2015-06-09T01:37:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="The Internet Communications (ice)-简介">
-<meta name="twitter:description" content="IM相关学习">
+<meta name="twitter:title" content="iOS学习参考">
+<meta name="twitter:description" content="社区博客CocoaChina
+苹果开发中文站 - 最热的iPhone开发社区，最热的苹果开发社区，最热的iPad开发社区。
+Code4App
+Code4App是一个移动平台的代码库，是iOS开发好帮手。Code4App为移动开发程序员提供大量的开源代码，iOS代码实例搜索，iOS特效示例，iOS代码例子下载。所有的开源代码都经过严格测试，并且配有效果图和演示视频。你可以搜索并下载你需要的任意代码，">
 
     
     <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
@@ -79,14 +88,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/27/The-Internet-Communications-Ice-简介/" title="The Internet Communications (ice)-简介" itemprop="url">The Internet Communications (ice)-简介</a>
+      <a href="/2015/06/09/iOS学习参考/" title="iOS学习参考" itemprop="url">iOS学习参考</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-27T09:26:50.000Z" itemprop="datePublished"> 发表于 2015-05-27</time>
+    <time datetime="2015-06-09T01:10:54.000Z" itemprop="datePublished"> 发表于 2015-06-09</time>
     
   </p>
 </header>
@@ -95,14 +104,37 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#开发环境搭建"><span class="toc-number">2.</span> <span class="toc-text">开发环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#相关文档"><span class="toc-number">3.</span> <span class="toc-text">相关文档</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ICE通讯框架基本原理"><span class="toc-number">4.</span> <span class="toc-text">ICE通讯框架基本原理</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#社区博客"><span class="toc-number">1.</span> <span class="toc-text">社区博客</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#个人博客"><span class="toc-number">2.</span> <span class="toc-text">个人博客</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他推荐"><span class="toc-number">3.</span> <span class="toc-text">其他推荐</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#写在最后"><span class="toc-number">4.</span> <span class="toc-text">写在最后</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="简介">简介</h1><p>The Internet Communications Engine (ice) is a modern object-oriented toolkit that enables you to build distributed applications with minimal effort. Ice allows you to focus your efforts on your application logic, and it takes care of all interactions with low-level network programming interfaces. With Ice, there is no need to worry about details such as opening network connections, serializing and deserializing data for network transmission, or retrying failed connection attempts (to name but a few of dozens of such low-level details).</p>
-<h1 id="开发环境搭建">开发环境搭建</h1><p>ICE安装文件：<a href="https://zeroc.com/icetouch/download.html" target="_blank" rel="external">https://zeroc.com/icetouch/download.html</a><br>ICE编译插件：<a href="https://github.com/zeroc-ice/ice-builder-xcode" target="_blank" rel="external">https://github.com/zeroc-ice/ice-builder-xcode</a></p>
-<h1 id="相关文档">相关文档</h1><p>ICE官网：<a href="http://www.zeroc.com/ice.html" target="_blank" rel="external">http://www.zeroc.com/ice.html</a><br>官网文档：<a href="http://doc.zeroc.com/display/Doc/Home" target="_blank" rel="external">http://doc.zeroc.com/display/Doc/Home</a><br>性能评测：<a href="http://zeroc.com/articles/IcePerformanceWhitePaper.pdf" target="_blank" rel="external">http://zeroc.com/articles/IcePerformanceWhitePaper.pdf</a></p>
-<h1 id="ICE通讯框架基本原理">ICE通讯框架基本原理</h1><p>ICE的思路是，用一个中间语言，建立数据结构规范和接口规范，然后再用一个IDE编译插件，将中间语言数据结构规范和接口规范编译为当前的语言，譬如OC的.h/.m文件，接下来，你在客户端和服务端实现中间语言定义号的接口，再做一些其它处理，就可以实现一个分布式程序了。这个思路确实很Nice，值得我们借鉴。</p>
+		<h1 id="社区博客">社区博客</h1><p><a href="http://www.cocoachina.com/" target="_blank" rel="external">CocoaChina</a></p>
+<p>苹果开发中文站 - 最热的iPhone开发社区，最热的苹果开发社区，最热的iPad开发社区。</p>
+<p><a href="http://www.code4app.com/" target="_blank" rel="external">Code4App</a></p>
+<p>Code4App是一个移动平台的代码库，是iOS开发好帮手。Code4App为移动开发程序员提供大量的开源代码，iOS代码实例搜索，iOS特效示例，iOS代码例子下载。所有的开源代码都经过严格测试，并且配有效果图和演示视频。你可以搜索并下载你需要的任意代码，当然，你也可以浏览这些效果图或者视频，来找找你的UI设计灵感。同时网站内的火花社区供开发者进行求职招聘、技术交流、分享设计创意、展示作品等方面的交流。</p>
+<p><a href="http://ios.jobbole.com" target="_blank" rel="external">伯乐在线</a></p>
+<p>分享iOS开发资讯和文章</p>
+<p><a href="http://www.oschina.net/ios/home" target="_blank" rel="external">开源中国</a></p>
+<p>iOS开发社区 - 开源中国社区</p>
+<h1 id="个人博客">个人博客</h1><p><a href="http://blog.devtang.com/" target="_blank" rel="external">唐巧</a></p>
+<p>InfoQ编辑, 《iOS开发进阶》作者, 在猿题库创业。Java开发工程师，曾开发网易微博后台。 iOS开发工程师，曾开发有道云笔记、猿题库。 </p>
+<p><a href="http://www.onevcat.com/" target="_blank" rel="external">王巍</a></p>
+<p>一名来自中国的 iOS / Unity 开发者。现居日本，就职于 LINE。正在修行，探求创意之源。</p>
+<p><a href="http://beyondvincent.com/" target="_blank" rel="external">破船之家</a></p>
+<p>我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的烟火…</p>
+<p><a href="http://www.cnblogs.com/chijianqiang/" target="_blank" rel="external">池建强</a></p>
+<p>70后程序员。先后从事互联网和企业级应用开发。目前就职瑞友科技（原用友软件工程）IT应用研究院，任职副院长。技术创新控，坚持年轻时的理想，倒霉的乐观者，关注互联网技术、应用平台研发、领域驱动，OSGi，动态语言应用 、云计算、Mac OS相关技术。喜欢的一句话：虽万千人，吾往矣</p>
+<p><a href="http://casatwy.com" target="_blank" rel="external">田伟宇</a></p>
+<p>Currently working at Alibaba.inc as an iOS engineer for food.</p>
+<h1 id="其他推荐">其他推荐</h1><p><a href="http://objccn.io" target="_blank" rel="external">objc中国</a></p>
+<p>为中国 Objective-C 社区带来最佳实践和先进技术</p>
+<p><a href="http://tech.glowing.com" target="_blank" rel="external">Glow技术团队博客</a></p>
+<p>Thoughts, stories and ideas.</p>
+<p><a href="https://github.com/Aufree/trip-to-iOS" target="_blank" rel="external">iOS 学习资料整理</a></p>
+<p>这份学习资料是为 iOS 初学者所准备的, 旨在帮助 iOS 初学者们快速找到适合自己的学习资料, 节省他们搜索资料的时间, 使他们更好的规划好自己的 iOS 学习路线, 更快的入门, 更准确的定位的目前所处的位置.</p>
+<p><a href="https://github.com/tangqiaoboy/iOSBlogCN" target="_blank" rel="external">推荐博客列表</a></p>
+<p>中文 iOS/Mac 开发博客列表</p>
+<h1 id="写在最后">写在最后</h1><p>在长的路，一步步也能走完；在短的路，不迈开双脚也无法到达！</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -116,7 +148,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ice/">ice</a>
+  <span></span> <a href="/tags/iOS/">iOS</a>
   </div>
 
 </div>
@@ -125,7 +157,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-简介/" data-title="The Internet Communications (ice)-简介 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2015/06/09/iOS学习参考/" data-title="iOS学习参考 | zhuli8’blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -138,20 +170,20 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/05/31/iOS应用数据存储的常用方式/" title="iOS应用数据存储的常用方式">
-  <strong>上一篇：</strong><br/>
-  <span>
-  iOS应用数据存储的常用方式</span>
+
+<div class="next">
+<a href="/2015/05/31/iOS应用数据存储的常用方式/"  title="iOS应用数据存储的常用方式">
+ <strong>下一篇：</strong><br/> 
+ <span>iOS应用数据存储的常用方式
+</span>
 </a>
 </div>
-
 
 </nav>
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/05/27/The-Internet-Communications-Ice-简介/" data-title="The Internet Communications (ice)-简介" data-url="http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-简介/"></div>
+	<div class="ds-thread" data-thread-key="2015/06/09/iOS学习参考/" data-title="iOS学习参考" data-url="http://www.zhuli8.com/2015/06/09/iOS学习参考/"></div>
 </section>
 
 
@@ -161,7 +193,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#开发环境搭建"><span class="toc-number">2.</span> <span class="toc-text">开发环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#相关文档"><span class="toc-number">3.</span> <span class="toc-text">相关文档</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ICE通讯框架基本原理"><span class="toc-number">4.</span> <span class="toc-text">ICE通讯框架基本原理</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#社区博客"><span class="toc-number">1.</span> <span class="toc-text">社区博客</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#个人博客"><span class="toc-number">2.</span> <span class="toc-text">个人博客</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他推荐"><span class="toc-number">3.</span> <span class="toc-text">其他推荐</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#写在最后"><span class="toc-number">4.</span> <span class="toc-text">写在最后</span></a></li></ol>
  
   </div>
 

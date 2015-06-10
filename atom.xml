@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-06-10T06:55:42.000Z</updated>
+  <updated>2015-06-10T07:19:04.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -19,9 +19,12 @@
     <link href="http://www.zhuli8.com/2015/06/10/Grand-Central-Dispatch-gcd/"/>
     <id>http://www.zhuli8.com/2015/06/10/Grand-Central-Dispatch-gcd/</id>
     <published>2015-06-10T06:50:07.000Z</published>
-    <updated>2015-06-10T06:55:42.000Z</updated>
+    <updated>2015-06-10T07:19:04.000Z</updated>
     <content type="html"><![CDATA[<p><a href="http://www.jianshu.com/p/50c060bab0ff" target="_blank" rel="external">Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2</a></p>
+<p><a href="[Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2](http://www.jianshu.com/p/50c060bab0ff">cocoachina：Grand Central Dispatch 基础教程：Part 2/2</a>)</p>
 <p><a href="http://www.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">唐巧：使用GCD</a></p>
+<p><a href="http://www.cocoachina.com/ios/20140428/8248.html" target="_blank" rel="external">GCD 深入理解（一）</a></p>
+<p><a href="http://www.cocoachina.com/ios/20140515/8433.html" target="_blank" rel="external">GCD 深入理解（二）</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p><a href="http://www.jianshu.com/p/50c060bab0ff" target="_blank" rel="external">Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2</a></p>

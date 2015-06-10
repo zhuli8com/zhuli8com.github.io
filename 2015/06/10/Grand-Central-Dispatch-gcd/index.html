@@ -4,23 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>The Internet Communications (ice) | zhuli8’blog</title>
+    <title>Grand Central Dispatch (gcd) | zhuli8’blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="朱利">
     
 
     
-    <meta name="description" content="IM相关学习">
+    <meta name="description" content="Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2
+唐巧：使用GCD">
 <meta property="og:type" content="article">
-<meta property="og:title" content="The Internet Communications (ice)">
-<meta property="og:url" content="http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-简介/index.html">
+<meta property="og:title" content="Grand Central Dispatch (gcd)">
+<meta property="og:url" content="http://www.zhuli8.com/2015/06/10/Grand-Central-Dispatch-gcd/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
-<meta property="og:description" content="IM相关学习">
-<meta property="og:updated_time" content="2015-06-09T01:45:48.000Z">
+<meta property="og:description" content="Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2
+唐巧：使用GCD">
+<meta property="og:updated_time" content="2015-06-10T06:55:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="The Internet Communications (ice)">
-<meta name="twitter:description" content="IM相关学习">
+<meta name="twitter:title" content="Grand Central Dispatch (gcd)">
+<meta name="twitter:description" content="Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2
+唐巧：使用GCD">
 
     
     <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
@@ -78,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/27/The-Internet-Communications-Ice-简介/" title="The Internet Communications (ice)" itemprop="url">The Internet Communications (ice)</a>
+      <a href="/2015/06/10/Grand-Central-Dispatch-gcd/" title="Grand Central Dispatch (gcd)" itemprop="url">Grand Central Dispatch (gcd)</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-27T09:26:50.000Z" itemprop="datePublished"> 发表于 2015-05-27</time>
+    <time datetime="2015-06-10T06:50:07.000Z" itemprop="datePublished"> 发表于 2015-06-10</time>
     
   </p>
 </header>
@@ -94,23 +97,12 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#开发环境搭建"><span class="toc-number">2.</span> <span class="toc-text">开发环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#相关文档"><span class="toc-number">3.</span> <span class="toc-text">相关文档</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ICE通讯框架基本原理"><span class="toc-number">4.</span> <span class="toc-text">ICE通讯框架基本原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通讯方式选择"><span class="toc-number">5.</span> <span class="toc-text">通讯方式选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#网络连接方式"><span class="toc-number">6.</span> <span class="toc-text">网络连接方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#协议选择"><span class="toc-number">7.</span> <span class="toc-text">协议选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">8.</span> <span class="toc-text">其他</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h1 id="简介">简介</h1><p>The Internet Communications Engine (ice) is a modern object-oriented toolkit that enables you to build distributed applications with minimal effort. Ice allows you to focus your efforts on your application logic, and it takes care of all interactions with low-level network programming interfaces. With Ice, there is no need to worry about details such as opening network connections, serializing and deserializing data for network transmission, or retrying failed connection attempts (to name but a few of dozens of such low-level details).</p>
-<h1 id="开发环境搭建">开发环境搭建</h1><p>ICE安装文件：<a href="https://zeroc.com/icetouch/download.html" target="_blank" rel="external">https://zeroc.com/icetouch/download.html</a><br>ICE编译插件：<a href="https://github.com/zeroc-ice/ice-builder-xcode" target="_blank" rel="external">https://github.com/zeroc-ice/ice-builder-xcode</a></p>
-<h1 id="相关文档">相关文档</h1><p>ICE官网：<a href="http://www.zeroc.com/ice.html" target="_blank" rel="external">http://www.zeroc.com/ice.html</a><br>官网文档：<a href="http://doc.zeroc.com/display/Doc/Home" target="_blank" rel="external">http://doc.zeroc.com/display/Doc/Home</a><br>性能评测：<a href="http://zeroc.com/articles/IcePerformanceWhitePaper.pdf" target="_blank" rel="external">http://zeroc.com/articles/IcePerformanceWhitePaper.pdf</a></p>
-<h1 id="ICE通讯框架基本原理">ICE通讯框架基本原理</h1><p>ICE的思路是，用一个中间语言，建立数据结构规范和接口规范，然后再用一个IDE编译插件，将中间语言数据结构规范和接口规范编译为当前的语言，譬如OC的.h/.m文件，接下来，你在客户端和服务端实现中间语言定义号的接口，再做一些其它处理，就可以实现一个分布式程序了。这个思路确实很Nice，值得我们借鉴。</p>
-<h1 id="通讯方式选择">通讯方式选择</h1><p>P2P（设备直连）</p>
-<p>通过服务器中转</p>
-<h1 id="网络连接方式">网络连接方式</h1><p>基于TCP的长连接</p>
-<p>基于HTTP短连接PULL的方式</p>
-<h1 id="协议选择">协议选择</h1><p>XMPP</p>
-<p>SIP</p>
-<p>MQTT</p>
-<p>私有协议（二进制协议）</p>
-<h1 id="其他">其他</h1><p>p2p视频聊天的过程：音视频数据采集—&gt;编码—&gt;发送—&gt;接收—&gt;解码—&gt;播放</p>
+		<p><a href="http://www.jianshu.com/p/50c060bab0ff" target="_blank" rel="external">Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2</a></p>
+<p><a href="http://www.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">唐巧：使用GCD</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -124,7 +116,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ice/">ice</a>
+  <span></span> <a href="/tags/GCD/">GCD</a><a href="/tags/iOS/">iOS</a>
   </div>
 
 </div>
@@ -133,7 +125,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-简介/" data-title="The Internet Communications (ice) | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2015/06/10/Grand-Central-Dispatch-gcd/" data-title="Grand Central Dispatch (gcd) | zhuli8’blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -146,20 +138,20 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/05/31/iOS应用数据存储的常用方式/" title="iOS应用数据存储的常用方式">
-  <strong>上一篇：</strong><br/>
-  <span>
-  iOS应用数据存储的常用方式</span>
+
+<div class="next">
+<a href="/2015/06/10/OBJC和DYNAMIC/"  title="@OBJC和DYNAMIC">
+ <strong>下一篇：</strong><br/> 
+ <span>@OBJC和DYNAMIC
+</span>
 </a>
 </div>
-
 
 </nav>
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/05/27/The-Internet-Communications-Ice-简介/" data-title="The Internet Communications (ice)" data-url="http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-简介/"></div>
+	<div class="ds-thread" data-thread-key="2015/06/10/Grand-Central-Dispatch-gcd/" data-title="Grand Central Dispatch (gcd)" data-url="http://www.zhuli8.com/2015/06/10/Grand-Central-Dispatch-gcd/"></div>
 </section>
 
 
@@ -169,7 +161,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#开发环境搭建"><span class="toc-number">2.</span> <span class="toc-text">开发环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#相关文档"><span class="toc-number">3.</span> <span class="toc-text">相关文档</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ICE通讯框架基本原理"><span class="toc-number">4.</span> <span class="toc-text">ICE通讯框架基本原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通讯方式选择"><span class="toc-number">5.</span> <span class="toc-text">通讯方式选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#网络连接方式"><span class="toc-number">6.</span> <span class="toc-text">网络连接方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#协议选择"><span class="toc-number">7.</span> <span class="toc-text">协议选择</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">8.</span> <span class="toc-text">其他</span></a></li></ol>
+ 
  
   </div>
 

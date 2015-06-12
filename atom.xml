@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-06-12T09:18:31.000Z</updated>
+  <updated>2015-06-12T09:22:01.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -15,11 +15,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[代理模式-Proxy程序替你聊天]]></title>
+    <title><![CDATA[swift版设计模式之代理模式-Proxy程序替你聊天]]></title>
     <link href="http://www.zhuli8.com/2015/06/12/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F-Proxy%E7%A8%8B%E5%BA%8F%E6%9B%BF%E4%BD%A0%E8%81%8A%E5%A4%A9/"/>
     <id>http://www.zhuli8.com/2015/06/12/代理模式-Proxy程序替你聊天/</id>
     <published>2015-06-12T09:05:10.000Z</published>
-    <updated>2015-06-12T09:18:31.000Z</updated>
+    <updated>2015-06-12T09:22:01.000Z</updated>
     <content type="html"><![CDATA[<h1 id="代理模式比喻">代理模式比喻</h1><p>跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。</p>
 <h1 id="代理模式意图">代理模式意图</h1><p>代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。</p>
 <h1 id="代理模式类图">代理模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/proxy.gif" alt=""></p>

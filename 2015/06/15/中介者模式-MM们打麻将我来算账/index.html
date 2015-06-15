@@ -1,0 +1,520 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>swift版设计模式之中介者模式-MM们打麻将我来算账 | zhuli8’blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="朱利">
+    
+
+    
+    <meta name="description" content="中介者模式比喻四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。
+中介者模式意图中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
+中介者模式类图
+中介者模式实现抽象中介者，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="swift版设计模式之中介者模式-MM们打麻将我来算账">
+<meta property="og:url" content="http://www.zhuli8.com/2015/06/15/中介者模式-MM们打麻将我来算账/index.html">
+<meta property="og:site_name" content="zhuli8’blog">
+<meta property="og:description" content="中介者模式比喻四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。
+中介者模式意图中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
+中介者模式类图
+中介者模式实现抽象中介者，">
+<meta property="og:image" content="http://www.zhuli8.com/photos/designpattern/mediator.gif">
+<meta property="og:updated_time" content="2015-06-15T07:00:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="swift版设计模式之中介者模式-MM们打麻将我来算账">
+<meta name="twitter:description" content="中介者模式比喻四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。
+中介者模式意图中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
+中介者模式类图
+中介者模式实现抽象中介者，">
+
+    
+    <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="zhuli8’blog" title="zhuli8’blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="zhuli8’blog">zhuli8’blog</a></h1>
+				<h2 class="blog-motto">Talk is cheap, show me the code.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+    <input type="text" id="st-search-input" maxlength="20" placeholder="搜索" />
+    </form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/15/中介者模式-MM们打麻将我来算账/" title="swift版设计模式之中介者模式-MM们打麻将我来算账" itemprop="url">swift版设计模式之中介者模式-MM们打麻将我来算账</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-15T04:05:10.000Z" itemprop="datePublished"> 发表于 2015-06-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式比喻"><span class="toc-number">1.</span> <span class="toc-text">中介者模式比喻</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式意图"><span class="toc-number">2.</span> <span class="toc-text">中介者模式意图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式类图"><span class="toc-number">3.</span> <span class="toc-text">中介者模式类图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式实现"><span class="toc-number">4.</span> <span class="toc-text">中介者模式实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式总结"><span class="toc-number">5.</span> <span class="toc-text">中介者模式总结</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="中介者模式比喻">中介者模式比喻</h1><p>四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。</p>
+<h1 id="中介者模式意图">中介者模式意图</h1><p>中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
+<h1 id="中介者模式类图">中介者模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/mediator.gif" alt=""></p>
+<h1 id="中介者模式实现">中介者模式实现</h1><p>抽象中介者，定义了MM需要什么样的中介者</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Mediator</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(money:Double,girl:Girl)</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体中介者对象，实现抽象类的方法，他需要知道所有具体的MM，并给MM核算服务</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Boy</span>: <span class="title">Mediator</span> </span>&#123;</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl1:<span class="type">FirstGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl2:<span class="type">SecondGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl3:<span class="type">ThirdGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl4:<span class="type">FourthGirl</span>?</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(money: Double, girl: Girl)</span></span> &#123;</span><br><span class="line">        <span class="keyword">var</span> money=money*<span class="number">10</span><span class="comment">////中介者的处理，此处业务比较简单假设一个筹码代表10</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> girl===girl1&#123;</span><br><span class="line">            girl1?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl2&#123;</span><br><span class="line">            girl2?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl3&#123;</span><br><span class="line">            girl3?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl4&#123;</span><br><span class="line">            girl4?.getResult(money)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抽象女孩类</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> mediator:<span class="type">Mediator</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(mediator:<span class="type">Mediator</span>)&#123;</span><br><span class="line">        <span class="keyword">self</span>.mediator=mediator<span class="comment">////得到中介者对象</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span><br><span class="line">    告诉中介者筹码数，让其帮我核算</span><br><span class="line">    */</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">notify</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        mediator.calculate(money, girl: <span class="keyword">self</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>女孩1，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识且依靠中介者对象核算</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FirstGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The FirstGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>女孩2，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SecondGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The SecondGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>女孩3，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThirdGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The ThirdGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>女孩4，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FourthGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The FourthGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>中介者模式客户端应用</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> boy=<span class="function"><span class="title">Boy</span><span class="params">()</span></span><span class="comment">//核算中介</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个打麻将的MM</span></span><br><span class="line"><span class="tag">var</span> girl1=<span class="function"><span class="title">FirstGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl2=<span class="function"><span class="title">SecondGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl3=<span class="function"><span class="title">ThirdGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl4=<span class="function"><span class="title">FourthGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个MM让我调节</span></span><br><span class="line">boy.girl1=girl1</span><br><span class="line">boy.girl2=girl2</span><br><span class="line">boy.girl3=girl3</span><br><span class="line">boy.girl4=girl4</span><br><span class="line">girl1.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">10</span>)</span></span></span><br><span class="line">girl2.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">20</span>)</span></span></span><br><span class="line">girl3.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">20</span>)</span></span></span><br><span class="line">girl4.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">10</span>)</span></span></span><br></pre></td></tr></table></figure>
+<h1 id="中介者模式总结">中介者模式总结</h1><p>中介者的出现减少了MM们的耦合，使得可以独立地改变和复用各个Mediator和Girl，具体女孩类的改变不会影响到其他女孩类，而只是Boy发生变化。Boy把对象如何协作进行了抽象，将中介作为一个独立的概念并将其封装在一个对象中，关注的对象就从对象各自本身的行为转移到她们之间的交互上来。即中介者模式包装了一系列对象相互作用的方式，使得这些对象不必相互明显作用。从而是它们可以松散耦合。当某些对象之间的作用发生改变时，不会立即影响其他的一些对象，保证这些作用可以彼此独立的变化。中介者模式将多对多的相互作用转化为一对多的相互作用。中介者模式将对象的行为和协作抽象化，把对象在小尺度的行为上与其他对象的相互作用分开处理。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/swift/">swift</a><a href="/tags/设计模式/">设计模式</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://www.zhuli8.com/2015/06/15/中介者模式-MM们打麻将我来算账/" data-title="swift版设计模式之中介者模式-MM们打麻将我来算账 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/06/12/代理模式-Proxy程序替你聊天/"  title="swift版设计模式之代理模式-Proxy程序替你聊天">
+ <strong>下一篇：</strong><br/> 
+ <span>swift版设计模式之代理模式-Proxy程序替你聊天
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/15/中介者模式-MM们打麻将我来算账/" data-title="swift版设计模式之中介者模式-MM们打麻将我来算账" data-url="http://www.zhuli8.com/2015/06/15/中介者模式-MM们打麻将我来算账/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式比喻"><span class="toc-number">1.</span> <span class="toc-text">中介者模式比喻</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式意图"><span class="toc-number">2.</span> <span class="toc-text">中介者模式意图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式类图"><span class="toc-number">3.</span> <span class="toc-text">中介者模式类图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式实现"><span class="toc-number">4.</span> <span class="toc-text">中介者模式实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式总结"><span class="toc-number">5.</span> <span class="toc-text">中介者模式总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/swift/" title="swift">swift<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/swift/" title="swift">swift<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据存储/" title="数据存储">数据存储<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ice/" title="ice">ice<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/GCD/" title="GCD">GCD<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://casatwy.com" target="_blank" title="App架构相关文章">田伟宇</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="hexo相关学习">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://tool.lu/favicon" target="_blank" title="icon制作在线工具">Icon制作</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> “Hello ,I&#39;m ZhuLi in Chinasofti.” <br/>
+			“This is my blog,believe it or not.”</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/zhuli8" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/zhuli8com" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="https://www.zhihu.com/people/zhu-li-68-76" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:zhuli1228@163.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="朱利">朱利</a>
+		
+		
+		</p>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','TqhyGfTT5KJKMHcgZnBF','2.0.0');
+</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhuli8"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_3725936'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D3725936' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

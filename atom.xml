@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-06-19T02:11:06.000Z</updated>
+  <updated>2015-06-19T02:14:27.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -16,10 +16,10 @@
   
   <entry>
     <title><![CDATA[与调试器共舞 - LLDB 的华尔兹]]></title>
-    <link href="http://www.zhuli8.com/2015/06/18/iOS%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E5%BC%8F%202/"/>
-    <id>http://www.zhuli8.com/2015/06/18/iOS应用数据存储的常用方式 2/</id>
+    <link href="http://www.zhuli8.com/2015/06/18/%E4%B8%8E%E8%B0%83%E8%AF%95%E5%99%A8%E5%85%B1%E8%88%9E%20-%20LLDB%20%E7%9A%84%E5%8D%8E%E5%B0%94%E5%85%B9/"/>
+    <id>http://www.zhuli8.com/2015/06/18/与调试器共舞 - LLDB 的华尔兹/</id>
     <published>2015-06-18T12:40:39.000Z</published>
-    <updated>2015-06-19T02:11:06.000Z</updated>
+    <updated>2015-06-19T02:14:27.000Z</updated>
     <content type="html"><![CDATA[<p>你是否曾经苦恼于理解你的代码，而去尝试打印一个变量的值？</p>
 
 <pre><code>NSLog(@"%@", whatIsInsideThisThing);
@@ -637,7 +637,7 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 
 <p>调试愉快！</p>
 
-<h1 id="来源objcio-cn_[http://objccn-io/issue-19-2/)">来源objcio.cn [<a href="http://objccn.io/issue-19-2/" target="_blank" rel="external">http://objccn.io/issue-19-2/</a>)</h1>]]></content>
+<h1 id="来源:objcio-cn">来源:<a href="http://objccn.io/issue-19-2/" target="_blank" rel="external">objcio.cn</a></h1>]]></content>
     <summary type="html">
     <![CDATA[与调试器共舞 - LLDB 的华尔兹]]>
     

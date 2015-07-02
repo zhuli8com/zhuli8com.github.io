@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-07-02T02:50:34.000Z</updated>
+  <updated>2015-07-02T03:05:36.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.zhuli8.com/2015/07/02/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/"/>
     <id>http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/</id>
     <published>2015-07-02T04:13:57.000Z</published>
-    <updated>2015-07-02T02:50:34.000Z</updated>
+    <updated>2015-07-02T03:05:36.000Z</updated>
     <content type="html"><![CDATA[<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
 <p><strong>目前为止Apple移动设备默认指令集</strong></p>
 <hr>
@@ -35,7 +35,20 @@
 <h2 id="arm64">arm64</h2><p>合并所有的*.a构建arm64为libWebRTC-arm64.a</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>arm64<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-arm64.a -r src/</span>arm64<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
 <h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
-<h2 id="其他">其他</h2><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。</p>
+<h2 id="其他">其他</h2><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</p>
+<p>1.Architectures：      </p>
+<p>指明选定Target要求被编译生成的二进制包所支持的指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而会造成最终编译生成的包很大。</p>
+<p>2.Valid Architectures：</p>
+<p>指明可能支持的指令集并非Architectures列表中指明的指令集都会被支持，Valid Architectures限制可能被支持的指令集的范围，即Valid Architectures和Architectures列表的交集，才是XCode最终生成二进制包所支持的指令集。比如，将Architectures支持arm指令集设置为：armv7,armv7s，对应的Valid Architectures的支持的指令集设置为：armv7s,arm64，那么此时，XCode生成二进制包所支持的指令集只有armv7s 。</p>
+<p>3.Build Active Architecture Only:</p>
+<p>指明是否只编译当前连接设备所支持的指令集,该选项起作用的条件有两个，必须同时满足才会起作用：</p>
+<ul>
+<li>其值设置为YES</li>
+</ul>
+<ol>
+<li>XCode成功连接调试设备</li>
+</ol>
+<p>当Build Active Architecture Only起作用时,连接的手机指令集匹配是由高到低（arm64 &gt; armv7s &gt; armv7）依次匹配的。<br>建议：通常Debug模式设置值为Yes，Release模式设置为No。</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，]]>

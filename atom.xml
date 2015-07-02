@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-07-02T03:07:33.000Z</updated>
+  <updated>2015-07-02T05:18:29.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.zhuli8.com/2015/07/02/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/"/>
     <id>http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/</id>
     <published>2015-07-02T04:13:57.000Z</published>
-    <updated>2015-07-02T03:07:33.000Z</updated>
+    <updated>2015-07-02T05:18:29.000Z</updated>
     <content type="html"><![CDATA[<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
 <p><strong>目前为止Apple移动设备默认指令集</strong></p>
 <hr>
@@ -44,10 +44,8 @@
 <p>指明是否只编译当前连接设备所支持的指令集,该选项起作用的条件有两个，必须同时满足才会起作用：</p>
 <ul>
 <li>其值设置为YES</li>
-</ul>
-<ol>
 <li>XCode成功连接调试设备</li>
-</ol>
+</ul>
 <p>当Build Active Architecture Only起作用时,连接的手机指令集匹配是由高到低（arm64 &gt; armv7s &gt; armv7）依次匹配的。<br>建议：通常Debug模式设置值为Yes，Release模式设置为No。</p>
 ]]></content>
     <summary type="html">

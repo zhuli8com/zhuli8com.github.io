@@ -109,8 +109,8 @@
 <h2 id="arm64">arm64</h2><p>合并所有的*.a构建arm64为libWebRTC-arm64.a</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>arm64<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-arm64.a -r src/</span>arm64<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
 <h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
-<h1 id="其他">其他</h1><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</p>
-<p>1.Architectures：      </p>
+<h1 id="其他">其他</h1><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。</p>
+<h2 id="XCode中与指令集相关的选项（Build_Settings_面板下_Architectures）：">XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</h2><p>1.Architectures：      </p>
 <p>指明选定Target要求被编译生成的二进制包所支持的指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而会造成最终编译生成的包很大。</p>
 <p>2.Valid Architectures：</p>
 <p>指明可能支持的指令集并非Architectures列表中指明的指令集都会被支持，Valid Architectures限制可能被支持的指令集的范围，即Valid Architectures和Architectures列表的交集，才是XCode最终生成二进制包所支持的指令集。比如，将Architectures支持arm指令集设置为：armv7,armv7s，对应的Valid Architectures的支持的指令集设置为：armv7s,arm64，那么此时，XCode生成二进制包所支持的指令集只有armv7s 。</p>
@@ -121,6 +121,26 @@
 <li>XCode成功连接调试设备</li>
 </ul>
 <p>当Build Active Architecture Only起作用时,连接的手机指令集匹配是由高到低（arm64 &gt; armv7s &gt; armv7）依次匹配的。<br>建议：通常Debug模式设置值为Yes，Release模式设置为No。</p>
+<h2 id="WebRTC-framework的依赖"><a href="http://www.it165.net/pro/html/201503/35541.html" target="_blank" rel="external">WebRTC.framework的依赖</a></h2><p>如果项目使用了该框架,那么编译的时候需要在项目的Build Phases中添加如下库和框架:</p>
+<blockquote>
+<ul>
+<li>libstdc++.6.dylib</li>
+<li>libsqlite3.dylib</li>
+<li>libc++.dylib</li>
+<li>libicucore.dylib</li>
+<li>Security.framework</li>
+<li>CFNetwork.framework</li>
+<li>GLKit.framework</li>
+<li>AudioToolbox.framework</li>
+<li>AVFoundation.framework</li>
+<li>CoreAudio.framework</li>
+<li>CoreMedia.framework</li>
+<li>CoreVideo.framework</li>
+<li>CoreGraphics.framework</li>
+<li>OpenGLES.framework</li>
+<li>QuartzCore.framework</li>
+</ul>
+</blockquote>
 
         
         

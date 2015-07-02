@@ -4,23 +4,44 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>构建支持armv7和arm64的webRTC静态库 | zhuli8’blog</title>
+    <title>swift学习参考 | zhuli8’blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="朱利">
     
 
     
-    <meta name="description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
+    <meta name="description" content="官方文档苹果出品，必属精品！
+The Swift Programming Language
+没机会参加 WWDC 2015，那你可以看看这10个视频
+精彩博文怎样在Swift中使用CocoaPods
+使用Xcode HeaderDoc和Doxygen文档化你的Objective-C和Swift代码
+Swift项目兼容Objective-c问题汇总
+按需加载资源开发指南
+10步成为专业iOS开发者—">
 <meta property="og:type" content="article">
-<meta property="og:title" content="构建支持armv7和arm64的webRTC静态库">
-<meta property="og:url" content="http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/index.html">
+<meta property="og:title" content="swift学习参考">
+<meta property="og:url" content="http://www.zhuli8.com/2015/07/01/swift学习参考/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
-<meta property="og:description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
-<meta property="og:updated_time" content="2015-07-02T05:18:29.000Z">
+<meta property="og:description" content="官方文档苹果出品，必属精品！
+The Swift Programming Language
+没机会参加 WWDC 2015，那你可以看看这10个视频
+精彩博文怎样在Swift中使用CocoaPods
+使用Xcode HeaderDoc和Doxygen文档化你的Objective-C和Swift代码
+Swift项目兼容Objective-c问题汇总
+按需加载资源开发指南
+10步成为专业iOS开发者—">
+<meta property="og:updated_time" content="2015-07-02T05:59:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="构建支持armv7和arm64的webRTC静态库">
-<meta name="twitter:description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
+<meta name="twitter:title" content="swift学习参考">
+<meta name="twitter:description" content="官方文档苹果出品，必属精品！
+The Swift Programming Language
+没机会参加 WWDC 2015，那你可以看看这10个视频
+精彩博文怎样在Swift中使用CocoaPods
+使用Xcode HeaderDoc和Doxygen文档化你的Objective-C和Swift代码
+Swift项目兼容Objective-c问题汇总
+按需加载资源开发指南
+10步成为专业iOS开发者—">
 
     
     <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
@@ -78,14 +99,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/07/02/构建支持armv7和arm64的webRTC静态库/" title="构建支持armv7和arm64的webRTC静态库" itemprop="url">构建支持armv7和arm64的webRTC静态库</a>
+      <a href="/2015/07/01/swift学习参考/" title="swift学习参考" itemprop="url">swift学习参考</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
 		
   <p class="article-time">
-    <time datetime="2015-07-02T04:13:57.000Z" itemprop="datePublished"> 发表于 2015-07-02</time>
+    <time datetime="2015-07-01T04:41:20.000Z" itemprop="datePublished"> 发表于 2015-07-01</time>
     
   </p>
 </header>
@@ -94,37 +115,20 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">3.</span> <span class="toc-text">其他</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#官方文档"><span class="toc-number">1.</span> <span class="toc-text">官方文档</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#精彩博文"><span class="toc-number">2.</span> <span class="toc-text">精彩博文</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
-<p><strong>目前为止Apple移动设备默认指令集</strong></p>
-<hr>
-<p>armv6 设备： iPhone, iPhone2, iPhone3G, 第一代、第二代 iPod Touch</p>
-<p>armv7 设备：iPhone3GS, iPhone4, iPhone4S, iPad, iPad2, iPad3(The New iPad), iPad mini,<br>iPod Touch 3G, iPod Touch4</p>
-<p>armv7s设备： iPhone5, iPhone5C, iPad4(iPad with Retina Display)</p>
-<p>arm64 设备： iPhone5S, iPad Air, iPad mini2(iPad mini with Retina Display)</p>
-<hr>
-<p>现在苹果默认要求支持armv7&amp;arm64，知道了这些信息我们进入下一话题！</p>
-<h1 id="构建支持armv7和arm64的webRTC静态库">构建支持armv7和arm64的webRTC静态库</h1><p>总体思路就是将webRTC中的armv7静态库合并优化成一个单一的静态库，arm64中的所有静态库合并优化成一个单一的静态库，最后利用lipo指令合并这两个静态库为一个最终的静态库。</p>
-<h2 id="armv7">armv7</h2><p>合并所有的*.a构建armv7为libWebRTC-armv7.a并优化静态库</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/armv7/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>armv7<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/armv7/</span>Release-iphoneos<span class="regexp">/libWebRTC-armv7.a -r src/</span>armv7<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
-<h2 id="arm64">arm64</h2><p>合并所有的*.a构建arm64为libWebRTC-arm64.a</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>arm64<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-arm64.a -r src/</span>arm64<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
-<h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
-<h1 id="其他">其他</h1><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</p>
-<p>1.Architectures：      </p>
-<p>指明选定Target要求被编译生成的二进制包所支持的指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而会造成最终编译生成的包很大。</p>
-<p>2.Valid Architectures：</p>
-<p>指明可能支持的指令集并非Architectures列表中指明的指令集都会被支持，Valid Architectures限制可能被支持的指令集的范围，即Valid Architectures和Architectures列表的交集，才是XCode最终生成二进制包所支持的指令集。比如，将Architectures支持arm指令集设置为：armv7,armv7s，对应的Valid Architectures的支持的指令集设置为：armv7s,arm64，那么此时，XCode生成二进制包所支持的指令集只有armv7s 。</p>
-<p>3.Build Active Architecture Only:</p>
-<p>指明是否只编译当前连接设备所支持的指令集,该选项起作用的条件有两个，必须同时满足才会起作用：</p>
-<ul>
-<li>其值设置为YES</li>
-<li>XCode成功连接调试设备</li>
-</ul>
-<p>当Build Active Architecture Only起作用时,连接的手机指令集匹配是由高到低（arm64 &gt; armv7s &gt; armv7）依次匹配的。<br>建议：通常Debug模式设置值为Yes，Release模式设置为No。</p>
+		<h1 id="官方文档">官方文档</h1><p><a href="https://developer.apple.com/swift/" target="_blank" rel="external">苹果出品，必属精品！</a></p>
+<p><a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/" target="_blank" rel="external">The Swift Programming Language</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150701/12328.html" target="_blank" rel="external">没机会参加 WWDC 2015，那你可以看看这10个视频</a></p>
+<h1 id="精彩博文">精彩博文</h1><p><a href="http://www.cocoachina.com/swift/20150630/12305.html" target="_blank" rel="external">怎样在Swift中使用CocoaPods</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150629/12298.html" target="_blank" rel="external">使用Xcode HeaderDoc和Doxygen文档化你的Objective-C和Swift代码</a></p>
+<p><a href="http://00red.com" target="_blank" rel="external">Swift项目兼容Objective-c问题汇总</a></p>
+<p><a href="http://benbeng.leanote.com/post/On-Demand-Resources-Guide" target="_blank" rel="external">按需加载资源开发指南</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150617/12165.html" target="_blank" rel="external">10步成为专业iOS开发者——从零起步</a></p>
+<p><a href="http://www.cocoachina.com/swift/" target="_blank" rel="external">cocoachina-swift集锦</a></p>
+<p><a href="http://www.cocoachina.com/special/xcode/" target="_blank" rel="external">cocoachina-xcode集锦</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -132,13 +136,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+  <a class="article-category-link" href="/categories/swift/">swift</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/webRTC/">webRTC</a>
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/swift/">swift</a>
   </div>
 
 </div>
@@ -147,7 +151,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/" data-title="构建支持armv7和arm64的webRTC静态库 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2015/07/01/swift学习参考/" data-title="swift学习参考 | zhuli8’blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -160,11 +164,19 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/07/02/构建支持armv7和arm64的webRTC静态库/" title="构建支持armv7和arm64的webRTC静态库">
+  <strong>上一篇：</strong><br/>
+  <span>
+  构建支持armv7和arm64的webRTC静态库</span>
+</a>
+</div>
+
 
 <div class="next">
-<a href="/2015/07/01/swift学习参考/"  title="swift学习参考">
+<a href="/2015/06/18/与调试器共舞 - LLDB 的华尔兹/"  title="与调试器共舞 - LLDB 的华尔兹">
  <strong>下一篇：</strong><br/> 
- <span>swift学习参考
+ <span>与调试器共舞 - LLDB 的华尔兹
 </span>
 </a>
 </div>
@@ -173,7 +185,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/07/02/构建支持armv7和arm64的webRTC静态库/" data-title="构建支持armv7和arm64的webRTC静态库" data-url="http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/"></div>
+	<div class="ds-thread" data-thread-key="2015/07/01/swift学习参考/" data-title="swift学习参考" data-url="http://www.zhuli8.com/2015/07/01/swift学习参考/"></div>
 </section>
 
 
@@ -183,7 +195,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">3.</span> <span class="toc-text">其他</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#官方文档"><span class="toc-number">1.</span> <span class="toc-text">官方文档</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#精彩博文"><span class="toc-number">2.</span> <span class="toc-text">精彩博文</span></a></li></ol>
  
   </div>
 

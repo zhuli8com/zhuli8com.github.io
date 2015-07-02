@@ -61,6 +61,36 @@
   </entry>
   
   <entry>
+    <title><![CDATA[swift学习参考]]></title>
+    <link href="http://www.zhuli8.com/2015/07/01/swift%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
+    <id>http://www.zhuli8.com/2015/07/01/swift学习参考/</id>
+    <published>2015-07-01T04:41:20.000Z</published>
+    <updated>2015-07-02T05:59:58.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="官方文档">官方文档</h1><p><a href="https://developer.apple.com/swift/" target="_blank" rel="external">苹果出品，必属精品！</a></p>
+<p><a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/" target="_blank" rel="external">The Swift Programming Language</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150701/12328.html" target="_blank" rel="external">没机会参加 WWDC 2015，那你可以看看这10个视频</a></p>
+<h1 id="精彩博文">精彩博文</h1><p><a href="http://www.cocoachina.com/swift/20150630/12305.html" target="_blank" rel="external">怎样在Swift中使用CocoaPods</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150629/12298.html" target="_blank" rel="external">使用Xcode HeaderDoc和Doxygen文档化你的Objective-C和Swift代码</a></p>
+<p><a href="http://00red.com" target="_blank" rel="external">Swift项目兼容Objective-c问题汇总</a></p>
+<p><a href="http://benbeng.leanote.com/post/On-Demand-Resources-Guide" target="_blank" rel="external">按需加载资源开发指南</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150617/12165.html" target="_blank" rel="external">10步成为专业iOS开发者——从零起步</a></p>
+<p><a href="http://www.cocoachina.com/swift/" target="_blank" rel="external">cocoachina-swift集锦</a></p>
+<p><a href="http://www.cocoachina.com/special/xcode/" target="_blank" rel="external">cocoachina-xcode集锦</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="官方文档">官方文档</h1><p><a href="https://developer.apple.com/swift/" target="_blank" rel="external">苹果出品，必属精品！</a></p>
+<p><a href="https:/]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="swift" scheme="http://www.zhuli8.com/tags/swift/"/>
+    
+      <category term="swift" scheme="http://www.zhuli8.com/categories/swift/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[与调试器共舞 - LLDB 的华尔兹]]></title>
     <link href="http://www.zhuli8.com/2015/06/18/%E4%B8%8E%E8%B0%83%E8%AF%95%E5%99%A8%E5%85%B1%E8%88%9E%20-%20LLDB%20%E7%9A%84%E5%8D%8E%E5%B0%94%E5%85%B9/"/>
     <id>http://www.zhuli8.com/2015/06/18/与调试器共舞 - LLDB 的华尔兹/</id>

@@ -17,7 +17,7 @@
 <meta property="og:url" content="http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
 <meta property="og:description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
-<meta property="og:updated_time" content="2015-07-02T03:05:36.000Z">
+<meta property="og:updated_time" content="2015-07-02T03:07:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="构建支持armv7和arm64的webRTC静态库">
 <meta name="twitter:description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
@@ -94,7 +94,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">2.4.</span> <span class="toc-text">其他</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">3.</span> <span class="toc-text">其他</span></a></li></ol>
 		
 		</div>
 		
@@ -113,7 +113,7 @@
 <h2 id="arm64">arm64</h2><p>合并所有的*.a构建arm64为libWebRTC-arm64.a</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>arm64<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-arm64.a -r src/</span>arm64<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
 <h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
-<h2 id="其他">其他</h2><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</p>
+<h1 id="其他">其他</h1><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</p>
 <p>1.Architectures：      </p>
 <p>指明选定Target要求被编译生成的二进制包所支持的指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而会造成最终编译生成的包很大。</p>
 <p>2.Valid Architectures：</p>
@@ -185,7 +185,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">2.4.</span> <span class="toc-text">其他</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">3.</span> <span class="toc-text">其他</span></a></li></ol>
  
   </div>
 

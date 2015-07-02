@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-06-19T02:14:27.000Z</updated>
+  <updated>2015-07-02T02:50:34.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -13,6 +13,41 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[构建支持armv7和arm64的webRTC静态库]]></title>
+    <link href="http://www.zhuli8.com/2015/07/02/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/"/>
+    <id>http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/</id>
+    <published>2015-07-02T04:13:57.000Z</published>
+    <updated>2015-07-02T02:50:34.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
+<p><strong>目前为止Apple移动设备默认指令集</strong></p>
+<hr>
+<p>armv6 设备： iPhone, iPhone2, iPhone3G, 第一代、第二代 iPod Touch</p>
+<p>armv7 设备：iPhone3GS, iPhone4, iPhone4S, iPad, iPad2, iPad3(The New iPad), iPad mini,<br>iPod Touch 3G, iPod Touch4</p>
+<p>armv7s设备： iPhone5, iPhone5C, iPad4(iPad with Retina Display)</p>
+<p>arm64 设备： iPhone5S, iPad Air, iPad mini2(iPad mini with Retina Display)</p>
+<hr>
+<p>现在苹果默认要求支持armv7&amp;arm64，知道了这些信息我们进入下一话题！</p>
+<h1 id="构建支持armv7和arm64的webRTC静态库">构建支持armv7和arm64的webRTC静态库</h1><p>总体思路就是将webRTC中的armv7静态库合并优化成一个单一的静态库，arm64中的所有静态库合并优化成一个单一的静态库，最后利用lipo指令合并这两个静态库为一个最终的静态库。</p>
+<h2 id="armv7">armv7</h2><p>合并所有的*.a构建armv7为libWebRTC-armv7.a并优化静态库</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/armv7/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>armv7<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/armv7/</span>Release-iphoneos<span class="regexp">/libWebRTC-armv7.a -r src/</span>armv7<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
+<h2 id="arm64">arm64</h2><p>合并所有的*.a构建arm64为libWebRTC-arm64.a</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>arm64<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-arm64.a -r src/</span>arm64<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
+<h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
+<h2 id="其他">其他</h2><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="webRTC" scheme="http://www.zhuli8.com/tags/webRTC/"/>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[与调试器共舞 - LLDB 的华尔兹]]></title>

@@ -4,23 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>@OBJC和DYNAMIC | zhuli8’blog</title>
+    <title>构建支持armv7和arm64的webRTC静态库 | zhuli8’blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="朱利">
     
 
     
-    <meta name="description" content="swift的@OBJC和DYNAMIC">
+    <meta name="description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
 <meta property="og:type" content="article">
-<meta property="og:title" content="@OBJC和DYNAMIC">
-<meta property="og:url" content="http://www.zhuli8.com/2015/06/10/OBJC和DYNAMIC/index.html">
+<meta property="og:title" content="构建支持armv7和arm64的webRTC静态库">
+<meta property="og:url" content="http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
-<meta property="og:description" content="swift的@OBJC和DYNAMIC">
-<meta property="og:updated_time" content="2015-06-10T03:04:44.000Z">
+<meta property="og:description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
+<meta property="og:updated_time" content="2015-07-02T02:50:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="@OBJC和DYNAMIC">
-<meta name="twitter:description" content="swift的@OBJC和DYNAMIC">
+<meta name="twitter:title" content="构建支持armv7和arm64的webRTC静态库">
+<meta name="twitter:description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
 
     
     <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
@@ -78,14 +78,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/10/OBJC和DYNAMIC/" title="@OBJC和DYNAMIC" itemprop="url">@OBJC和DYNAMIC</a>
+      <a href="/2015/07/02/构建支持armv7和arm64的webRTC静态库/" title="构建支持armv7和arm64的webRTC静态库" itemprop="url">构建支持armv7和arm64的webRTC静态库</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
 		
   <p class="article-time">
-    <time datetime="2015-06-10T02:44:45.000Z" itemprop="datePublished"> 发表于 2015-06-10</time>
+    <time datetime="2015-07-02T04:13:57.000Z" itemprop="datePublished"> 发表于 2015-07-02</time>
     
   </p>
 </header>
@@ -94,16 +94,26 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">2.4.</span> <span class="toc-text">其他</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<p><div class="post-content clearfix"><br>        <p>虽然说 Swift 语言的初衷是希望能摆脱 Objective-C 的沉重的历史包袱和约束，但是不可否认的是经过了二十多年的洗礼，Cocoa 框架早就烙上了不可磨灭的 Objective-C 的印记。无数的第三方库是用 Objective-C 写成的，这些积累无论是谁都不能小觑。因此，在最初的版本中，Swift 不得不考虑与 Objective-C 的兼容。</p></div></p>
-<p>Apple 采取的做法是允许我们在同一个项目中同时使用 Swift 和 Objective-C 来进行开发。其实一个项目中的 Objective-C 文件和 Swift 文件是处于两个不同世界中的，为了让它们能相互联通，我们需要添加一些桥梁。</p><br><p>首先通过添加 <code>{product-module-name}-Bridging-Header.h</code> 文件，并在其中填写想要使用的头文件名称，我们就可以很容易地在 Swift 中使用 Objective-C 代码了。Xcode 为了简化这个设定，甚至在 Swift 项目中第一次导入 Objective-C 文件时会主动弹框进行询问是否要自动创建这个文件，可以说是非常方便。</p><br><p>但是如果想要在 Objective-C 中使用 Swift 的类型的时候，事情就复杂一些。如果是来自外部的框架，那么这个框架与 Objective-C 项目肯定不是处在同一个 target 中的，我们需要对外部的 Swift module 进行导入。这个其实和使用 Objective-C 的原来的 Framework 是一样的，对于一个项目来说，外界框架是由 Swift 写的还是 Objective-C 写的，两者并没有太大区别。我们通过使用 2013 年新引入的 <code>@import</code> 来引入 module：</p><br><pre><code>@import MySwiftKit;<br></code></pre><br><p>之后就可以正常使用这个 Swift 写的框架了。</p><br><p>如果想要在 Objective-C 里使用的是同一个项目中的 Swift 的源文件的话，可以直接导入自动生成的头文件 <code>{product-module-name}-Swift.h</code> 来完成。比如项目的 target 叫做 <code>MyApp</code> 的话，我们就需要在 Objective-C 文件中写</p><br><pre><code>#import “MyApp-Swift.h”<br></code></pre><br><p>但这只是故事的开始。Objective-C 和 Swift 在底层使用的是两套完全不同的机制，Cocoa 中的 Objective-C 对象是基于运行时的，它从骨子里遵循了 KVC (Key-Value Coding，通过类似字典的方式存储对象信息) 以及动态派发 (Dynamic Dispatch，在运行调用时再决定实际调用的具体实现)。而 Swift 为了追求性能，如果没有特殊需要的话，是不会在运行时再来决定这些的。也就是说，Swift 类型的成员或者方法在编译时就已经决定，而运行时便不再需要经过一次查找，而可以直接使用。</p><br><p>显而易见，这带来的问题是如果我们要使用 Objective-C 的代码或者特性来调用纯 Swift 的类型时候，我们会因为找不到所需要的这些运行时信息，而导致失败。解决起来也很简单，在 Swift 类型文件中，我们可以将需要暴露给 Objective-C 使用的任何地方 (包括类，属性和方法等) 的声明前面加上 <code>@objc</code> 修饰符。注意这个步骤只需要对那些不是继承自 <code>NSObject</code> 的类型进行，如果你用 Swift 写的 class 是继承自 <code>NSObject</code> 的话，Swift 会默认自动为所有的非 private 的类和成员加上 <code>@objc</code>。这就是说，对一个 <code>NSObject</code> 的子类，你只需要导入相应的头文件就可以在 Objective-C 里使用这个类了。</p><br><p><code>@objc</code> 修饰符的另一个作用是为 Objective-C 侧重新声明方法或者变量的名字。虽然绝大部分时候自动转换的方法名已经足够好用 (比如会将 Swift 中类似 <code>init(name: String)</code> 的方法转换成 <code>-initWithName:(NSString *)name</code> 这样)，但是有时候我们还是期望 Objective-C 里使用和 Swift 中不一样的方法名或者类的名字，比如 Swift 里这样的一个类：</p><br><pre><code>class 我的类 {<br>    func 打招呼(名字: String) {<br>        println(“哈喽，(名字)”)<br>    }<br>}<br>我的类().打招呼(“小明”)<br></code></pre><br><p>Objective-C 的话是无法使用中文来进行调用的，因此我们<strong>必须</strong>使用 <code>@objc</code> 将其转为 ASCII 才能在 Objective-C 里访问：</p>
-
-<p><pre><code>@objc(MyClass)<br>class 我的类 {<br>    @objc(greeting:)<br>    func 打招呼(名字: String) {<br>        println(“哈喽，(名字)”)<br>    }<br>}<br></code></pre></p>
-<p></p><p>这样，我们在 Objective-C 里就能调用 <code>[[MyClass new] greeting:@”XiaoMing”]</code> 这样的代码了 (虽然比起原来一点都不好玩了)。另外，正如上面所说的以及在 <a href="http://swifter.tips/selector/" target="_blank" rel="external">Selector</a> 一节中所提到的，即使是 <code>NSObject</code> 的子类，Swift 也不会在被标记为 <code>private</code> 的方法或成员上自动加 <code>@objc</code>。如果我们需要使用这些内容的动态特性的话，我们需要手动给它们加上 <code>@objc</code> 修饰。</p><p></p>
-<p></p><p>添加 <code>@objc</code> 修饰符并不意味着这个方法或者属性会变成动态派发，Swift 依然可能会将其优化为静态调用。如果你需要和 Objective-C 里动态调用时相同的运行时特性的话，你需要使用的修饰符是 <code>dynamic</code>。一般情况下在做 app 开发时应该用不上，但是在施展一些像动态替换方法或者运行时再决定实现这样的 “黑魔法” 的时候，我们就需要用到 <code>dynamic</code> 修饰符了。在之后的 KVO 一节中，我们还会提到一个关于使用 <code>dynamic</code> 的实例。</p><br>    <br>作者王巍 <a href="http://swifter.tips/" target="_blank" rel="external">(@onevcat)</a> 原文地址 <a href="http://swifter.tips/objc-dynamic/" target="_blank" rel="external">http://swifter.tips/objc-dynamic/</a><p></p>
+		<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
+<p><strong>目前为止Apple移动设备默认指令集</strong></p>
+<hr>
+<p>armv6 设备： iPhone, iPhone2, iPhone3G, 第一代、第二代 iPod Touch</p>
+<p>armv7 设备：iPhone3GS, iPhone4, iPhone4S, iPad, iPad2, iPad3(The New iPad), iPad mini,<br>iPod Touch 3G, iPod Touch4</p>
+<p>armv7s设备： iPhone5, iPhone5C, iPad4(iPad with Retina Display)</p>
+<p>arm64 设备： iPhone5S, iPad Air, iPad mini2(iPad mini with Retina Display)</p>
+<hr>
+<p>现在苹果默认要求支持armv7&amp;arm64，知道了这些信息我们进入下一话题！</p>
+<h1 id="构建支持armv7和arm64的webRTC静态库">构建支持armv7和arm64的webRTC静态库</h1><p>总体思路就是将webRTC中的armv7静态库合并优化成一个单一的静态库，arm64中的所有静态库合并优化成一个单一的静态库，最后利用lipo指令合并这两个静态库为一个最终的静态库。</p>
+<h2 id="armv7">armv7</h2><p>合并所有的*.a构建armv7为libWebRTC-armv7.a并优化静态库</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/armv7/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>armv7<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/armv7/</span>Release-iphoneos<span class="regexp">/libWebRTC-armv7.a -r src/</span>armv7<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
+<h2 id="arm64">arm64</h2><p>合并所有的*.a构建arm64为libWebRTC-arm64.a</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>arm64<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-arm64.a -r src/</span>arm64<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
+<h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
+<h2 id="其他">其他</h2><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -111,13 +121,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/swift/">swift</a>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/swift/">swift</a>
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/webRTC/">webRTC</a>
   </div>
 
 </div>
@@ -126,7 +136,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/06/10/OBJC和DYNAMIC/" data-title="@OBJC和DYNAMIC | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/" data-title="构建支持armv7和arm64的webRTC静态库 | zhuli8’blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -139,19 +149,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/06/10/Grand-Central-Dispatch-gcd/" title="Grand Central Dispatch (gcd)">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Grand Central Dispatch (gcd)</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/06/09/iOS学习参考/"  title="iOS学习参考">
+<a href="/2015/06/18/与调试器共舞 - LLDB 的华尔兹/"  title="与调试器共舞 - LLDB 的华尔兹">
  <strong>下一篇：</strong><br/> 
- <span>iOS学习参考
+ <span>与调试器共舞 - LLDB 的华尔兹
 </span>
 </a>
 </div>
@@ -160,7 +162,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/06/10/OBJC和DYNAMIC/" data-title="@OBJC和DYNAMIC" data-url="http://www.zhuli8.com/2015/06/10/OBJC和DYNAMIC/"></div>
+	<div class="ds-thread" data-thread-key="2015/07/02/构建支持armv7和arm64的webRTC静态库/" data-title="构建支持armv7和arm64的webRTC静态库" data-url="http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/"></div>
 </section>
 
 
@@ -170,7 +172,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">2.4.</span> <span class="toc-text">其他</span></a></li></ol></li></ol>
  
   </div>
 

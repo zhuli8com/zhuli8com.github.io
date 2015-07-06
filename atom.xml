@@ -985,7 +985,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
     <link href="http://www.zhuli8.com/2015/06/09/iOS%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
     <id>http://www.zhuli8.com/2015/06/09/iOS学习参考/</id>
     <published>2015-06-09T01:10:54.000Z</published>
-    <updated>2015-06-11T01:37:36.000Z</updated>
+    <updated>2015-07-06T03:08:37.000Z</updated>
     <content type="html"><![CDATA[<h1 id="社区博客">社区博客</h1><p><a href="http://www.cocoachina.com/" target="_blank" rel="external">CocoaChina</a></p>
 <p>苹果开发中文站 - 最热的iPhone开发社区，最热的苹果开发社区，最热的iPad开发社区。</p>
 <p><a href="http://www.code4app.com/" target="_blank" rel="external">Code4App</a></p>
@@ -1020,6 +1020,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 <p><a href="http://www.liuhaihua.cn/archives/16111.html" target="_blank" rel="external">ReactiveCocoa入门教程：第一部分</a></p>
 <p><a href="http://yulingtianxia.com/blog/2015/05/21/ReactiveCocoa-and-MVVM-an-Introduction/" target="_blank" rel="external">ReactiveCocoa 和 MVVM 入门</a></p>
 <p><a href="http://www.devtang.com/blog/2014/02/11/reactivecocoa-introduction/" target="_blank" rel="external">ReactiveCocoa - iOS开发的新框架</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150702/12302.html" target="_blank" rel="external">ReactiveCocoa自述：工作原理和应用</a></p>
 <p><a href="http://zhuanlan.zhihu.com/gupeng/19930501" target="_blank" rel="external">Method Swizzling 和 AOP 实践</a></p>
 <p><a href="http://my.oschina.net/lujianing/blog/394367" target="_blank" rel="external">Java转iOS-第一个项目总结(1)</a></p>
 <p><a href="http://my.oschina.net/lujianing/blog/404080" target="_blank" rel="external">Java转iOS-第一个项目总结(2)</a></p>

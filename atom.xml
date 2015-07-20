@@ -1198,7 +1198,7 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
     <link href="http://www.zhuli8.com/2015/05/10/GPU-%E5%8A%A0%E9%80%9F%E4%B8%8B%E7%9A%84%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/"/>
     <id>http://www.zhuli8.com/2015/05/10/GPU-加速下的图像处理/</id>
     <published>2015-05-10T02:35:27.000Z</published>
-    <updated>2015-07-20T02:44:34.000Z</updated>
+    <updated>2015-07-20T02:55:17.000Z</updated>
     <content type="html"><![CDATA[ <p>Instagram，Snapchat，Photoshop。</p>
 
 <p>所有这些应用都是用来做图像处理的。图像处理可以简单到把一张照片转换为灰度图，也可以复杂到是分析一个视频，并在人群中找到某个特定的人。尽管这些应用非常的不同，但这些例子遵从同样的流程，都是从创造到渲染。</p>
@@ -1637,6 +1637,7 @@ uniform highp float refractiveIndex;
 <p>学习着色器需要一些坚持和好奇心，但是并不是不可能的。如果一个 33 岁的还在康复中的新闻专业的人都能够克服她对数学的恐惧来处理着色器的话，那么你肯定也可以。</p>
 
 <p>原文 <a href="http://www.objc.io/issue-21/gpu-accelerated-image-processing.html" target="_blank" rel="external">GPU-Accelerated Image Processing</a> <a href="http://objccn.io/issue-21-7/" target="_blank" rel="external">译文</a></p>
+<p>扩展阅读 <a href="https://github.com/100mango/zen/blob/master/WWDC心得：Advanced%20Graphics%20and%20Animations%20for%20iOS%20Apps/Advanced%20Graphics%20and%20Animations%20for%20iOS%20Apps.md" target="_blank" rel="external">Advanced Graphics and Animations for iOS Apps</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[ <p>Instagram，Snapchat，Photoshop。</p>

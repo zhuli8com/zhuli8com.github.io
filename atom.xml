@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-07-06T10:30:00.000Z</updated>
+  <updated>2015-07-20T02:15:30.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -15,131 +15,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[iOS应用数据存储的常用方式]]></title>
-    <link href="http://www.zhuli8.com/2015/07/06/iOS%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E5%BC%8F/"/>
-    <id>http://www.zhuli8.com/2015/07/06/iOS应用数据存储的常用方式/</id>
-    <published>2015-07-06T04:40:39.000Z</published>
-    <updated>2015-07-06T10:30:00.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="应用沙盒">应用沙盒</h1><pre><code>iOS应用数据一般存储于应用沙盒，每个iOS应用都有自己的应用沙盒（应用沙盒就是文件系统目录），与其他文件系统隔离。应用必须待在自己的沙盒里，其他应用不能访问该沙盒。
-</code></pre><p>应用沙盒的文件系统目录如下图所示：</p>
-<p><img src="http://www.zhuli8.com/photos/沙盒目录结构.png" alt=""></p>
-<p>模拟器应用沙盒的根路径在：</p>
-<p><code>/Users/用户名/Library/Developer/CoreSimulator/Devices/模拟器UDID/data/Containers/Data/Application/对应应用程序文件夹</code></p>
-<h2 id="应用沙盒结构分析">应用沙盒结构分析</h2><h3 id="Documents">Documents</h3><p>保存应用运行时生成的 <strong>需要持久化的数据</strong> ，iTunes同步设备时会 <strong>会备份</strong> 该目录。例如，游戏应用可将游戏存档保存在该目录。</p>
-<h3 id="Library/Caches">Library/Caches</h3><p>保存应用运行时生成的 <strong>需要持久化的数据</strong> ，iTunes同步设备时 <strong>不会备份</strong> 该目录。一般存储体积大、不需要备份的非重要数据。</p>
-<h3 id="Library/Preference">Library/Preference</h3><p>保存应用的所有 <strong>偏好设置</strong> ，iOS的Settings（设置）应用会在该目录中查找应用的设置信息。iTunes同步设备时 <strong>会备份</strong> 该目录。</p>
-<h3 id="temp">temp</h3><p>保存应用运行时所需的 <strong>临时文件</strong> ，使用完毕后再将相应的文件从该目录删除。应用没有运行时，系统也可能会清除该目录下的文件。iTunes同步设备时 <strong>不会备份</strong> 该目录。</p>
-<h2 id="应用沙盒目录的常见获取方式">应用沙盒目录的常见获取方式</h2><h3 id="沙盒根目录">沙盒根目录</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *home=<span class="built_in">NSHomeDirectory</span>();</span><br></pre></td></tr></table></figure>
-<h3 id="Documnets">Documnets</h3><p><strong>利用NSSearchPathForDirectoriesInDomains函数</strong></p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject];</span><br></pre></td></tr></table></figure>
-<p><strong>利用NSFileManager的URLsForDirectory:inDomains:函数</strong></p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSURL</span> *path=[[[<span class="built_in">NSFileManager</span> defaultManager] URLsForDirectory:<span class="built_in">NSDocumentDirectory</span> inDomains:<span class="built_in">NSUserDomainMask</span>] lastObject];</span><br></pre></td></tr></table></figure>
-<p><strong>参数说明</strong></p>
-<p>在iOS中，只有一个目录跟传入的参数匹配，所以这个集合里面只有一个元素。</p>
-<blockquote>
-<p>NSUserDomainMask 代表从用户文件夹下找</p>
-<p>YES 代表展开路径中的波浪线字符“~”</p>
-</blockquote>
-<h3 id="Library/Caches-1">Library/Caches</h3><p><strong>利用NSSearchPathForDirectoriesInDomains函数</strong></p>
-<p><strong>利用NSFileManager的URLsForDirectory:inDomains:函数</strong></p>
-<blockquote>
-<p>将函数的第1个参数改为：NSCachesDirectory即可</p>
-</blockquote>
-<h3 id="Library/Preference-1">Library/Preference</h3><p><strong>通过过 NSUserDefaults 类存取该目录下的设置信息</strong></p>
-<h3 id="temp-1">temp</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=<span class="built_in">NSTemporaryDirectory</span>();</span><br></pre></td></tr></table></figure>
-<h1 id="XML属性列表（plist）归档">XML属性列表（plist）归档</h1><p>属性列表是一种XML格式的文件，拓展名为plist。<br>如果对象是NSString、NSDictionary、NSArray、NSData、NSNumber等类型，就可以使用这些对象的writeToFile:atomically:方法直接将对象写到属性列表文件中。</p>
-<blockquote>
-<p>所谓归档，是一个过程，即用某种格式来保存一个或者多个对象以便以后还原这些对象。</p>
-</blockquote>
-<h2 id="归档NSDictionary">归档NSDictionary</h2><p>将一个NSDictionary对象归档到一个plist属性列表中。</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject] stringByAppendingPathComponent:<span class="string">@"info.plist"</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">//将数据封装成字典</span></span><br><span class="line"><span class="built_in">NSMutableDictionary</span> *dict=[<span class="built_in">NSMutableDictionary</span> dictionary];</span><br><span class="line">[dict setValue:<span class="string">@"朱利"</span> forKey:<span class="string">@"name"</span>];</span><br><span class="line">[dict setValue:<span class="string">@"http://www.zhuli8.com"</span> forKey:<span class="string">@"site"</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">//将字典持久化到Docums/info.plist文件中</span></span><br><span class="line">[dict writeToFile:path atomically:<span class="literal">YES</span>];</span><br></pre></td></tr></table></figure>
-<h2 id="恢复NSDictionary">恢复NSDictionary</h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject] stringByAppendingPathComponent:<span class="string">@"info.plist"</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">//读取Documents/info.plist的内容，实例化NSDictionary。</span></span><br><span class="line"><span class="built_in">NSDictionary</span> *dict=[<span class="built_in">NSDictionary</span> dictionaryWithContentsOfFile:path];</span><br><span class="line">    </span><br><span class="line"><span class="built_in">NSString</span> *name=[dict objectForKey:<span class="string">@"name"</span>];</span><br><span class="line"><span class="built_in">NSString</span> *site=[dict objectForKey:<span class="string">@"site"</span>];</span><br></pre></td></tr></table></figure>
-<h1 id="Preference（偏好设置）">Preference（偏好设置）</h1><p>很多iOS应用都支持偏好设置，比如保存用户名、是否自动登录、字体大小等设置，iOS提供了一套标准的解决方案来为应用程序加入偏好设置功能。每个应用都有个 <strong>NSUserDefaults</strong> 实例，通过它来存取偏好设置。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NSUserDefaults *defaults= [NSUserDefaults standardUserDefaults];</span><br><span class="line">[defaults <span class="built_in">set</span>Object:@<span class="string">"朱利"</span> <span class="keyword">for</span>Key:@<span class="string">"name"</span>];</span><br><span class="line">[defaults <span class="built_in">set</span>Float:<span class="number">18</span> <span class="keyword">for</span>Key:@<span class="string">"fontSize"</span>];</span><br><span class="line">[defaults <span class="built_in">set</span>Bool:YES <span class="keyword">for</span>Key:@<span class="string">"autoLogin"</span>];</span><br><span class="line">    </span><br><span class="line">[defaults synchronize];</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意</p>
-</blockquote>
-<p><strong>NSUserDefauts设置数据时，不是立即写入，而是根据时间戳定时地把缓存中的数据写入本地磁盘。所以调用了set方法之后数据有可能还没有写入磁盘应用程序就终止了。出现以上问题，可以通过调用synchronize方法强制写入。</strong></p>
-<p>读取上次保存的偏好设置</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSUserDefaults</span> *defaults= [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</span><br><span class="line">    </span><br><span class="line"><span class="built_in">NSString</span> *name=[defaults objectForKey:<span class="string">@"name"</span>];</span><br><span class="line"><span class="keyword">float</span> fontSize=[defaults floatForKey:<span class="string">@"fontSize"</span>];</span><br><span class="line"><span class="built_in">BOOL</span> autoLogin=[defaults boolForKey:<span class="string">@"autoLogin"</span>];</span><br></pre></td></tr></table></figure>
-<h1 id="NSKeyedArchiver归档（NSCoding）">NSKeyedArchiver归档（NSCoding）</h1><p>如果对象是NSString、NSDictionary、NSArray、NSData、NSNumber等类型，可以直接用NSKeyedArchiver进行归档和恢复，不是所有的对象都可以直接用这种方法进行归档，只有遵守了NSCoding协议的对象才可以。</p>
-<h2 id="NSCoding协议的2个方法">NSCoding协议的2个方法</h2><h3 id="initWithCoder">initWithCoder</h3><p>每次从文件中恢复（解码）对象时都会调用这个方法，一般在这个方法里面指定如何解码文件中的数据为对象的实例变量，可以使用 <strong>decodeObject:forKey:</strong>方法解码实例变量。</p>
-<h3 id="encodeWithCoder">encodeWithCoder</h3><p>每次归档对象时，都会调用这个方法，一般这个方法里面指定如何归档对象中的每个实例变量，可以使用 <strong>encoderObject:forKey:</strong>方法归档实例变量。</p>
-<h2 id="NSKeyedArchiver归档NSArray">NSKeyedArchiver归档NSArray</h2><h3 id="归档一个NSArray对象到Documents/array-archive">归档一个NSArray对象到Documents/array.archive</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject] stringByAppendingPathComponent:<span class="string">@"array.archive"</span>];</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSArray</span> *array = [<span class="built_in">NSArray</span> arrayWithObjects:@”a”,@”b”,<span class="literal">nil</span>];</span><br><span class="line">[<span class="built_in">NSKeyedArchiver</span> archiveRootObject:array toFile:path];</span><br></pre></td></tr></table></figure>
-<h3 id="恢复(解码)NSArray对象">恢复(解码)NSArray对象</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject] stringByAppendingPathComponent:<span class="string">@"array.archive"</span>];</span><br><span class="line">    </span><br><span class="line"><span class="built_in">NSArray</span> *array= [<span class="built_in">NSKeyedUnarchiver</span> unarchiveObjectWithFile:path];</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,array);</span><br></pre></td></tr></table></figure>
-<h2 id="NSKeyedArchiver-归档Person对象">NSKeyedArchiver-归档Person对象</h2><h3 id="Person-h">Person.h</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@interface</span> <span class="attribute">Person </span>: NSObject&lt;NSCoding&gt;</span><br><span class="line"><span class="variable">@property</span> (nonatomic, copy) NSString *name;</span><br><span class="line"><span class="variable">@property</span> (nonatomic, assign) int age;</span><br><span class="line"><span class="variable">@property</span> (nonatomic, assign) float height;</span><br><span class="line"><span class="variable">@end</span></span><br></pre></td></tr></table></figure>
-<h3 id="Person-m">Person.m</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@implementation</span> Person</span><br><span class="line">-(<span class="typename">void</span>)<span class="string">encodeWithCoder:</span>(NSCoder *)encoder</span><br><span class="line">&#123;</span><br><span class="line">    [encoder <span class="string">encodeObject:</span>self.name <span class="string">forKey:</span>@<span class="string">"name"</span>];</span><br><span class="line">    [encoder <span class="string">encodeInt:</span>self.age <span class="string">forKey:</span>@<span class="string">"age"</span>];</span><br><span class="line">    [encoder <span class="string">encodeFloat:</span>self.height <span class="string">forKey:</span>@<span class="string">"height"</span>];</span><br><span class="line">&#125;</span><br><span class="line">-(id)<span class="string">initWithCoder:</span>(NSCoder *)decoder</span><br><span class="line">&#123;</span><br><span class="line">    self.name=[decoder <span class="string">decodeObjectForKey:</span>@<span class="string">"name"</span>];</span><br><span class="line">    self.age=[decoder <span class="string">decodeIntForKey:</span>@<span class="string">"age"</span>];</span><br><span class="line">    self.height=[decoder <span class="string">decodeFloatForKey:</span>@<span class="string">"height"</span>];</span><br><span class="line">    <span class="keyword">return</span> self;</span><br><span class="line">&#125;</span><br><span class="line"><span class="annotation">@end</span></span><br></pre></td></tr></table></figure>
-<h3 id="归档(编码)">归档(编码)</h3><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NSString *path=<span class="comment">[<span class="comment">[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]</span> stringByAppendingPathComponent:@"person.archive"]</span>;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">Person</span> *<span class="keyword">person</span>=<span class="comment">[<span class="comment">[Person alloc]</span> init]</span>;</span><br><span class="line"><span class="keyword">person</span>.name=@<span class="string">"zhuli8.com"</span>;</span><br><span class="line"><span class="keyword">person</span>.age=1;</span><br><span class="line"><span class="keyword">person</span>.height=2.0f;</span><br><span class="line"><span class="comment">[NSKeyedArchiver archiveRootObject:person toFile:path]</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="恢复(解码)">恢复(解码)</h3><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">NSString *path=<span class="comment">[<span class="comment">[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]</span> stringByAppendingPathComponent:@"person.archive"]</span>;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">Person</span> *<span class="keyword">person</span>= <span class="comment">[NSKeyedUnarchiver unarchiveObjectWithFile:path]</span>;</span><br><span class="line">NSLog(@<span class="string">"%@"</span>,<span class="keyword">person</span>);</span><br></pre></td></tr></table></figure>
-<h3 id="NSKeyedArchiver-归档对象的注意">NSKeyedArchiver-归档对象的注意</h3><p>如果父类也遵守了NSCoding协议，请注意：</p>
-<ul>
-<li>应该在encodeWithCoder:方法中加上一句<strong>[super encodeWithCode:encode];</strong>确保继承的实例变量也能被编码，即也能被归档；</li>
-<li>应该在initWithCoder:方法中加上一句<strong>self = [super initWithCoder:decoder];</strong>确保继承的实例变量也能被解码，即也能被恢复。</li>
-</ul>
-<h2 id="NSData">NSData</h2><p>使用archiveRootObject:toFile:方法可以将一个对象直接写入到一个文件中，但有时候可能想将多个对象写入到同一个文件中，那么就要使用NSData来进行归档对象。NSData可以为一些数据提供临时存储空间，以便随后写入文件，或者存放从磁盘读取的文件内容。可以使用[NSMutableData data]创建可变数据空间。</p>
-<p><img src="http://www.zhuli8.com/photos/NSData.png" alt=""></p>
-<h3 id="归档2个Person对象到同一文件中">归档2个Person对象到同一文件中</h3><h4 id="归档（编码）">归档（编码）</h4><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Person</span> *person1=<span class="comment">[<span class="comment">[Person alloc]</span> init]</span>;</span><br><span class="line">person1.name=@<span class="string">"zhuli8.com"</span>;</span><br><span class="line">person1.age=1;</span><br><span class="line">person1.height=1.2f;</span><br><span class="line"></span><br><span class="line"><span class="keyword">Person</span> *person2=<span class="comment">[<span class="comment">[Person alloc]</span> init]</span>;</span><br><span class="line">person2.name=@<span class="string">"朱利"</span>;</span><br><span class="line">person2.age=28;</span><br><span class="line">person2.height=1.7f;</span><br><span class="line"></span><br><span class="line">//新建一块可变数据区</span><br><span class="line">NSMutableData *data=<span class="comment">[NSMutableData data]</span>;</span><br><span class="line"></span><br><span class="line">//将数据区连接到一个NSKeyedArchiver对象</span><br><span class="line">NSKeyedArchiver *archiver=<span class="comment">[<span class="comment">[NSKeyedArchiver alloc]</span> initForWritingWithMutableData:data]</span>;</span><br><span class="line"></span><br><span class="line">//开始存档对象，存档的数据都会存储到NSMutableData中</span><br><span class="line"><span class="comment">[archiver encodeObject:person1 forKey:@"person1"]</span>;</span><br><span class="line"><span class="comment">[archiver encodeObject:person2 forKey:@"person2"]</span>;</span><br><span class="line"></span><br><span class="line">//存档完毕（一定要调用这个方法）</span><br><span class="line"><span class="comment">[archiver finishEncoding]</span>;</span><br><span class="line"></span><br><span class="line">//将存档的数据写入文件</span><br><span class="line">NSString *path=<span class="comment">[<span class="comment">[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]</span> stringByAppendingPathComponent:@"persons.archive"]</span>;</span><br><span class="line"><span class="comment">[data writeToFile:path atomically:YES]</span>;</span><br></pre></td></tr></table></figure>
-<h4 id="恢复（解码）">恢复（解码）</h4><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//从文件中读取数据</span><br><span class="line">NSString *path=<span class="comment">[<span class="comment">[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]</span> stringByAppendingPathComponent:@"persons.archive"]</span>;</span><br><span class="line">NSData *data=<span class="comment">[NSData dataWithContentsOfFile:path]</span>;</span><br><span class="line">//根据数据，解析成一个NSKeyedUnarchiver对象</span><br><span class="line">NSKeyedUnarchiver *unarchiver=<span class="comment">[<span class="comment">[NSKeyedUnarchiver alloc]</span> initForReadingWithData:data]</span>;</span><br><span class="line"><span class="keyword">Person</span> *person1=<span class="comment">[unarchiver decodeObjectForKey:@"person1"]</span>;</span><br><span class="line"><span class="keyword">Person</span> *person2=<span class="comment">[unarchiver decodeObjectForKey:@"person2"]</span>;</span><br><span class="line"></span><br><span class="line">//恢复完毕</span><br><span class="line"><span class="comment">[unarchiver finishDecoding]</span>;</span><br><span class="line"></span><br><span class="line">NSLog(@<span class="string">"%@,%@"</span>,person1,person2);</span><br></pre></td></tr></table></figure>
-<h3 id="利用归档实现深复制">利用归档实现深复制</h3><p>比如对一个Person对象进行深复制</p>
-<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Person</span> *person1=<span class="comment">[<span class="comment">[Person alloc]</span> init]</span>;</span><br><span class="line">person1.name=@<span class="string">"zhuli8.com"</span>;</span><br><span class="line">person1.age=1;</span><br><span class="line">person1.height=1.2f;</span><br><span class="line"></span><br><span class="line">//临时存储person1的数据</span><br><span class="line">NSData *data=<span class="comment">[NSKeyedArchiver archivedDataWithRootObject:person1]</span>;</span><br><span class="line"></span><br><span class="line">//解析data，生成一个新的<span class="keyword">Person</span>对象</span><br><span class="line"><span class="keyword">Person</span> *person2=<span class="comment">[NSKeyedUnarchiver unarchiveObjectWithData:data]</span>;</span><br><span class="line"></span><br><span class="line">//分别打印内存地址</span><br><span class="line">NSLog(@<span class="string">"person1=%p,person2=%p"</span>,person1,person2);</span><br><span class="line"></span><br><span class="line">//person1=0x7fc478c49390,person2=0x7fc478e1c180</span><br></pre></td></tr></table></figure>
-<h1 id="SQLite3">SQLite3</h1><p>SQLite3是一款开源的嵌入式关系型数据库，可移植性好、易使用、内存开销小。<br>SQLite3是无类型的，意味着你可以保存任何类型的数据到任意表的任意字段中。比如下列的创表语句是合法的：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> t_person(name, age);</span></span><br></pre></td></tr></table></figure>
-<p>为了保证可读性，建议还是把字段类型加上：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> t_person(name <span class="built_in">text</span>, age <span class="built_in">integer</span>);</span></span><br></pre></td></tr></table></figure>
-<p>SQLite3常用的5种数据类型：text、integer、float、boolean、blob。</p>
-<h2 id="创建、打开、关闭数据库">创建、打开、关闭数据库</h2><h3 id="创建或打开数据库">创建或打开数据库</h3><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">NSString</span> *path=[[<span class="type">NSSearchPathForDirectoriesInDomains</span>(<span class="type">NSDocumentationDirectory</span>, <span class="type">NSUserDomainMask</span>, <span class="type">YES</span>) lastObject] stringByAppendingPathComponent:@<span class="string">"person.db"</span>];</span><br><span class="line"></span><br><span class="line">sqlite3 *db;//一个打开的数据库实例</span><br><span class="line"></span><br><span class="line">//将根据文件路径打开数据库，如果不存在，则会创建一个新的数据库。如果<span class="literal">result</span>等于常量<span class="type">SQLITE_OK</span>，则表示成功打开数据库。</span><br><span class="line"><span class="type">int</span> <span class="literal">result</span>=sqlite3_open([path <span class="type">UTF8String</span>], &amp;db);//数据库文件的路径必须以C字符串(而非<span class="type">NSString</span>)传入</span><br></pre></td></tr></table></figure>
-<h3 id="关闭数据库：">关闭数据库：</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_close<span class="list">(<span class="keyword">db</span>)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<h2 id="执行不返回数据的SQL语句">执行不返回数据的SQL语句</h2><h3 id="执行创表语句">执行创表语句</h3><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *errorMsg;//用来存储错误信息</span><br><span class="line"><span class="type">char</span> *sql=<span class="string">"create table if not exists t_person(id integer primary key autoincrement,name text,age integer);"</span>;</span><br><span class="line"><span class="type">int</span> <span class="literal">result</span>=sqlite3_exec(db, sql, <span class="type">NULL</span>, <span class="type">NULL</span>, &amp;errorMsg);</span><br></pre></td></tr></table></figure>
-<p>sqlite3_exec()可以执行任何SQL语句，比如创表、更新、插入和删除操作。但是一般不用它执行查询语句，因为它不会返回查询到的数据。<br>sqlite3_exec()还可以执行的语句：</p>
-<ul>
-<li>开启事务：begin transaction;</li>
-<li>回滚事务：rollback;</li>
-<li>提交事务：commit;</li>
-</ul>
-<h3 id="带占位符插入数据">带占位符插入数据</h3><figure class="highlight openscad"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">char <span class="built_in">*</span>sql=<span class="string">"insert into t_person(name,age) values(?,?);"</span>;</span><br><span class="line">sqlite3_stmt <span class="built_in">*</span>stmt;</span><br><span class="line"><span class="keyword">if</span> <span class="params">(sqlite3_prepare_v2<span class="params">(db, sql, -<span class="number">1</span>, &amp;stmt, NULL)</span>==SQLITE_OK)</span> &#123;</span><br><span class="line">    sqlite3_bind_text<span class="params">(stmt, <span class="number">1</span>, <span class="string">"朱利"</span>, -<span class="number">1</span>, NULL)</span>;</span><br><span class="line">    sqlite3_bind_int<span class="params">(stmt, <span class="number">2</span>, <span class="number">1</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="params">(sqlite3_step<span class="params">(stmt)</span>!=SQLITE_DONE)</span> &#123;</span><br><span class="line">    NSLog<span class="params">(@<span class="string">"插入数据错误"</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sqlite3_finalize<span class="params">(stmt)</span>;</span><br></pre></td></tr></table></figure>
-<p>sqlite3_prepare_v2()：返回值等于SQLITE_OK，说明SQL语句已经准备成功，没有语法问题。<br>sqlite3_bind_text()：大部分绑定函数都只有3个参数</p>
-<ul>
-<li>第1个参数是sqlite3_stmt *类型</li>
-<li>第2个参数指占位符的位置，第一个占位符的位置是1，不是0</li>
-<li>第3个参数指占位符要绑定的值</li>
-<li>第4个参数指在第3个参数中所传递数据的长度，对于C字符串，可以传递-1代替字符串的长度</li>
-<li>第5个参数是一个可选的函数回调，一般用于在语句执行后完成内存清理工作<br>sqlite_step()：执行SQL语句，返回SQLITE_DONE代表成功执行完毕。<br>sqlite_finalize()：销毁sqlite3_stmt *对象。</li>
-</ul>
-<h2 id="查询数据">查询数据</h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *sql = <span class="string">"select id,name,age from t_person;"</span>;</span><br><span class="line">sqlite3_stmt *stmt;</span><br><span class="line"><span class="keyword">if</span> (sqlite3_prepare_v2(db, sql, -<span class="number">1</span>, &amp;stmt, <span class="literal">NULL</span>) == SQLITE_OK) &#123;</span><br><span class="line">    <span class="keyword">while</span> (sqlite3_step(stmt) == SQLITE_ROW) &#123;</span><br><span class="line">        <span class="keyword">int</span> _<span class="keyword">id</span> = sqlite3_column_int(stmt, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">char</span> *_name = (<span class="keyword">char</span> *)sqlite3_column_text(stmt, <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">NSString</span> *name = [<span class="built_in">NSString</span> stringWithUTF8String:_name];</span><br><span class="line">        <span class="keyword">int</span> _age = sqlite3_column_int(stmt, <span class="number">2</span>);</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"id=%i, name=%@, age=%i"</span>, _<span class="keyword">id</span>, name, _age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">sqlite3_finalize(stmt);</span><br></pre></td></tr></table></figure>
-<p>sqlite3<em>step()：返回SQLITE_ROW代表遍历到一条新记录。<br>sqlite3_column</em>*()用于获取每个字段对应的值，第2个参数是字段的索引，从0开始</p>
-<h1 id="Core_Data">Core Data</h1><p>Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象转化成数据，保存在SQLite3数据库文件中，也能够将保存在数据库中的数据还原成OC对象。在此数据操作期间，不需要编写任何SQL语句。</p>
-<h2 id="推荐文章阅读">推荐文章阅读</h2><p><a href="http://yulingtianxia.com/blog/2014/05/01/chu-shi-core-data-1/" target="_blank" rel="external">初识Core Data(1)</a></p>
-<p><a href="http://yulingtianxia.com/blog/2014/05/02/chu-shi-core-data-2/" target="_blank" rel="external">初识Core Data(2)</a></p>
-<p><a href="http://yulingtianxia.com/blog/2014/07/03/chu-shi-core-data-3/" target="_blank" rel="external">初识Core Data(3)</a></p>
-<h2 id="打开Core_Data的SQL日志输出开关">打开Core Data的SQL日志输出开关</h2><ul>
-<li>打开Product，点击Edit Scheme…</li>
-<li>点击Arguments，在Arguments Passed On Launch中添加2项<ul>
-<li>-com.apple.CoreData.SQLDebug</li>
-<li>1</li>
-</ul>
-</li>
-</ul>
-<h2 id="Core_Data的延迟加载">Core Data的延迟加载</h2><p>Core Data不会根据实体中的关联关系立即获取相应的关联对象，比如通过Core Data取出Person实体时，并不会立即查询相关联的Card实体；当应用真的需要使用Card时，才会查询数据库，加载Card实体的信息。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[iOS应用数据存储的常用方式]]>
-    
-    </summary>
-    
-      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
-    
-      <category term="数据存储" scheme="http://www.zhuli8.com/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"/>
-    
-      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[构建支持armv7和arm64的webRTC静态库]]></title>
-    <link href="http://www.zhuli8.com/2015/07/02/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/"/>
-    <id>http://www.zhuli8.com/2015/07/02/构建支持armv7和arm64的webRTC静态库/</id>
-    <published>2015-07-02T04:13:57.000Z</published>
-    <updated>2015-07-02T07:14:47.000Z</updated>
+    <link href="http://www.zhuli8.com/2015/07/19/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/"/>
+    <id>http://www.zhuli8.com/2015/07/19/构建支持armv7和arm64的webRTC静态库/</id>
+    <published>2015-07-19T04:13:57.000Z</published>
+    <updated>2015-07-20T02:15:30.000Z</updated>
     <content type="html"><![CDATA[<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
 <p><strong>目前为止Apple移动设备默认指令集</strong></p>
 <hr>
@@ -201,11 +81,179 @@
   </entry>
   
   <entry>
+    <title><![CDATA[The Internet Communications (ice)]]></title>
+    <link href="http://www.zhuli8.com/2015/07/12/The-Internet-Communications-Ice-%E7%AE%80%E4%BB%8B/"/>
+    <id>http://www.zhuli8.com/2015/07/12/The-Internet-Communications-Ice-简介/</id>
+    <published>2015-07-12T09:26:50.000Z</published>
+    <updated>2015-07-20T02:15:58.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="简介">简介</h1><p>The Internet Communications Engine (ice) is a modern object-oriented toolkit that enables you to build distributed applications with minimal effort. Ice allows you to focus your efforts on your application logic, and it takes care of all interactions with low-level network programming interfaces. With Ice, there is no need to worry about details such as opening network connections, serializing and deserializing data for network transmission, or retrying failed connection attempts (to name but a few of dozens of such low-level details).</p>
+<h1 id="开发环境搭建">开发环境搭建</h1><p>ICE安装文件：<a href="https://zeroc.com/icetouch/download.html" target="_blank" rel="external">https://zeroc.com/icetouch/download.html</a><br>ICE编译插件：<a href="https://github.com/zeroc-ice/ice-builder-xcode" target="_blank" rel="external">https://github.com/zeroc-ice/ice-builder-xcode</a></p>
+<h1 id="相关文档">相关文档</h1><p>ICE官网：<a href="http://www.zeroc.com/ice.html" target="_blank" rel="external">http://www.zeroc.com/ice.html</a><br>官网文档：<a href="http://doc.zeroc.com/display/Doc/Home" target="_blank" rel="external">http://doc.zeroc.com/display/Doc/Home</a><br>性能评测：<a href="http://zeroc.com/articles/IcePerformanceWhitePaper.pdf" target="_blank" rel="external">http://zeroc.com/articles/IcePerformanceWhitePaper.pdf</a></p>
+<h1 id="ICE通讯框架基本原理">ICE通讯框架基本原理</h1><p>ICE的思路是，用一个中间语言，建立数据结构规范和接口规范，然后再用一个IDE编译插件，将中间语言数据结构规范和接口规范编译为当前的语言，譬如OC的.h/.m文件，接下来，你在客户端和服务端实现中间语言定义号的接口，再做一些其它处理，就可以实现一个分布式程序了。这个思路确实很Nice，值得我们借鉴。</p>
+<h1 id="通讯方式选择">通讯方式选择</h1><p>P2P（设备直连）</p>
+<p>通过服务器中转</p>
+<h1 id="网络连接方式">网络连接方式</h1><p>基于TCP的长连接</p>
+<p>基于HTTP短连接PULL的方式</p>
+<h1 id="协议选择">协议选择</h1><p>XMPP</p>
+<p>SIP</p>
+<p>MQTT</p>
+<p>私有协议（二进制协议）</p>
+<h1 id="其他">其他</h1><p>p2p视频聊天的过程：音视频数据采集—&gt;编码—&gt;发送—&gt;接收—&gt;解码—&gt;播放</p>
+<p><a href="http://www.cnblogs.com/HouZhiHouJueBlogs/p/3864677.html" target="_blank" rel="external">The Internet Communications Engine (Ice) 跨平台异构通讯方案 第一弹-ICE简介</a></p>
+<p><a href="http://www.cnblogs.com/HouZhiHouJueBlogs/p/3864737.html" target="_blank" rel="external">The Internet Communications Engine (Ice) 跨平台异构通讯方案 第二弹-Hello world！</a></p>
+<p><a href="http://www.cnblogs.com/lingyunhu/category/626157.html" target="_blank" rel="external">webrtc</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[IM相关学习]]>
+    
+    </summary>
+    
+      <category term="ice" scheme="http://www.zhuli8.com/tags/ice/"/>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Grand Central Dispatch (gcd)]]></title>
+    <link href="http://www.zhuli8.com/2015/07/05/Grand-Central-Dispatch-gcd/"/>
+    <id>http://www.zhuli8.com/2015/07/05/Grand-Central-Dispatch-gcd/</id>
+    <published>2015-07-05T06:50:07.000Z</published>
+    <updated>2015-07-20T02:16:55.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
+<li>全称是Grand Central Dispatch ，可译为“大中央调度”</li>
+<li>纯C语言，提供了非常多强大的函数库</li>
+<li><h2 id="GCD的优势">GCD的优势</h2></li>
+<li>GCD是苹果公司为<strong>多核</strong>的<strong>并行</strong>运算提出的解决方案</li>
+<li>GCD会自动利用更多的CPU内核（比如双核、四核）</li>
+<li>GCD会自动管理线程的生命周期（创建线程、调度任务、销毁线程）</li>
+<li>程序员只需要告诉GCD想要执行什么任务，不需要编写任何线程管理代码<h1 id="任务和队列">任务和队列</h1></li>
+<li>GCD中有两个核心概念</li>
+</ul>
+<ol>
+<li><strong>任务</strong>：执行什么操作</li>
+<li><strong>队列</strong>：用来存放任务</li>
+</ol>
+<ul>
+<li>GCD的使用步骤</li>
+</ul>
+<ol>
+<li><strong>定制任务</strong>：确定想做的事情</li>
+<li><strong>将任务添加到队列中</strong>：GCD会自动将<em>队列</em>中的<em>任务</em>取出，放到对应的<em>线程</em>中执行；<em>任务</em>的取出遵循<em>队列</em>的FIFO原则：先进先出，后进后出<h2 id="执行任务">执行任务</h2>GCD中有2个用来执行任务的函数</li>
+</ol>
+<ul>
+<li>用<strong>同步</strong>的方式执行任务<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatch_sync(<span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span>, <span class="keyword">dispatch_block_t</span> block);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>queue：队列<br>  block：任务</p>
+</blockquote>
+<ul>
+<li><p>用<strong>异步</strong>的方式执行任务</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(<span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span>, <span class="keyword">dispatch_block_t</span> block); </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同步和异步的区别</p>
+<blockquote>
+<p>同步：只能在<strong>当前</strong>线程中执行任务，<strong>不具备</strong>开启新线程的能力<br>异步：可以在<strong>新的</strong>线程中执行任务，<strong>具备</strong>开启新线程的能力</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="队列的类型">队列的类型</h2><p>GCD的队列可以分为2大类型</p>
+<ul>
+<li><p><strong>并发</strong>队列（Concurrent Dispatch Queue）</p>
+<blockquote>
+<p>可以让多个任务<strong>并发（同时）</strong>执行（自动开启多个线程同时执行任务）<br><strong>并发</strong>功能只有在<strong>异步（dispatch_async）</strong>函数下才有效</p>
+</blockquote>
+</li>
+<li><p><strong>串行</strong>队列（Serial Dispatch Queue）</p>
+<blockquote>
+<p>让任务一个接着一个地执行（一个任务执行完毕后，再执行下一个任务）</p>
+</blockquote>
+</li>
+<li>容易混淆的术语 <blockquote>
+<p>有4个术语比较容易混淆：同步、异步、并发、串行<br><strong>同步和异步主要影响：能不能开启新的线程</strong><br>同步：在当前线程中执行任务，不具备开启新线程的能力<br>异步：在新的线程中执行任务，具备开启新线程的能力<br><strong>并发和串行主要影响：任务的执行方式</strong><br>并发：多个任务并发（同时）执行<br>串行：一个任务执行完毕后，再执行下一个任务</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="并发队列">并发队列</h3><ul>
+<li>GCD默认已经提供了全局的并发队列，供整个应用使用，不需要手动创建<br><strong>使用dispatch_get_global_queue函数获得全局的并发队列</strong><blockquote>
+<p>dispatch_queue_t dispatch_get_global_queue(<br>dispatch_queue_priority_t priority, // 队列的优先级<br>unsigned long flags); // 此参数暂时无用，用0即可</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span> = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>); <span class="comment">// 获得全局并发队列</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>全局并发队列的优先级<br><code>#define DISPATCH_QUEUE_PRIORITY_HIGH 2 // 高</code><br><code>#define DISPATCH_QUEUE_PRIORITY_DEFAULT 0 // 默认（中</code>）<br><code>#define DISPATCH_QUEUE_PRIORITY_LOW (-2) // 低</code><br><code>#define DISPATCH_QUEUE_PRIORITY_BACKGROUND INT16_MIN // 后台</code></p>
+</blockquote>
+<h3 id="串行队列 ">串行队列 </h3><ul>
+<li>GCD中获得串行有2种途径</li>
+</ul>
+<p><strong>使用dispatch_queue_create函数创建串行队列</strong></p>
+<blockquote>
+<p>dispatch_queue_t<br>dispatch_queue_create(const char *label, // 队列名称<br>dispatch_queue_attr_t attr); // 队列属性，一般用NULL即可<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span> = dispatch_queue_create(<span class="string">"cn.itcast.queue"</span>, NULL); <span class="comment">// 创建</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><strong>使用主队列（跟主线程相关联的队列）</strong><br>主队列是GCD自带的一种特殊的串行队列<br>放在主队列中的任务，都会放到主线程中执行<br>使用dispatch_get_main_queue()获得主队列<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span> = dispatch_get_main_queue();</span><br></pre></td></tr></table></figure></p>
+<pre><code>凡是函数名种带有<span class="operator"><span class="keyword">create</span>\copy\new\retain等字眼, 都应该在不需要使用这个数据的时候进行<span class="keyword">release</span>
+GCD的数据类型在ARC环境下不需要再做<span class="keyword">release</span>
+CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="keyword">release</span></span>
+</code></pre><h3 id="各种队列的执行效果">各种队列的执行效果</h3><p><img src="http://www.zhuli8.com/photos/gcd.png" alt=""></p>
+<blockquote>
+<p><strong>注意</strong><br>使用sync函数往当前串行队列中添加任务，会卡住当前的串行队列</p>
+</blockquote>
+<h1 id="线程间通信示例 ">线程间通信示例 </h1><h2 id="从子线程回到主线程">从子线程回到主线程</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async<span class="list">(<span class="keyword">dispatch_get_global_queue</span><span class="list">(<span class="keyword">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>)</span>, ^&#123;</span><br><span class="line">    // 执行耗时的异步操作...</span><br><span class="line">      dispatch_async<span class="list">(<span class="keyword">dispatch_get_main_queue</span><span class="list">()</span>, ^&#123;</span><br><span class="line">        // 回到主线程，执行UI刷新操作</span><br><span class="line">        &#125;)</span><span class="comment">;</span></span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<h2 id="延时执行">延时执行</h2><p>iOS常见的延时执行有2种方式</p>
+<h3 id="调用NSObject的方法">调用NSObject的方法</h3><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">self</span> <span class="symbol">performSelector:</span><span class="variable">@selector</span>(run) <span class="symbol">withObject:</span><span class="keyword">nil</span> <span class="symbol">afterDelay:</span><span class="number">2.0</span>];<span class="regexp">//</span> <span class="number">2</span>秒后再调用<span class="keyword">self</span>的run方法</span><br></pre></td></tr></table></figure>
+<h3 id="使用GCD函数">使用GCD函数</h3><figure class="highlight openscad"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dispatch_after<span class="params">(dispatch_time<span class="params">(DISPATCH_TIME_NOW, <span class="params">(int64_t)</span><span class="params">(<span class="number">2.0</span> * NSEC_PER_SEC)</span>)</span>, dispatch_get_main_queue<span class="params">()</span>, ^&#123;</span><br><span class="line">    // <span class="number">2</span>秒后异步执行这里的代码...</span><br><span class="line">&#125;)</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="一次性代码">一次性代码</h2><p>使用dispatch_once函数能保证某段代码在程序运行过程中只被执行1次<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</span><br><span class="line"><span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</span><br><span class="line">    <span class="comment">// 只执行1次的代码(这里面默认是线程安全的)</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h2 id="队列组">队列组</h2><p>有这么1种需求<br>首先：分别异步执行2个耗时的操作<br>其次：等2个异步操作都执行完毕后，再回到主线程执行操作<br>如果想要快速高效地实现上述需求，可以考虑用队列组<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">dispatch_group_t group =  dispatch_group_create<span class="list">()</span><span class="comment">;</span></span><br><span class="line">dispatch_group_async<span class="list">(<span class="keyword">group</span>, dispatch_get_global_queue<span class="list">(<span class="keyword">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>)</span>, ^&#123;</span><br><span class="line">    // 执行<span class="number">1</span>个耗时的异步操作</span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br><span class="line">dispatch_group_async<span class="list">(<span class="keyword">group</span>, dispatch_get_global_queue<span class="list">(<span class="keyword">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>)</span>, ^&#123;</span><br><span class="line">    // 执行<span class="number">1</span>个耗时的异步操作</span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br><span class="line">dispatch_group_notify<span class="list">(<span class="keyword">group</span>, dispatch_get_main_queue<span class="list">()</span>, ^&#123;</span><br><span class="line">    // 等前面的异步操作都执行完毕后，回到主线程...</span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="单例模式">单例模式</h2><h3 id="单例模式的作用">单例模式的作用</h3><p>可以保证在程序运行过程，一个类只有一个实例，而且该实例易于供外界访问，从而方便地控制了实例个数，并节约系统资源</p>
+<h3 id="单例模式的使用场合">单例模式的使用场合</h3><ul>
+<li>在整个应用程序中，共享一份资源（这份资源只需要创建初始化1次）</li>
+<li>单例模式在ARC\MRC环境下的写法有所不同，需要编写2套不同的代码<br>可以用宏判断是否为ARC环境<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">if</span> __has_feature(objc_arc)</span></span><br><span class="line"><span class="comment">// ARC</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">else</span></span></span><br><span class="line"><span class="comment">// MRC</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="ARC单例模式的实现">ARC单例模式的实现</h4><ul>
+<li><p>在.m中保留一个全局的static的实例</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">id</span> _instance;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重写allocWithZone:方法，在这里创建唯一的实例（注意线程安全）</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">id</span>)allocWithZone:(<span class="keyword">struct</span> _<span class="built_in">NSZone</span> *)zone</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">@synchronized</span>(<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!_instance) &#123;</span><br><span class="line">            _instance = [<span class="keyword">super</span> allocWithZone:zone];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>提供1个类方法让外界访问唯一的实例</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ (instancetype)sharedSoundTool</span><br><span class="line">&#123;</span><br><span class="line">    <span class="variable">@synchronized</span>(<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!_instance) &#123;</span><br><span class="line">            _instance = [[<span class="keyword">self</span> alloc] init];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现copyWithZone:方法</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)copyWithZone:(<span class="keyword">struct</span> _<span class="built_in">NSZone</span> *)zone</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="MRC">MRC</h4><p>非ARC中（MRC），单例模式的实现（比ARC多了几个步骤）<br><em>实现内存管理方法</em></p>
+<pre><code>-<span class="ruby"> (id)retain { <span class="keyword">return</span> <span class="keyword">self</span>; }
+</span>-<span class="ruby"> (<span class="constant">NSUInteger</span>)retainCount { <span class="keyword">return</span> <span class="number">1</span>; }
+</span>-<span class="ruby"> (oneway void)release {}
+</span>-<span class="ruby"> (id)autorelease { <span class="keyword">return</span> <span class="keyword">self</span>; }</span>
+</code></pre><h1 id="推荐阅读">推荐阅读</h1><p><a href="http://www.jianshu.com/p/50c060bab0ff" target="_blank" rel="external">Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2</a><br><a href="[Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2](http://www.jianshu.com/p/50c060bab0ff">cocoachina：Grand Central Dispatch 基础教程：Part 2/2</a>)<br><a href="http://www.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">唐巧：使用GCD</a><br><a href="http://www.cocoachina.com/ios/20140428/8248.html" target="_blank" rel="external">GCD 深入理解（一）</a><br><a href="http://www.cocoachina.com/ios/20140515/8433.html" target="_blank" rel="external">GCD 深入理解（二）</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
+<li>全称是Grand Central Dispatch ，可译为“大中央调度”</li>
+<li>纯C语言，提供了非常多强大的函数库</li>
+<li><h2 id="GCD]]>
+    </summary>
+    
+      <category term="GCD" scheme="http://www.zhuli8.com/tags/GCD/"/>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[swift学习参考]]></title>
-    <link href="http://www.zhuli8.com/2015/07/01/swift%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
-    <id>http://www.zhuli8.com/2015/07/01/swift学习参考/</id>
-    <published>2015-07-01T04:41:20.000Z</published>
-    <updated>2015-07-09T01:54:53.000Z</updated>
+    <link href="http://www.zhuli8.com/2015/06/28/swift%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
+    <id>http://www.zhuli8.com/2015/06/28/swift学习参考/</id>
+    <published>2015-06-28T04:41:20.000Z</published>
+    <updated>2015-07-20T02:17:28.000Z</updated>
     <content type="html"><![CDATA[<h1 id="官方文档">官方文档</h1><p><a href="https://developer.apple.com/swift/" target="_blank" rel="external">苹果出品，必属精品！</a></p>
 <p><a href="https://github.com/zhuli8com/Welcome-to-Swift" target="_blank" rel="external">Welcome-to-Swift</a>（中文版）</p>
 <p><a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/" target="_blank" rel="external">The Swift Programming Language</a></p>
@@ -233,11 +281,109 @@
   </entry>
   
   <entry>
+    <title><![CDATA[swift版设计模式之代理模式-Proxy程序替你聊天]]></title>
+    <link href="http://www.zhuli8.com/2015/06/21/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F-Proxy%E7%A8%8B%E5%BA%8F%E6%9B%BF%E4%BD%A0%E8%81%8A%E5%A4%A9/"/>
+    <id>http://www.zhuli8.com/2015/06/21/代理模式-Proxy程序替你聊天/</id>
+    <published>2015-06-21T09:05:10.000Z</published>
+    <updated>2015-07-20T02:17:40.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="代理模式比喻">代理模式比喻</h1><p>跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。</p>
+<h1 id="代理模式意图">代理模式意图</h1><p>代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。</p>
+<h1 id="代理模式类图">代理模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/proxy.gif" alt=""></p>
+<h1 id="代理模式实现">代理模式实现</h1><p>定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Proxy所代表的真实实体</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span>: <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> mm:<span class="type">Girl</span></span><br><span class="line">    <span class="keyword">init</span>(mm:<span class="type">Girl</span>)&#123;</span><br><span class="line">        <span class="keyword">self</span>.mm=mm</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> mm.word!&#123;<span class="comment">//记得强制解包哦</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">"hi,你好"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"hi,你好"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你从哪里来呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"火星"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你多大了？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="number">18</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"身高多少呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"2.5m"</span>)</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            say()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">say</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"我出场了……"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>保存一个RealSubject引用，使得代理可以访问实体并提供一个与Subject相同的接口来代替实体</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Proxy</span>: <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> rs:<span class="type">RealSubject</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(mm:<span class="type">Girl</span>)&#123;</span><br><span class="line">        rs=<span class="type">RealSubject</span>(mm: mm)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span> &#123;</span><br><span class="line">        rs.operation()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>聊天的MM</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> word:<span class="built_in">String</span>?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代理模式客户端应用</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> mm=<span class="function"><span class="title">Girl</span><span class="params">()</span></span></span><br><span class="line">mm.word=<span class="string">"hi,你好"</span></span><br><span class="line"></span><br><span class="line"><span class="tag">var</span> proxy=<span class="function"><span class="title">Proxy</span><span class="params">(mm: mm)</span></span></span><br><span class="line">proxy.<span class="function"><span class="title">operation</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<h1 id="代理模式总结">代理模式总结</h1><p>吼吼，这是不是就是传说中的机器人聊天原理啊！代理模式给某一个对象提供一个代理对象，由代理对象控制对源对象的引用。代理就是一个人或一个结构代表另一个人或者一个机构采取行动。我们身边到处都是代理模式，如远程代理、虚拟代理、安全代理、智能指引等。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="代理模式比喻">代理模式比喻</h1><p>跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷]]>
+    </summary>
+    
+      <category term="swift" scheme="http://www.zhuli8.com/tags/swift/"/>
+    
+      <category term="设计模式" scheme="http://www.zhuli8.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="设计模式" scheme="http://www.zhuli8.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[swift版设计模式之中介者模式-MM们打麻将我来算账]]></title>
+    <link href="http://www.zhuli8.com/2015/06/14/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F-MM%E4%BB%AC%E6%89%93%E9%BA%BB%E5%B0%86%E6%88%91%E6%9D%A5%E7%AE%97%E8%B4%A6/"/>
+    <id>http://www.zhuli8.com/2015/06/14/中介者模式-MM们打麻将我来算账/</id>
+    <published>2015-06-14T04:05:10.000Z</published>
+    <updated>2015-07-20T02:18:18.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="中介者模式比喻">中介者模式比喻</h1><p>四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。</p>
+<h1 id="中介者模式意图">中介者模式意图</h1><p>中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
+<h1 id="中介者模式类图">中介者模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/mediator.gif" alt=""></p>
+<h1 id="中介者模式实现">中介者模式实现</h1><p>抽象中介者，定义了MM需要什么样的中介者</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Mediator</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(money:Double,girl:Girl)</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体中介者对象，实现抽象类的方法，他需要知道所有具体的MM，并给MM核算服务</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Boy</span>: <span class="title">Mediator</span> </span>&#123;</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl1:<span class="type">FirstGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl2:<span class="type">SecondGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl3:<span class="type">ThirdGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl4:<span class="type">FourthGirl</span>?</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(<span class="keyword">var</span> money: Double, girl: Girl)</span></span> &#123;</span><br><span class="line">        money=money*<span class="number">10</span><span class="comment">////中介者的处理，此处业务比较简单假设一个筹码代表10</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> girl===girl1&#123;</span><br><span class="line">            girl1?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl2&#123;</span><br><span class="line">            girl2?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl3&#123;</span><br><span class="line">            girl3?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl4&#123;</span><br><span class="line">            girl4?.getResult(money)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抽象女孩类</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> mediator:<span class="type">Mediator</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(mediator:<span class="type">Mediator</span>)&#123;</span><br><span class="line">        <span class="keyword">self</span>.mediator=mediator<span class="comment">////得到中介者对象</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span><br><span class="line">    告诉中介者筹码数，让其帮我核算</span><br><span class="line">    */</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">notify</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        mediator.calculate(money, girl: <span class="keyword">self</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>女孩1，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识且依靠中介者对象核算</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FirstGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The FirstGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>女孩2，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SecondGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The SecondGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>女孩3，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThirdGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The ThirdGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>女孩4，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FourthGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The FourthGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>中介者模式客户端应用</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> boy=<span class="function"><span class="title">Boy</span><span class="params">()</span></span><span class="comment">//核算中介</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个打麻将的MM</span></span><br><span class="line"><span class="tag">var</span> girl1=<span class="function"><span class="title">FirstGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl2=<span class="function"><span class="title">SecondGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl3=<span class="function"><span class="title">ThirdGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl4=<span class="function"><span class="title">FourthGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个MM让我调节</span></span><br><span class="line">boy.girl1=girl1</span><br><span class="line">boy.girl2=girl2</span><br><span class="line">boy.girl3=girl3</span><br><span class="line">boy.girl4=girl4</span><br><span class="line">girl1.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">10</span>)</span></span></span><br><span class="line">girl2.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">20</span>)</span></span></span><br><span class="line">girl3.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">20</span>)</span></span></span><br><span class="line">girl4.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">10</span>)</span></span></span><br></pre></td></tr></table></figure>
+<h1 id="中介者模式总结">中介者模式总结</h1><p>中介者的出现减少了MM们的耦合，使得可以独立地改变和复用各个Mediator和Girl，具体女孩类的改变不会影响到其他女孩类，而只是Boy发生变化。Boy把对象如何协作进行了抽象，将中介作为一个独立的概念并将其封装在一个对象中，关注的对象就从对象各自本身的行为转移到她们之间的交互上来。即中介者模式包装了一系列对象相互作用的方式，使得这些对象不必相互明显作用。从而是它们可以松散耦合。当某些对象之间的作用发生改变时，不会立即影响其他的一些对象，保证这些作用可以彼此独立的变化。中介者模式将多对多的相互作用转化为一对多的相互作用。中介者模式将对象的行为和协作抽象化，把对象在小尺度的行为上与其他对象的相互作用分开处理。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="中介者模式比喻">中介者模式比喻</h1><p>四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。</p>
+<h1 id="中介者模式意图">中介]]>
+    </summary>
+    
+      <category term="swift" scheme="http://www.zhuli8.com/tags/swift/"/>
+    
+      <category term="设计模式" scheme="http://www.zhuli8.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="设计模式" scheme="http://www.zhuli8.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[@OBJC和DYNAMIC]]></title>
+    <link href="http://www.zhuli8.com/2015/06/07/OBJC%E5%92%8CDYNAMIC/"/>
+    <id>http://www.zhuli8.com/2015/06/07/OBJC和DYNAMIC/</id>
+    <published>2015-06-07T02:44:45.000Z</published>
+    <updated>2015-07-20T02:18:42.000Z</updated>
+    <content type="html"><![CDATA[<p><div class="post-content clearfix"><br>        <p>虽然说 Swift 语言的初衷是希望能摆脱 Objective-C 的沉重的历史包袱和约束，但是不可否认的是经过了二十多年的洗礼，Cocoa 框架早就烙上了不可磨灭的 Objective-C 的印记。无数的第三方库是用 Objective-C 写成的，这些积累无论是谁都不能小觑。因此，在最初的版本中，Swift 不得不考虑与 Objective-C 的兼容。</p></div></p>
+<p>Apple 采取的做法是允许我们在同一个项目中同时使用 Swift 和 Objective-C 来进行开发。其实一个项目中的 Objective-C 文件和 Swift 文件是处于两个不同世界中的，为了让它们能相互联通，我们需要添加一些桥梁。</p><br><p>首先通过添加 <code>{product-module-name}-Bridging-Header.h</code> 文件，并在其中填写想要使用的头文件名称，我们就可以很容易地在 Swift 中使用 Objective-C 代码了。Xcode 为了简化这个设定，甚至在 Swift 项目中第一次导入 Objective-C 文件时会主动弹框进行询问是否要自动创建这个文件，可以说是非常方便。</p><br><p>但是如果想要在 Objective-C 中使用 Swift 的类型的时候，事情就复杂一些。如果是来自外部的框架，那么这个框架与 Objective-C 项目肯定不是处在同一个 target 中的，我们需要对外部的 Swift module 进行导入。这个其实和使用 Objective-C 的原来的 Framework 是一样的，对于一个项目来说，外界框架是由 Swift 写的还是 Objective-C 写的，两者并没有太大区别。我们通过使用 2013 年新引入的 <code>@import</code> 来引入 module：</p><br><pre><code>@import MySwiftKit;<br></code></pre><br><p>之后就可以正常使用这个 Swift 写的框架了。</p><br><p>如果想要在 Objective-C 里使用的是同一个项目中的 Swift 的源文件的话，可以直接导入自动生成的头文件 <code>{product-module-name}-Swift.h</code> 来完成。比如项目的 target 叫做 <code>MyApp</code> 的话，我们就需要在 Objective-C 文件中写</p><br><pre><code>#import “MyApp-Swift.h”<br></code></pre><br><p>但这只是故事的开始。Objective-C 和 Swift 在底层使用的是两套完全不同的机制，Cocoa 中的 Objective-C 对象是基于运行时的，它从骨子里遵循了 KVC (Key-Value Coding，通过类似字典的方式存储对象信息) 以及动态派发 (Dynamic Dispatch，在运行调用时再决定实际调用的具体实现)。而 Swift 为了追求性能，如果没有特殊需要的话，是不会在运行时再来决定这些的。也就是说，Swift 类型的成员或者方法在编译时就已经决定，而运行时便不再需要经过一次查找，而可以直接使用。</p><br><p>显而易见，这带来的问题是如果我们要使用 Objective-C 的代码或者特性来调用纯 Swift 的类型时候，我们会因为找不到所需要的这些运行时信息，而导致失败。解决起来也很简单，在 Swift 类型文件中，我们可以将需要暴露给 Objective-C 使用的任何地方 (包括类，属性和方法等) 的声明前面加上 <code>@objc</code> 修饰符。注意这个步骤只需要对那些不是继承自 <code>NSObject</code> 的类型进行，如果你用 Swift 写的 class 是继承自 <code>NSObject</code> 的话，Swift 会默认自动为所有的非 private 的类和成员加上 <code>@objc</code>。这就是说，对一个 <code>NSObject</code> 的子类，你只需要导入相应的头文件就可以在 Objective-C 里使用这个类了。</p><br><p><code>@objc</code> 修饰符的另一个作用是为 Objective-C 侧重新声明方法或者变量的名字。虽然绝大部分时候自动转换的方法名已经足够好用 (比如会将 Swift 中类似 <code>init(name: String)</code> 的方法转换成 <code>-initWithName:(NSString *)name</code> 这样)，但是有时候我们还是期望 Objective-C 里使用和 Swift 中不一样的方法名或者类的名字，比如 Swift 里这样的一个类：</p><br><pre><code>class 我的类 {<br>    func 打招呼(名字: String) {<br>        println(“哈喽，(名字)”)<br>    }<br>}<br>我的类().打招呼(“小明”)<br></code></pre><br><p>Objective-C 的话是无法使用中文来进行调用的，因此我们<strong>必须</strong>使用 <code>@objc</code> 将其转为 ASCII 才能在 Objective-C 里访问：</p>
+
+<p><pre><code>@objc(MyClass)<br>class 我的类 {<br>    @objc(greeting:)<br>    func 打招呼(名字: String) {<br>        println(“哈喽，(名字)”)<br>    }<br>}<br></code></pre></p>
+<p></p><p>这样，我们在 Objective-C 里就能调用 <code>[[MyClass new] greeting:@”XiaoMing”]</code> 这样的代码了 (虽然比起原来一点都不好玩了)。另外，正如上面所说的以及在 <a href="http://swifter.tips/selector/" target="_blank" rel="external">Selector</a> 一节中所提到的，即使是 <code>NSObject</code> 的子类，Swift 也不会在被标记为 <code>private</code> 的方法或成员上自动加 <code>@objc</code>。如果我们需要使用这些内容的动态特性的话，我们需要手动给它们加上 <code>@objc</code> 修饰。</p><p></p>
+<p></p><p>添加 <code>@objc</code> 修饰符并不意味着这个方法或者属性会变成动态派发，Swift 依然可能会将其优化为静态调用。如果你需要和 Objective-C 里动态调用时相同的运行时特性的话，你需要使用的修饰符是 <code>dynamic</code>。一般情况下在做 app 开发时应该用不上，但是在施展一些像动态替换方法或者运行时再决定实现这样的 “黑魔法” 的时候，我们就需要用到 <code>dynamic</code> 修饰符了。在之后的 KVO 一节中，我们还会提到一个关于使用 <code>dynamic</code> 的实例。</p><br>    <br>作者王巍 <a href="http://swifter.tips/" target="_blank" rel="external">(@onevcat)</a> 原文地址 <a href="http://swifter.tips/objc-dynamic/" target="_blank" rel="external">http://swifter.tips/objc-dynamic/</a><p></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[swift的@OBJC和DYNAMIC]]>
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="swift" scheme="http://www.zhuli8.com/tags/swift/"/>
+    
+      <category term="swift" scheme="http://www.zhuli8.com/categories/swift/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[与调试器共舞 - LLDB 的华尔兹]]></title>
-    <link href="http://www.zhuli8.com/2015/06/18/%E4%B8%8E%E8%B0%83%E8%AF%95%E5%99%A8%E5%85%B1%E8%88%9E%20-%20LLDB%20%E7%9A%84%E5%8D%8E%E5%B0%94%E5%85%B9/"/>
-    <id>http://www.zhuli8.com/2015/06/18/与调试器共舞 - LLDB 的华尔兹/</id>
-    <published>2015-06-18T12:40:39.000Z</published>
-    <updated>2015-06-19T02:14:27.000Z</updated>
+    <link href="http://www.zhuli8.com/2015/05/31/%E4%B8%8E%E8%B0%83%E8%AF%95%E5%99%A8%E5%85%B1%E8%88%9E%20-%20LLDB%20%E7%9A%84%E5%8D%8E%E5%B0%94%E5%85%B9/"/>
+    <id>http://www.zhuli8.com/2015/05/31/与调试器共舞 - LLDB 的华尔兹/</id>
+    <published>2015-05-31T12:40:39.000Z</published>
+    <updated>2015-07-20T02:19:05.000Z</updated>
     <content type="html"><![CDATA[<p>你是否曾经苦恼于理解你的代码，而去尝试打印一个变量的值？</p>
 
 <pre><code>NSLog(@"%@", whatIsInsideThisThing);
@@ -870,243 +1016,131 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
   </entry>
   
   <entry>
-    <title><![CDATA[swift版设计模式之中介者模式-MM们打麻将我来算账]]></title>
-    <link href="http://www.zhuli8.com/2015/06/15/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F-MM%E4%BB%AC%E6%89%93%E9%BA%BB%E5%B0%86%E6%88%91%E6%9D%A5%E7%AE%97%E8%B4%A6/"/>
-    <id>http://www.zhuli8.com/2015/06/15/中介者模式-MM们打麻将我来算账/</id>
-    <published>2015-06-15T04:05:10.000Z</published>
-    <updated>2015-06-15T07:08:46.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="中介者模式比喻">中介者模式比喻</h1><p>四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。</p>
-<h1 id="中介者模式意图">中介者模式意图</h1><p>中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
-<h1 id="中介者模式类图">中介者模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/mediator.gif" alt=""></p>
-<h1 id="中介者模式实现">中介者模式实现</h1><p>抽象中介者，定义了MM需要什么样的中介者</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Mediator</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(money:Double,girl:Girl)</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>具体中介者对象，实现抽象类的方法，他需要知道所有具体的MM，并给MM核算服务</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Boy</span>: <span class="title">Mediator</span> </span>&#123;</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl1:<span class="type">FirstGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl2:<span class="type">SecondGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl3:<span class="type">ThirdGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl4:<span class="type">FourthGirl</span>?</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(<span class="keyword">var</span> money: Double, girl: Girl)</span></span> &#123;</span><br><span class="line">        money=money*<span class="number">10</span><span class="comment">////中介者的处理，此处业务比较简单假设一个筹码代表10</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> girl===girl1&#123;</span><br><span class="line">            girl1?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl2&#123;</span><br><span class="line">            girl2?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl3&#123;</span><br><span class="line">            girl3?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl4&#123;</span><br><span class="line">            girl4?.getResult(money)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>抽象女孩类</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> mediator:<span class="type">Mediator</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(mediator:<span class="type">Mediator</span>)&#123;</span><br><span class="line">        <span class="keyword">self</span>.mediator=mediator<span class="comment">////得到中介者对象</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span><br><span class="line">    告诉中介者筹码数，让其帮我核算</span><br><span class="line">    */</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">notify</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        mediator.calculate(money, girl: <span class="keyword">self</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>女孩1，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识且依靠中介者对象核算</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FirstGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The FirstGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>女孩2，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SecondGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The SecondGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>女孩3，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThirdGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The ThirdGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>女孩4，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FourthGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The FourthGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>中介者模式客户端应用</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> boy=<span class="function"><span class="title">Boy</span><span class="params">()</span></span><span class="comment">//核算中介</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个打麻将的MM</span></span><br><span class="line"><span class="tag">var</span> girl1=<span class="function"><span class="title">FirstGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl2=<span class="function"><span class="title">SecondGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl3=<span class="function"><span class="title">ThirdGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl4=<span class="function"><span class="title">FourthGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个MM让我调节</span></span><br><span class="line">boy.girl1=girl1</span><br><span class="line">boy.girl2=girl2</span><br><span class="line">boy.girl3=girl3</span><br><span class="line">boy.girl4=girl4</span><br><span class="line">girl1.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">10</span>)</span></span></span><br><span class="line">girl2.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">20</span>)</span></span></span><br><span class="line">girl3.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">20</span>)</span></span></span><br><span class="line">girl4.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">10</span>)</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="中介者模式总结">中介者模式总结</h1><p>中介者的出现减少了MM们的耦合，使得可以独立地改变和复用各个Mediator和Girl，具体女孩类的改变不会影响到其他女孩类，而只是Boy发生变化。Boy把对象如何协作进行了抽象，将中介作为一个独立的概念并将其封装在一个对象中，关注的对象就从对象各自本身的行为转移到她们之间的交互上来。即中介者模式包装了一系列对象相互作用的方式，使得这些对象不必相互明显作用。从而是它们可以松散耦合。当某些对象之间的作用发生改变时，不会立即影响其他的一些对象，保证这些作用可以彼此独立的变化。中介者模式将多对多的相互作用转化为一对多的相互作用。中介者模式将对象的行为和协作抽象化，把对象在小尺度的行为上与其他对象的相互作用分开处理。</p>
+    <title><![CDATA[iOS应用数据存储的常用方式]]></title>
+    <link href="http://www.zhuli8.com/2015/05/24/iOS%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E5%BC%8F/"/>
+    <id>http://www.zhuli8.com/2015/05/24/iOS应用数据存储的常用方式/</id>
+    <published>2015-05-24T04:40:39.000Z</published>
+    <updated>2015-07-20T02:19:23.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="应用沙盒">应用沙盒</h1><pre><code>iOS应用数据一般存储于应用沙盒，每个iOS应用都有自己的应用沙盒（应用沙盒就是文件系统目录），与其他文件系统隔离。应用必须待在自己的沙盒里，其他应用不能访问该沙盒。
+</code></pre><p>应用沙盒的文件系统目录如下图所示：</p>
+<p><img src="http://www.zhuli8.com/photos/沙盒目录结构.png" alt=""></p>
+<p>模拟器应用沙盒的根路径在：</p>
+<p><code>/Users/用户名/Library/Developer/CoreSimulator/Devices/模拟器UDID/data/Containers/Data/Application/对应应用程序文件夹</code></p>
+<h2 id="应用沙盒结构分析">应用沙盒结构分析</h2><h3 id="Documents">Documents</h3><p>保存应用运行时生成的 <strong>需要持久化的数据</strong> ，iTunes同步设备时会 <strong>会备份</strong> 该目录。例如，游戏应用可将游戏存档保存在该目录。</p>
+<h3 id="Library/Caches">Library/Caches</h3><p>保存应用运行时生成的 <strong>需要持久化的数据</strong> ，iTunes同步设备时 <strong>不会备份</strong> 该目录。一般存储体积大、不需要备份的非重要数据。</p>
+<h3 id="Library/Preference">Library/Preference</h3><p>保存应用的所有 <strong>偏好设置</strong> ，iOS的Settings（设置）应用会在该目录中查找应用的设置信息。iTunes同步设备时 <strong>会备份</strong> 该目录。</p>
+<h3 id="temp">temp</h3><p>保存应用运行时所需的 <strong>临时文件</strong> ，使用完毕后再将相应的文件从该目录删除。应用没有运行时，系统也可能会清除该目录下的文件。iTunes同步设备时 <strong>不会备份</strong> 该目录。</p>
+<h2 id="应用沙盒目录的常见获取方式">应用沙盒目录的常见获取方式</h2><h3 id="沙盒根目录">沙盒根目录</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *home=<span class="built_in">NSHomeDirectory</span>();</span><br></pre></td></tr></table></figure>
+<h3 id="Documnets">Documnets</h3><p><strong>利用NSSearchPathForDirectoriesInDomains函数</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject];</span><br></pre></td></tr></table></figure>
+<p><strong>利用NSFileManager的URLsForDirectory:inDomains:函数</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSURL</span> *path=[[[<span class="built_in">NSFileManager</span> defaultManager] URLsForDirectory:<span class="built_in">NSDocumentDirectory</span> inDomains:<span class="built_in">NSUserDomainMask</span>] lastObject];</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明</strong></p>
+<p>在iOS中，只有一个目录跟传入的参数匹配，所以这个集合里面只有一个元素。</p>
+<blockquote>
+<p>NSUserDomainMask 代表从用户文件夹下找</p>
+<p>YES 代表展开路径中的波浪线字符“~”</p>
+</blockquote>
+<h3 id="Library/Caches-1">Library/Caches</h3><p><strong>利用NSSearchPathForDirectoriesInDomains函数</strong></p>
+<p><strong>利用NSFileManager的URLsForDirectory:inDomains:函数</strong></p>
+<blockquote>
+<p>将函数的第1个参数改为：NSCachesDirectory即可</p>
+</blockquote>
+<h3 id="Library/Preference-1">Library/Preference</h3><p><strong>通过过 NSUserDefaults 类存取该目录下的设置信息</strong></p>
+<h3 id="temp-1">temp</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=<span class="built_in">NSTemporaryDirectory</span>();</span><br></pre></td></tr></table></figure>
+<h1 id="XML属性列表（plist）归档">XML属性列表（plist）归档</h1><p>属性列表是一种XML格式的文件，拓展名为plist。<br>如果对象是NSString、NSDictionary、NSArray、NSData、NSNumber等类型，就可以使用这些对象的writeToFile:atomically:方法直接将对象写到属性列表文件中。</p>
+<blockquote>
+<p>所谓归档，是一个过程，即用某种格式来保存一个或者多个对象以便以后还原这些对象。</p>
+</blockquote>
+<h2 id="归档NSDictionary">归档NSDictionary</h2><p>将一个NSDictionary对象归档到一个plist属性列表中。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject] stringByAppendingPathComponent:<span class="string">@"info.plist"</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">//将数据封装成字典</span></span><br><span class="line"><span class="built_in">NSMutableDictionary</span> *dict=[<span class="built_in">NSMutableDictionary</span> dictionary];</span><br><span class="line">[dict setValue:<span class="string">@"朱利"</span> forKey:<span class="string">@"name"</span>];</span><br><span class="line">[dict setValue:<span class="string">@"http://www.zhuli8.com"</span> forKey:<span class="string">@"site"</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">//将字典持久化到Docums/info.plist文件中</span></span><br><span class="line">[dict writeToFile:path atomically:<span class="literal">YES</span>];</span><br></pre></td></tr></table></figure>
+<h2 id="恢复NSDictionary">恢复NSDictionary</h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject] stringByAppendingPathComponent:<span class="string">@"info.plist"</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">//读取Documents/info.plist的内容，实例化NSDictionary。</span></span><br><span class="line"><span class="built_in">NSDictionary</span> *dict=[<span class="built_in">NSDictionary</span> dictionaryWithContentsOfFile:path];</span><br><span class="line">    </span><br><span class="line"><span class="built_in">NSString</span> *name=[dict objectForKey:<span class="string">@"name"</span>];</span><br><span class="line"><span class="built_in">NSString</span> *site=[dict objectForKey:<span class="string">@"site"</span>];</span><br></pre></td></tr></table></figure>
+<h1 id="Preference（偏好设置）">Preference（偏好设置）</h1><p>很多iOS应用都支持偏好设置，比如保存用户名、是否自动登录、字体大小等设置，iOS提供了一套标准的解决方案来为应用程序加入偏好设置功能。每个应用都有个 <strong>NSUserDefaults</strong> 实例，通过它来存取偏好设置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NSUserDefaults *defaults= [NSUserDefaults standardUserDefaults];</span><br><span class="line">[defaults <span class="built_in">set</span>Object:@<span class="string">"朱利"</span> <span class="keyword">for</span>Key:@<span class="string">"name"</span>];</span><br><span class="line">[defaults <span class="built_in">set</span>Float:<span class="number">18</span> <span class="keyword">for</span>Key:@<span class="string">"fontSize"</span>];</span><br><span class="line">[defaults <span class="built_in">set</span>Bool:YES <span class="keyword">for</span>Key:@<span class="string">"autoLogin"</span>];</span><br><span class="line">    </span><br><span class="line">[defaults synchronize];</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意</p>
+</blockquote>
+<p><strong>NSUserDefauts设置数据时，不是立即写入，而是根据时间戳定时地把缓存中的数据写入本地磁盘。所以调用了set方法之后数据有可能还没有写入磁盘应用程序就终止了。出现以上问题，可以通过调用synchronize方法强制写入。</strong></p>
+<p>读取上次保存的偏好设置</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSUserDefaults</span> *defaults= [<span class="built_in">NSUserDefaults</span> standardUserDefaults];</span><br><span class="line">    </span><br><span class="line"><span class="built_in">NSString</span> *name=[defaults objectForKey:<span class="string">@"name"</span>];</span><br><span class="line"><span class="keyword">float</span> fontSize=[defaults floatForKey:<span class="string">@"fontSize"</span>];</span><br><span class="line"><span class="built_in">BOOL</span> autoLogin=[defaults boolForKey:<span class="string">@"autoLogin"</span>];</span><br></pre></td></tr></table></figure>
+<h1 id="NSKeyedArchiver归档（NSCoding）">NSKeyedArchiver归档（NSCoding）</h1><p>如果对象是NSString、NSDictionary、NSArray、NSData、NSNumber等类型，可以直接用NSKeyedArchiver进行归档和恢复，不是所有的对象都可以直接用这种方法进行归档，只有遵守了NSCoding协议的对象才可以。</p>
+<h2 id="NSCoding协议的2个方法">NSCoding协议的2个方法</h2><h3 id="initWithCoder">initWithCoder</h3><p>每次从文件中恢复（解码）对象时都会调用这个方法，一般在这个方法里面指定如何解码文件中的数据为对象的实例变量，可以使用 <strong>decodeObject:forKey:</strong>方法解码实例变量。</p>
+<h3 id="encodeWithCoder">encodeWithCoder</h3><p>每次归档对象时，都会调用这个方法，一般这个方法里面指定如何归档对象中的每个实例变量，可以使用 <strong>encoderObject:forKey:</strong>方法归档实例变量。</p>
+<h2 id="NSKeyedArchiver归档NSArray">NSKeyedArchiver归档NSArray</h2><h3 id="归档一个NSArray对象到Documents/array-archive">归档一个NSArray对象到Documents/array.archive</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject] stringByAppendingPathComponent:<span class="string">@"array.archive"</span>];</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSArray</span> *array = [<span class="built_in">NSArray</span> arrayWithObjects:@”a”,@”b”,<span class="literal">nil</span>];</span><br><span class="line">[<span class="built_in">NSKeyedArchiver</span> archiveRootObject:array toFile:path];</span><br></pre></td></tr></table></figure>
+<h3 id="恢复(解码)NSArray对象">恢复(解码)NSArray对象</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *path=[[<span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>) lastObject] stringByAppendingPathComponent:<span class="string">@"array.archive"</span>];</span><br><span class="line">    </span><br><span class="line"><span class="built_in">NSArray</span> *array= [<span class="built_in">NSKeyedUnarchiver</span> unarchiveObjectWithFile:path];</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>,array);</span><br></pre></td></tr></table></figure>
+<h2 id="NSKeyedArchiver-归档Person对象">NSKeyedArchiver-归档Person对象</h2><h3 id="Person-h">Person.h</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@interface</span> <span class="attribute">Person </span>: NSObject&lt;NSCoding&gt;</span><br><span class="line"><span class="variable">@property</span> (nonatomic, copy) NSString *name;</span><br><span class="line"><span class="variable">@property</span> (nonatomic, assign) int age;</span><br><span class="line"><span class="variable">@property</span> (nonatomic, assign) float height;</span><br><span class="line"><span class="variable">@end</span></span><br></pre></td></tr></table></figure>
+<h3 id="Person-m">Person.m</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@implementation</span> Person</span><br><span class="line">-(<span class="typename">void</span>)<span class="string">encodeWithCoder:</span>(NSCoder *)encoder</span><br><span class="line">&#123;</span><br><span class="line">    [encoder <span class="string">encodeObject:</span>self.name <span class="string">forKey:</span>@<span class="string">"name"</span>];</span><br><span class="line">    [encoder <span class="string">encodeInt:</span>self.age <span class="string">forKey:</span>@<span class="string">"age"</span>];</span><br><span class="line">    [encoder <span class="string">encodeFloat:</span>self.height <span class="string">forKey:</span>@<span class="string">"height"</span>];</span><br><span class="line">&#125;</span><br><span class="line">-(id)<span class="string">initWithCoder:</span>(NSCoder *)decoder</span><br><span class="line">&#123;</span><br><span class="line">    self.name=[decoder <span class="string">decodeObjectForKey:</span>@<span class="string">"name"</span>];</span><br><span class="line">    self.age=[decoder <span class="string">decodeIntForKey:</span>@<span class="string">"age"</span>];</span><br><span class="line">    self.height=[decoder <span class="string">decodeFloatForKey:</span>@<span class="string">"height"</span>];</span><br><span class="line">    <span class="keyword">return</span> self;</span><br><span class="line">&#125;</span><br><span class="line"><span class="annotation">@end</span></span><br></pre></td></tr></table></figure>
+<h3 id="归档(编码)">归档(编码)</h3><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NSString *path=<span class="comment">[<span class="comment">[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]</span> stringByAppendingPathComponent:@"person.archive"]</span>;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">Person</span> *<span class="keyword">person</span>=<span class="comment">[<span class="comment">[Person alloc]</span> init]</span>;</span><br><span class="line"><span class="keyword">person</span>.name=@<span class="string">"zhuli8.com"</span>;</span><br><span class="line"><span class="keyword">person</span>.age=1;</span><br><span class="line"><span class="keyword">person</span>.height=2.0f;</span><br><span class="line"><span class="comment">[NSKeyedArchiver archiveRootObject:person toFile:path]</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="恢复(解码)">恢复(解码)</h3><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">NSString *path=<span class="comment">[<span class="comment">[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]</span> stringByAppendingPathComponent:@"person.archive"]</span>;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">Person</span> *<span class="keyword">person</span>= <span class="comment">[NSKeyedUnarchiver unarchiveObjectWithFile:path]</span>;</span><br><span class="line">NSLog(@<span class="string">"%@"</span>,<span class="keyword">person</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="NSKeyedArchiver-归档对象的注意">NSKeyedArchiver-归档对象的注意</h3><p>如果父类也遵守了NSCoding协议，请注意：</p>
+<ul>
+<li>应该在encodeWithCoder:方法中加上一句<strong>[super encodeWithCode:encode];</strong>确保继承的实例变量也能被编码，即也能被归档；</li>
+<li>应该在initWithCoder:方法中加上一句<strong>self = [super initWithCoder:decoder];</strong>确保继承的实例变量也能被解码，即也能被恢复。</li>
+</ul>
+<h2 id="NSData">NSData</h2><p>使用archiveRootObject:toFile:方法可以将一个对象直接写入到一个文件中，但有时候可能想将多个对象写入到同一个文件中，那么就要使用NSData来进行归档对象。NSData可以为一些数据提供临时存储空间，以便随后写入文件，或者存放从磁盘读取的文件内容。可以使用[NSMutableData data]创建可变数据空间。</p>
+<p><img src="http://www.zhuli8.com/photos/NSData.png" alt=""></p>
+<h3 id="归档2个Person对象到同一文件中">归档2个Person对象到同一文件中</h3><h4 id="归档（编码）">归档（编码）</h4><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Person</span> *person1=<span class="comment">[<span class="comment">[Person alloc]</span> init]</span>;</span><br><span class="line">person1.name=@<span class="string">"zhuli8.com"</span>;</span><br><span class="line">person1.age=1;</span><br><span class="line">person1.height=1.2f;</span><br><span class="line"></span><br><span class="line"><span class="keyword">Person</span> *person2=<span class="comment">[<span class="comment">[Person alloc]</span> init]</span>;</span><br><span class="line">person2.name=@<span class="string">"朱利"</span>;</span><br><span class="line">person2.age=28;</span><br><span class="line">person2.height=1.7f;</span><br><span class="line"></span><br><span class="line">//新建一块可变数据区</span><br><span class="line">NSMutableData *data=<span class="comment">[NSMutableData data]</span>;</span><br><span class="line"></span><br><span class="line">//将数据区连接到一个NSKeyedArchiver对象</span><br><span class="line">NSKeyedArchiver *archiver=<span class="comment">[<span class="comment">[NSKeyedArchiver alloc]</span> initForWritingWithMutableData:data]</span>;</span><br><span class="line"></span><br><span class="line">//开始存档对象，存档的数据都会存储到NSMutableData中</span><br><span class="line"><span class="comment">[archiver encodeObject:person1 forKey:@"person1"]</span>;</span><br><span class="line"><span class="comment">[archiver encodeObject:person2 forKey:@"person2"]</span>;</span><br><span class="line"></span><br><span class="line">//存档完毕（一定要调用这个方法）</span><br><span class="line"><span class="comment">[archiver finishEncoding]</span>;</span><br><span class="line"></span><br><span class="line">//将存档的数据写入文件</span><br><span class="line">NSString *path=<span class="comment">[<span class="comment">[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]</span> stringByAppendingPathComponent:@"persons.archive"]</span>;</span><br><span class="line"><span class="comment">[data writeToFile:path atomically:YES]</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="恢复（解码）">恢复（解码）</h4><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//从文件中读取数据</span><br><span class="line">NSString *path=<span class="comment">[<span class="comment">[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]</span> stringByAppendingPathComponent:@"persons.archive"]</span>;</span><br><span class="line">NSData *data=<span class="comment">[NSData dataWithContentsOfFile:path]</span>;</span><br><span class="line">//根据数据，解析成一个NSKeyedUnarchiver对象</span><br><span class="line">NSKeyedUnarchiver *unarchiver=<span class="comment">[<span class="comment">[NSKeyedUnarchiver alloc]</span> initForReadingWithData:data]</span>;</span><br><span class="line"><span class="keyword">Person</span> *person1=<span class="comment">[unarchiver decodeObjectForKey:@"person1"]</span>;</span><br><span class="line"><span class="keyword">Person</span> *person2=<span class="comment">[unarchiver decodeObjectForKey:@"person2"]</span>;</span><br><span class="line"></span><br><span class="line">//恢复完毕</span><br><span class="line"><span class="comment">[unarchiver finishDecoding]</span>;</span><br><span class="line"></span><br><span class="line">NSLog(@<span class="string">"%@,%@"</span>,person1,person2);</span><br></pre></td></tr></table></figure>
+<h3 id="利用归档实现深复制">利用归档实现深复制</h3><p>比如对一个Person对象进行深复制</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Person</span> *person1=<span class="comment">[<span class="comment">[Person alloc]</span> init]</span>;</span><br><span class="line">person1.name=@<span class="string">"zhuli8.com"</span>;</span><br><span class="line">person1.age=1;</span><br><span class="line">person1.height=1.2f;</span><br><span class="line"></span><br><span class="line">//临时存储person1的数据</span><br><span class="line">NSData *data=<span class="comment">[NSKeyedArchiver archivedDataWithRootObject:person1]</span>;</span><br><span class="line"></span><br><span class="line">//解析data，生成一个新的<span class="keyword">Person</span>对象</span><br><span class="line"><span class="keyword">Person</span> *person2=<span class="comment">[NSKeyedUnarchiver unarchiveObjectWithData:data]</span>;</span><br><span class="line"></span><br><span class="line">//分别打印内存地址</span><br><span class="line">NSLog(@<span class="string">"person1=%p,person2=%p"</span>,person1,person2);</span><br><span class="line"></span><br><span class="line">//person1=0x7fc478c49390,person2=0x7fc478e1c180</span><br></pre></td></tr></table></figure>
+<h1 id="SQLite3">SQLite3</h1><p>SQLite3是一款开源的嵌入式关系型数据库，可移植性好、易使用、内存开销小。<br>SQLite3是无类型的，意味着你可以保存任何类型的数据到任意表的任意字段中。比如下列的创表语句是合法的：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> t_person(name, age);</span></span><br></pre></td></tr></table></figure>
+<p>为了保证可读性，建议还是把字段类型加上：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> t_person(name <span class="built_in">text</span>, age <span class="built_in">integer</span>);</span></span><br></pre></td></tr></table></figure>
+<p>SQLite3常用的5种数据类型：text、integer、float、boolean、blob。</p>
+<h2 id="创建、打开、关闭数据库">创建、打开、关闭数据库</h2><h3 id="创建或打开数据库">创建或打开数据库</h3><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">NSString</span> *path=[[<span class="type">NSSearchPathForDirectoriesInDomains</span>(<span class="type">NSDocumentationDirectory</span>, <span class="type">NSUserDomainMask</span>, <span class="type">YES</span>) lastObject] stringByAppendingPathComponent:@<span class="string">"person.db"</span>];</span><br><span class="line"></span><br><span class="line">sqlite3 *db;//一个打开的数据库实例</span><br><span class="line"></span><br><span class="line">//将根据文件路径打开数据库，如果不存在，则会创建一个新的数据库。如果<span class="literal">result</span>等于常量<span class="type">SQLITE_OK</span>，则表示成功打开数据库。</span><br><span class="line"><span class="type">int</span> <span class="literal">result</span>=sqlite3_open([path <span class="type">UTF8String</span>], &amp;db);//数据库文件的路径必须以C字符串(而非<span class="type">NSString</span>)传入</span><br></pre></td></tr></table></figure>
+<h3 id="关闭数据库：">关闭数据库：</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3_close<span class="list">(<span class="keyword">db</span>)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<h2 id="执行不返回数据的SQL语句">执行不返回数据的SQL语句</h2><h3 id="执行创表语句">执行创表语句</h3><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span> *errorMsg;//用来存储错误信息</span><br><span class="line"><span class="type">char</span> *sql=<span class="string">"create table if not exists t_person(id integer primary key autoincrement,name text,age integer);"</span>;</span><br><span class="line"><span class="type">int</span> <span class="literal">result</span>=sqlite3_exec(db, sql, <span class="type">NULL</span>, <span class="type">NULL</span>, &amp;errorMsg);</span><br></pre></td></tr></table></figure>
+<p>sqlite3_exec()可以执行任何SQL语句，比如创表、更新、插入和删除操作。但是一般不用它执行查询语句，因为它不会返回查询到的数据。<br>sqlite3_exec()还可以执行的语句：</p>
+<ul>
+<li>开启事务：begin transaction;</li>
+<li>回滚事务：rollback;</li>
+<li>提交事务：commit;</li>
+</ul>
+<h3 id="带占位符插入数据">带占位符插入数据</h3><figure class="highlight openscad"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">char <span class="built_in">*</span>sql=<span class="string">"insert into t_person(name,age) values(?,?);"</span>;</span><br><span class="line">sqlite3_stmt <span class="built_in">*</span>stmt;</span><br><span class="line"><span class="keyword">if</span> <span class="params">(sqlite3_prepare_v2<span class="params">(db, sql, -<span class="number">1</span>, &amp;stmt, NULL)</span>==SQLITE_OK)</span> &#123;</span><br><span class="line">    sqlite3_bind_text<span class="params">(stmt, <span class="number">1</span>, <span class="string">"朱利"</span>, -<span class="number">1</span>, NULL)</span>;</span><br><span class="line">    sqlite3_bind_int<span class="params">(stmt, <span class="number">2</span>, <span class="number">1</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="params">(sqlite3_step<span class="params">(stmt)</span>!=SQLITE_DONE)</span> &#123;</span><br><span class="line">    NSLog<span class="params">(@<span class="string">"插入数据错误"</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sqlite3_finalize<span class="params">(stmt)</span>;</span><br></pre></td></tr></table></figure>
+<p>sqlite3_prepare_v2()：返回值等于SQLITE_OK，说明SQL语句已经准备成功，没有语法问题。<br>sqlite3_bind_text()：大部分绑定函数都只有3个参数</p>
+<ul>
+<li>第1个参数是sqlite3_stmt *类型</li>
+<li>第2个参数指占位符的位置，第一个占位符的位置是1，不是0</li>
+<li>第3个参数指占位符要绑定的值</li>
+<li>第4个参数指在第3个参数中所传递数据的长度，对于C字符串，可以传递-1代替字符串的长度</li>
+<li>第5个参数是一个可选的函数回调，一般用于在语句执行后完成内存清理工作<br>sqlite_step()：执行SQL语句，返回SQLITE_DONE代表成功执行完毕。<br>sqlite_finalize()：销毁sqlite3_stmt *对象。</li>
+</ul>
+<h2 id="查询数据">查询数据</h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *sql = <span class="string">"select id,name,age from t_person;"</span>;</span><br><span class="line">sqlite3_stmt *stmt;</span><br><span class="line"><span class="keyword">if</span> (sqlite3_prepare_v2(db, sql, -<span class="number">1</span>, &amp;stmt, <span class="literal">NULL</span>) == SQLITE_OK) &#123;</span><br><span class="line">    <span class="keyword">while</span> (sqlite3_step(stmt) == SQLITE_ROW) &#123;</span><br><span class="line">        <span class="keyword">int</span> _<span class="keyword">id</span> = sqlite3_column_int(stmt, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">char</span> *_name = (<span class="keyword">char</span> *)sqlite3_column_text(stmt, <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">NSString</span> *name = [<span class="built_in">NSString</span> stringWithUTF8String:_name];</span><br><span class="line">        <span class="keyword">int</span> _age = sqlite3_column_int(stmt, <span class="number">2</span>);</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"id=%i, name=%@, age=%i"</span>, _<span class="keyword">id</span>, name, _age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">sqlite3_finalize(stmt);</span><br></pre></td></tr></table></figure>
+<p>sqlite3<em>step()：返回SQLITE_ROW代表遍历到一条新记录。<br>sqlite3_column</em>*()用于获取每个字段对应的值，第2个参数是字段的索引，从0开始</p>
+<h1 id="Core_Data">Core Data</h1><p>Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象转化成数据，保存在SQLite3数据库文件中，也能够将保存在数据库中的数据还原成OC对象。在此数据操作期间，不需要编写任何SQL语句。</p>
+<h2 id="推荐文章阅读">推荐文章阅读</h2><p><a href="http://yulingtianxia.com/blog/2014/05/01/chu-shi-core-data-1/" target="_blank" rel="external">初识Core Data(1)</a></p>
+<p><a href="http://yulingtianxia.com/blog/2014/05/02/chu-shi-core-data-2/" target="_blank" rel="external">初识Core Data(2)</a></p>
+<p><a href="http://yulingtianxia.com/blog/2014/07/03/chu-shi-core-data-3/" target="_blank" rel="external">初识Core Data(3)</a></p>
+<h2 id="打开Core_Data的SQL日志输出开关">打开Core Data的SQL日志输出开关</h2><ul>
+<li>打开Product，点击Edit Scheme…</li>
+<li>点击Arguments，在Arguments Passed On Launch中添加2项<ul>
+<li>-com.apple.CoreData.SQLDebug</li>
+<li>1</li>
+</ul>
+</li>
+</ul>
+<h2 id="Core_Data的延迟加载">Core Data的延迟加载</h2><p>Core Data不会根据实体中的关联关系立即获取相应的关联对象，比如通过Core Data取出Person实体时，并不会立即查询相关联的Card实体；当应用真的需要使用Card时，才会查询数据库，加载Card实体的信息。</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h1 id="中介者模式比喻">中介者模式比喻</h1><p>四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。</p>
-<h1 id="中介者模式意图">中介]]>
+    <![CDATA[iOS应用数据存储的常用方式]]>
+    
     </summary>
-    
-      <category term="swift" scheme="http://www.zhuli8.com/tags/swift/"/>
-    
-      <category term="设计模式" scheme="http://www.zhuli8.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-      <category term="设计模式" scheme="http://www.zhuli8.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[swift版设计模式之代理模式-Proxy程序替你聊天]]></title>
-    <link href="http://www.zhuli8.com/2015/06/12/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F-Proxy%E7%A8%8B%E5%BA%8F%E6%9B%BF%E4%BD%A0%E8%81%8A%E5%A4%A9/"/>
-    <id>http://www.zhuli8.com/2015/06/12/代理模式-Proxy程序替你聊天/</id>
-    <published>2015-06-12T09:05:10.000Z</published>
-    <updated>2015-06-15T06:51:44.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="代理模式比喻">代理模式比喻</h1><p>跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。</p>
-<h1 id="代理模式意图">代理模式意图</h1><p>代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。</p>
-<h1 id="代理模式类图">代理模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/proxy.gif" alt=""></p>
-<h1 id="代理模式实现">代理模式实现</h1><p>定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Proxy所代表的真实实体</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span>: <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> mm:<span class="type">Girl</span></span><br><span class="line">    <span class="keyword">init</span>(mm:<span class="type">Girl</span>)&#123;</span><br><span class="line">        <span class="keyword">self</span>.mm=mm</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> mm.word!&#123;<span class="comment">//记得强制解包哦</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">"hi,你好"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"hi,你好"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你从哪里来呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"火星"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你多大了？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="number">18</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"身高多少呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"2.5m"</span>)</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            say()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">say</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"我出场了……"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>保存一个RealSubject引用，使得代理可以访问实体并提供一个与Subject相同的接口来代替实体</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Proxy</span>: <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> rs:<span class="type">RealSubject</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(mm:<span class="type">Girl</span>)&#123;</span><br><span class="line">        rs=<span class="type">RealSubject</span>(mm: mm)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span> &#123;</span><br><span class="line">        rs.operation()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>聊天的MM</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> word:<span class="built_in">String</span>?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>代理模式客户端应用</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> mm=<span class="function"><span class="title">Girl</span><span class="params">()</span></span></span><br><span class="line">mm.word=<span class="string">"hi,你好"</span></span><br><span class="line"></span><br><span class="line"><span class="tag">var</span> proxy=<span class="function"><span class="title">Proxy</span><span class="params">(mm: mm)</span></span></span><br><span class="line">proxy.<span class="function"><span class="title">operation</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="代理模式总结">代理模式总结</h1><p>吼吼，这是不是就是传说中的机器人聊天原理啊！代理模式给某一个对象提供一个代理对象，由代理对象控制对源对象的引用。代理就是一个人或一个结构代表另一个人或者一个机构采取行动。我们身边到处都是代理模式，如远程代理、虚拟代理、安全代理、智能指引等。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="代理模式比喻">代理模式比喻</h1><p>跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷]]>
-    </summary>
-    
-      <category term="swift" scheme="http://www.zhuli8.com/tags/swift/"/>
-    
-      <category term="设计模式" scheme="http://www.zhuli8.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-      <category term="设计模式" scheme="http://www.zhuli8.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Grand Central Dispatch (gcd)]]></title>
-    <link href="http://www.zhuli8.com/2015/06/10/Grand-Central-Dispatch-gcd/"/>
-    <id>http://www.zhuli8.com/2015/06/10/Grand-Central-Dispatch-gcd/</id>
-    <published>2015-06-10T06:50:07.000Z</published>
-    <updated>2015-06-10T08:36:40.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
-<li>全称是Grand Central Dispatch ，可译为“大中央调度”</li>
-<li>纯C语言，提供了非常多强大的函数库</li>
-<li><h2 id="GCD的优势">GCD的优势</h2></li>
-<li>GCD是苹果公司为<strong>多核</strong>的<strong>并行</strong>运算提出的解决方案</li>
-<li>GCD会自动利用更多的CPU内核（比如双核、四核）</li>
-<li>GCD会自动管理线程的生命周期（创建线程、调度任务、销毁线程）</li>
-<li>程序员只需要告诉GCD想要执行什么任务，不需要编写任何线程管理代码<h1 id="任务和队列">任务和队列</h1></li>
-<li>GCD中有两个核心概念</li>
-</ul>
-<ol>
-<li><strong>任务</strong>：执行什么操作</li>
-<li><strong>队列</strong>：用来存放任务</li>
-</ol>
-<ul>
-<li>GCD的使用步骤</li>
-</ul>
-<ol>
-<li><strong>定制任务</strong>：确定想做的事情</li>
-<li><strong>将任务添加到队列中</strong>：GCD会自动将<em>队列</em>中的<em>任务</em>取出，放到对应的<em>线程</em>中执行；<em>任务</em>的取出遵循<em>队列</em>的FIFO原则：先进先出，后进后出<h2 id="执行任务">执行任务</h2>GCD中有2个用来执行任务的函数</li>
-</ol>
-<ul>
-<li>用<strong>同步</strong>的方式执行任务<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatch_sync(<span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span>, <span class="keyword">dispatch_block_t</span> block);</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>queue：队列<br>  block：任务</p>
-</blockquote>
-<ul>
-<li><p>用<strong>异步</strong>的方式执行任务</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(<span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span>, <span class="keyword">dispatch_block_t</span> block); </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>同步和异步的区别</p>
-<blockquote>
-<p>同步：只能在<strong>当前</strong>线程中执行任务，<strong>不具备</strong>开启新线程的能力<br>异步：可以在<strong>新的</strong>线程中执行任务，<strong>具备</strong>开启新线程的能力</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="队列的类型">队列的类型</h2><p>GCD的队列可以分为2大类型</p>
-<ul>
-<li><p><strong>并发</strong>队列（Concurrent Dispatch Queue）</p>
-<blockquote>
-<p>可以让多个任务<strong>并发（同时）</strong>执行（自动开启多个线程同时执行任务）<br><strong>并发</strong>功能只有在<strong>异步（dispatch_async）</strong>函数下才有效</p>
-</blockquote>
-</li>
-<li><p><strong>串行</strong>队列（Serial Dispatch Queue）</p>
-<blockquote>
-<p>让任务一个接着一个地执行（一个任务执行完毕后，再执行下一个任务）</p>
-</blockquote>
-</li>
-<li>容易混淆的术语 <blockquote>
-<p>有4个术语比较容易混淆：同步、异步、并发、串行<br><strong>同步和异步主要影响：能不能开启新的线程</strong><br>同步：在当前线程中执行任务，不具备开启新线程的能力<br>异步：在新的线程中执行任务，具备开启新线程的能力<br><strong>并发和串行主要影响：任务的执行方式</strong><br>并发：多个任务并发（同时）执行<br>串行：一个任务执行完毕后，再执行下一个任务</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="并发队列">并发队列</h3><ul>
-<li>GCD默认已经提供了全局的并发队列，供整个应用使用，不需要手动创建<br><strong>使用dispatch_get_global_queue函数获得全局的并发队列</strong><blockquote>
-<p>dispatch_queue_t dispatch_get_global_queue(<br>dispatch_queue_priority_t priority, // 队列的优先级<br>unsigned long flags); // 此参数暂时无用，用0即可</p>
-</blockquote>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span> = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>); <span class="comment">// 获得全局并发队列</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>全局并发队列的优先级<br><code>#define DISPATCH_QUEUE_PRIORITY_HIGH 2 // 高</code><br><code>#define DISPATCH_QUEUE_PRIORITY_DEFAULT 0 // 默认（中</code>）<br><code>#define DISPATCH_QUEUE_PRIORITY_LOW (-2) // 低</code><br><code>#define DISPATCH_QUEUE_PRIORITY_BACKGROUND INT16_MIN // 后台</code></p>
-</blockquote>
-<h3 id="串行队列 ">串行队列 </h3><ul>
-<li>GCD中获得串行有2种途径</li>
-</ul>
-<p><strong>使用dispatch_queue_create函数创建串行队列</strong></p>
-<blockquote>
-<p>dispatch_queue_t<br>dispatch_queue_create(const char *label, // 队列名称<br>dispatch_queue_attr_t attr); // 队列属性，一般用NULL即可<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span> = dispatch_queue_create(<span class="string">"cn.itcast.queue"</span>, NULL); <span class="comment">// 创建</span></span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p><strong>使用主队列（跟主线程相关联的队列）</strong><br>主队列是GCD自带的一种特殊的串行队列<br>放在主队列中的任务，都会放到主线程中执行<br>使用dispatch_get_main_queue()获得主队列<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span> = dispatch_get_main_queue();</span><br></pre></td></tr></table></figure></p>
-<pre><code>凡是函数名种带有<span class="operator"><span class="keyword">create</span>\copy\new\retain等字眼, 都应该在不需要使用这个数据的时候进行<span class="keyword">release</span>
-GCD的数据类型在ARC环境下不需要再做<span class="keyword">release</span>
-CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="keyword">release</span></span>
-</code></pre><h3 id="各种队列的执行效果">各种队列的执行效果</h3><p><img src="http://www.zhuli8.com/photos/gcd.png" alt=""></p>
-<blockquote>
-<p><strong>注意</strong><br>使用sync函数往当前串行队列中添加任务，会卡住当前的串行队列</p>
-</blockquote>
-<h1 id="线程间通信示例 ">线程间通信示例 </h1><h2 id="从子线程回到主线程">从子线程回到主线程</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async<span class="list">(<span class="keyword">dispatch_get_global_queue</span><span class="list">(<span class="keyword">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>)</span>, ^&#123;</span><br><span class="line">    // 执行耗时的异步操作...</span><br><span class="line">      dispatch_async<span class="list">(<span class="keyword">dispatch_get_main_queue</span><span class="list">()</span>, ^&#123;</span><br><span class="line">        // 回到主线程，执行UI刷新操作</span><br><span class="line">        &#125;)</span><span class="comment">;</span></span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<h2 id="延时执行">延时执行</h2><p>iOS常见的延时执行有2种方式</p>
-<h3 id="调用NSObject的方法">调用NSObject的方法</h3><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">self</span> <span class="symbol">performSelector:</span><span class="variable">@selector</span>(run) <span class="symbol">withObject:</span><span class="keyword">nil</span> <span class="symbol">afterDelay:</span><span class="number">2.0</span>];<span class="regexp">//</span> <span class="number">2</span>秒后再调用<span class="keyword">self</span>的run方法</span><br></pre></td></tr></table></figure>
-<h3 id="使用GCD函数">使用GCD函数</h3><figure class="highlight openscad"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dispatch_after<span class="params">(dispatch_time<span class="params">(DISPATCH_TIME_NOW, <span class="params">(int64_t)</span><span class="params">(<span class="number">2.0</span> * NSEC_PER_SEC)</span>)</span>, dispatch_get_main_queue<span class="params">()</span>, ^&#123;</span><br><span class="line">    // <span class="number">2</span>秒后异步执行这里的代码...</span><br><span class="line">&#125;)</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="一次性代码">一次性代码</h2><p>使用dispatch_once函数能保证某段代码在程序运行过程中只被执行1次<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</span><br><span class="line"><span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</span><br><span class="line">    <span class="comment">// 只执行1次的代码(这里面默认是线程安全的)</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<h2 id="队列组">队列组</h2><p>有这么1种需求<br>首先：分别异步执行2个耗时的操作<br>其次：等2个异步操作都执行完毕后，再回到主线程执行操作<br>如果想要快速高效地实现上述需求，可以考虑用队列组<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">dispatch_group_t group =  dispatch_group_create<span class="list">()</span><span class="comment">;</span></span><br><span class="line">dispatch_group_async<span class="list">(<span class="keyword">group</span>, dispatch_get_global_queue<span class="list">(<span class="keyword">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>)</span>, ^&#123;</span><br><span class="line">    // 执行<span class="number">1</span>个耗时的异步操作</span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br><span class="line">dispatch_group_async<span class="list">(<span class="keyword">group</span>, dispatch_get_global_queue<span class="list">(<span class="keyword">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>)</span>, ^&#123;</span><br><span class="line">    // 执行<span class="number">1</span>个耗时的异步操作</span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br><span class="line">dispatch_group_notify<span class="list">(<span class="keyword">group</span>, dispatch_get_main_queue<span class="list">()</span>, ^&#123;</span><br><span class="line">    // 等前面的异步操作都执行完毕后，回到主线程...</span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="单例模式">单例模式</h2><h3 id="单例模式的作用">单例模式的作用</h3><p>可以保证在程序运行过程，一个类只有一个实例，而且该实例易于供外界访问，从而方便地控制了实例个数，并节约系统资源</p>
-<h3 id="单例模式的使用场合">单例模式的使用场合</h3><ul>
-<li>在整个应用程序中，共享一份资源（这份资源只需要创建初始化1次）</li>
-<li>单例模式在ARC\MRC环境下的写法有所不同，需要编写2套不同的代码<br>可以用宏判断是否为ARC环境<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">if</span> __has_feature(objc_arc)</span></span><br><span class="line"><span class="comment">// ARC</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">else</span></span></span><br><span class="line"><span class="comment">// MRC</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="ARC单例模式的实现">ARC单例模式的实现</h4><ul>
-<li><p>在.m中保留一个全局的static的实例</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">id</span> _instance;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重写allocWithZone:方法，在这里创建唯一的实例（注意线程安全）</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">id</span>)allocWithZone:(<span class="keyword">struct</span> _<span class="built_in">NSZone</span> *)zone</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">@synchronized</span>(<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!_instance) &#123;</span><br><span class="line">            _instance = [<span class="keyword">super</span> allocWithZone:zone];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>提供1个类方法让外界访问唯一的实例</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ (instancetype)sharedSoundTool</span><br><span class="line">&#123;</span><br><span class="line">    <span class="variable">@synchronized</span>(<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!_instance) &#123;</span><br><span class="line">            _instance = [[<span class="keyword">self</span> alloc] init];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>实现copyWithZone:方法</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)copyWithZone:(<span class="keyword">struct</span> _<span class="built_in">NSZone</span> *)zone</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="MRC">MRC</h4><p>非ARC中（MRC），单例模式的实现（比ARC多了几个步骤）<br><em>实现内存管理方法</em></p>
-<pre><code>-<span class="ruby"> (id)retain { <span class="keyword">return</span> <span class="keyword">self</span>; }
-</span>-<span class="ruby"> (<span class="constant">NSUInteger</span>)retainCount { <span class="keyword">return</span> <span class="number">1</span>; }
-</span>-<span class="ruby"> (oneway void)release {}
-</span>-<span class="ruby"> (id)autorelease { <span class="keyword">return</span> <span class="keyword">self</span>; }</span>
-</code></pre><h1 id="推荐阅读">推荐阅读</h1><p><a href="http://www.jianshu.com/p/50c060bab0ff" target="_blank" rel="external">Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2</a><br><a href="[Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2](http://www.jianshu.com/p/50c060bab0ff">cocoachina：Grand Central Dispatch 基础教程：Part 2/2</a>)<br><a href="http://www.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">唐巧：使用GCD</a><br><a href="http://www.cocoachina.com/ios/20140428/8248.html" target="_blank" rel="external">GCD 深入理解（一）</a><br><a href="http://www.cocoachina.com/ios/20140515/8433.html" target="_blank" rel="external">GCD 深入理解（二）</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
-<li>全称是Grand Central Dispatch ，可译为“大中央调度”</li>
-<li>纯C语言，提供了非常多强大的函数库</li>
-<li><h2 id="GCD]]>
-    </summary>
-    
-      <category term="GCD" scheme="http://www.zhuli8.com/tags/GCD/"/>
     
       <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="数据存储" scheme="http://www.zhuli8.com/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"/>
     
       <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
     
   </entry>
   
   <entry>
-    <title><![CDATA[@OBJC和DYNAMIC]]></title>
-    <link href="http://www.zhuli8.com/2015/06/10/OBJC%E5%92%8CDYNAMIC/"/>
-    <id>http://www.zhuli8.com/2015/06/10/OBJC和DYNAMIC/</id>
-    <published>2015-06-10T02:44:45.000Z</published>
-    <updated>2015-06-10T03:04:44.000Z</updated>
-    <content type="html"><![CDATA[<p><div class="post-content clearfix"><br>        <p>虽然说 Swift 语言的初衷是希望能摆脱 Objective-C 的沉重的历史包袱和约束，但是不可否认的是经过了二十多年的洗礼，Cocoa 框架早就烙上了不可磨灭的 Objective-C 的印记。无数的第三方库是用 Objective-C 写成的，这些积累无论是谁都不能小觑。因此，在最初的版本中，Swift 不得不考虑与 Objective-C 的兼容。</p></div></p>
-<p>Apple 采取的做法是允许我们在同一个项目中同时使用 Swift 和 Objective-C 来进行开发。其实一个项目中的 Objective-C 文件和 Swift 文件是处于两个不同世界中的，为了让它们能相互联通，我们需要添加一些桥梁。</p><br><p>首先通过添加 <code>{product-module-name}-Bridging-Header.h</code> 文件，并在其中填写想要使用的头文件名称，我们就可以很容易地在 Swift 中使用 Objective-C 代码了。Xcode 为了简化这个设定，甚至在 Swift 项目中第一次导入 Objective-C 文件时会主动弹框进行询问是否要自动创建这个文件，可以说是非常方便。</p><br><p>但是如果想要在 Objective-C 中使用 Swift 的类型的时候，事情就复杂一些。如果是来自外部的框架，那么这个框架与 Objective-C 项目肯定不是处在同一个 target 中的，我们需要对外部的 Swift module 进行导入。这个其实和使用 Objective-C 的原来的 Framework 是一样的，对于一个项目来说，外界框架是由 Swift 写的还是 Objective-C 写的，两者并没有太大区别。我们通过使用 2013 年新引入的 <code>@import</code> 来引入 module：</p><br><pre><code>@import MySwiftKit;<br></code></pre><br><p>之后就可以正常使用这个 Swift 写的框架了。</p><br><p>如果想要在 Objective-C 里使用的是同一个项目中的 Swift 的源文件的话，可以直接导入自动生成的头文件 <code>{product-module-name}-Swift.h</code> 来完成。比如项目的 target 叫做 <code>MyApp</code> 的话，我们就需要在 Objective-C 文件中写</p><br><pre><code>#import “MyApp-Swift.h”<br></code></pre><br><p>但这只是故事的开始。Objective-C 和 Swift 在底层使用的是两套完全不同的机制，Cocoa 中的 Objective-C 对象是基于运行时的，它从骨子里遵循了 KVC (Key-Value Coding，通过类似字典的方式存储对象信息) 以及动态派发 (Dynamic Dispatch，在运行调用时再决定实际调用的具体实现)。而 Swift 为了追求性能，如果没有特殊需要的话，是不会在运行时再来决定这些的。也就是说，Swift 类型的成员或者方法在编译时就已经决定，而运行时便不再需要经过一次查找，而可以直接使用。</p><br><p>显而易见，这带来的问题是如果我们要使用 Objective-C 的代码或者特性来调用纯 Swift 的类型时候，我们会因为找不到所需要的这些运行时信息，而导致失败。解决起来也很简单，在 Swift 类型文件中，我们可以将需要暴露给 Objective-C 使用的任何地方 (包括类，属性和方法等) 的声明前面加上 <code>@objc</code> 修饰符。注意这个步骤只需要对那些不是继承自 <code>NSObject</code> 的类型进行，如果你用 Swift 写的 class 是继承自 <code>NSObject</code> 的话，Swift 会默认自动为所有的非 private 的类和成员加上 <code>@objc</code>。这就是说，对一个 <code>NSObject</code> 的子类，你只需要导入相应的头文件就可以在 Objective-C 里使用这个类了。</p><br><p><code>@objc</code> 修饰符的另一个作用是为 Objective-C 侧重新声明方法或者变量的名字。虽然绝大部分时候自动转换的方法名已经足够好用 (比如会将 Swift 中类似 <code>init(name: String)</code> 的方法转换成 <code>-initWithName:(NSString *)name</code> 这样)，但是有时候我们还是期望 Objective-C 里使用和 Swift 中不一样的方法名或者类的名字，比如 Swift 里这样的一个类：</p><br><pre><code>class 我的类 {<br>    func 打招呼(名字: String) {<br>        println(“哈喽，(名字)”)<br>    }<br>}<br>我的类().打招呼(“小明”)<br></code></pre><br><p>Objective-C 的话是无法使用中文来进行调用的，因此我们<strong>必须</strong>使用 <code>@objc</code> 将其转为 ASCII 才能在 Objective-C 里访问：</p>
-
-<p><pre><code>@objc(MyClass)<br>class 我的类 {<br>    @objc(greeting:)<br>    func 打招呼(名字: String) {<br>        println(“哈喽，(名字)”)<br>    }<br>}<br></code></pre></p>
-<p></p><p>这样，我们在 Objective-C 里就能调用 <code>[[MyClass new] greeting:@”XiaoMing”]</code> 这样的代码了 (虽然比起原来一点都不好玩了)。另外，正如上面所说的以及在 <a href="http://swifter.tips/selector/" target="_blank" rel="external">Selector</a> 一节中所提到的，即使是 <code>NSObject</code> 的子类，Swift 也不会在被标记为 <code>private</code> 的方法或成员上自动加 <code>@objc</code>。如果我们需要使用这些内容的动态特性的话，我们需要手动给它们加上 <code>@objc</code> 修饰。</p><p></p>
-<p></p><p>添加 <code>@objc</code> 修饰符并不意味着这个方法或者属性会变成动态派发，Swift 依然可能会将其优化为静态调用。如果你需要和 Objective-C 里动态调用时相同的运行时特性的话，你需要使用的修饰符是 <code>dynamic</code>。一般情况下在做 app 开发时应该用不上，但是在施展一些像动态替换方法或者运行时再决定实现这样的 “黑魔法” 的时候，我们就需要用到 <code>dynamic</code> 修饰符了。在之后的 KVO 一节中，我们还会提到一个关于使用 <code>dynamic</code> 的实例。</p><br>    <br>作者王巍 <a href="http://swifter.tips/" target="_blank" rel="external">(@onevcat)</a> 原文地址 <a href="http://swifter.tips/objc-dynamic/" target="_blank" rel="external">http://swifter.tips/objc-dynamic/</a><p></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[swift的@OBJC和DYNAMIC]]>
-    
-    </summary>
-    
-      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
-    
-      <category term="swift" scheme="http://www.zhuli8.com/tags/swift/"/>
-    
-      <category term="swift" scheme="http://www.zhuli8.com/categories/swift/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[iOS学习参考]]></title>
-    <link href="http://www.zhuli8.com/2015/06/09/iOS%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
-    <id>http://www.zhuli8.com/2015/06/09/iOS学习参考/</id>
-    <published>2015-06-09T01:10:54.000Z</published>
-    <updated>2015-07-06T03:08:37.000Z</updated>
+    <link href="http://www.zhuli8.com/2015/05/17/iOS%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
+    <id>http://www.zhuli8.com/2015/05/17/iOS学习参考/</id>
+    <published>2015-05-17T01:10:54.000Z</published>
+    <updated>2015-07-20T02:19:40.000Z</updated>
     <content type="html"><![CDATA[<h1 id="社区博客">社区博客</h1><p><a href="http://www.cocoachina.com/" target="_blank" rel="external">CocoaChina</a></p>
 <p>苹果开发中文站 - 最热的iPhone开发社区，最热的苹果开发社区，最热的iPad开发社区。</p>
 <p><a href="http://www.code4app.com/" target="_blank" rel="external">Code4App</a></p>
@@ -1154,40 +1188,6 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
     </summary>
     
       <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
-    
-      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[The Internet Communications (ice)]]></title>
-    <link href="http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-%E7%AE%80%E4%BB%8B/"/>
-    <id>http://www.zhuli8.com/2015/05/27/The-Internet-Communications-Ice-简介/</id>
-    <published>2015-05-27T09:26:50.000Z</published>
-    <updated>2015-06-11T01:40:38.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="简介">简介</h1><p>The Internet Communications Engine (ice) is a modern object-oriented toolkit that enables you to build distributed applications with minimal effort. Ice allows you to focus your efforts on your application logic, and it takes care of all interactions with low-level network programming interfaces. With Ice, there is no need to worry about details such as opening network connections, serializing and deserializing data for network transmission, or retrying failed connection attempts (to name but a few of dozens of such low-level details).</p>
-<h1 id="开发环境搭建">开发环境搭建</h1><p>ICE安装文件：<a href="https://zeroc.com/icetouch/download.html" target="_blank" rel="external">https://zeroc.com/icetouch/download.html</a><br>ICE编译插件：<a href="https://github.com/zeroc-ice/ice-builder-xcode" target="_blank" rel="external">https://github.com/zeroc-ice/ice-builder-xcode</a></p>
-<h1 id="相关文档">相关文档</h1><p>ICE官网：<a href="http://www.zeroc.com/ice.html" target="_blank" rel="external">http://www.zeroc.com/ice.html</a><br>官网文档：<a href="http://doc.zeroc.com/display/Doc/Home" target="_blank" rel="external">http://doc.zeroc.com/display/Doc/Home</a><br>性能评测：<a href="http://zeroc.com/articles/IcePerformanceWhitePaper.pdf" target="_blank" rel="external">http://zeroc.com/articles/IcePerformanceWhitePaper.pdf</a></p>
-<h1 id="ICE通讯框架基本原理">ICE通讯框架基本原理</h1><p>ICE的思路是，用一个中间语言，建立数据结构规范和接口规范，然后再用一个IDE编译插件，将中间语言数据结构规范和接口规范编译为当前的语言，譬如OC的.h/.m文件，接下来，你在客户端和服务端实现中间语言定义号的接口，再做一些其它处理，就可以实现一个分布式程序了。这个思路确实很Nice，值得我们借鉴。</p>
-<h1 id="通讯方式选择">通讯方式选择</h1><p>P2P（设备直连）</p>
-<p>通过服务器中转</p>
-<h1 id="网络连接方式">网络连接方式</h1><p>基于TCP的长连接</p>
-<p>基于HTTP短连接PULL的方式</p>
-<h1 id="协议选择">协议选择</h1><p>XMPP</p>
-<p>SIP</p>
-<p>MQTT</p>
-<p>私有协议（二进制协议）</p>
-<h1 id="其他">其他</h1><p>p2p视频聊天的过程：音视频数据采集—&gt;编码—&gt;发送—&gt;接收—&gt;解码—&gt;播放</p>
-<p><a href="http://www.cnblogs.com/HouZhiHouJueBlogs/p/3864677.html" target="_blank" rel="external">The Internet Communications Engine (Ice) 跨平台异构通讯方案 第一弹-ICE简介</a></p>
-<p><a href="http://www.cnblogs.com/HouZhiHouJueBlogs/p/3864737.html" target="_blank" rel="external">The Internet Communications Engine (Ice) 跨平台异构通讯方案 第二弹-Hello world！</a></p>
-<p><a href="http://www.cnblogs.com/lingyunhu/category/626157.html" target="_blank" rel="external">webrtc</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[IM相关学习]]>
-    
-    </summary>
-    
-      <category term="ice" scheme="http://www.zhuli8.com/tags/ice/"/>
     
       <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
     

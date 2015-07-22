@@ -2,6 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.zhuli8.com/2015/07/19/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/</loc>
+    <lastmod>2015-07-22T07:04:49.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.zhuli8.com/2015/07/26/%E4%BF%A1%E4%BB%A4%E3%80%81stun%E3%80%81turn/</loc>
+    <lastmod>2015-07-22T07:04:23.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.zhuli8.com/2015/07/12/The-Internet-Communications-Ice-%E7%AE%80%E4%BB%8B/</loc>
+    <lastmod>2015-07-22T07:03:57.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.zhuli8.com/2015/05/10/GPU-%E5%8A%A0%E9%80%9F%E4%B8%8B%E7%9A%84%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/</loc>
     <lastmod>2015-07-20T02:55:17.000Z</lastmod>
   </url>
@@ -44,16 +59,6 @@
   <url>
     <loc>http://www.zhuli8.com/2015/07/05/Grand-Central-Dispatch-gcd/</loc>
     <lastmod>2015-07-20T02:16:55.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.zhuli8.com/2015/07/12/The-Internet-Communications-Ice-%E7%AE%80%E4%BB%8B/</loc>
-    <lastmod>2015-07-20T02:15:58.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.zhuli8.com/2015/07/19/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/</loc>
-    <lastmod>2015-07-20T02:15:30.000Z</lastmod>
   </url>
   
   <url>

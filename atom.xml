@@ -69,21 +69,6 @@
   </entry>
   
   <entry>
-    <title><![CDATA[sip&xmpp]]></title>
-    <link href="http://www.zhuli8.com/2015/07/22/sip-xmpp-1/"/>
-    <id>http://www.zhuli8.com/2015/07/22/sip-xmpp-1/</id>
-    <published>2015-07-22T07:30:03.000Z</published>
-    <updated>2015-07-22T07:30:03.000Z</updated>
-    <content type="html"><![CDATA[<p>这里开始使用markdown格式输入你的正文。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>这里开始使用markdown格式输入你的正文。</p>
-]]>
-    </summary>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[构建支持armv7和arm64的webRTC静态库]]></title>
     <link href="http://www.zhuli8.com/2015/07/19/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/"/>
     <id>http://www.zhuli8.com/2015/07/19/构建支持armv7和arm64的webRTC静态库/</id>

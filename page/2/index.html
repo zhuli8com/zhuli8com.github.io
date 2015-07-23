@@ -834,6 +834,106 @@ uniform highp float refractiveIndex;
 
 
 
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/19/git总结/" title="git总结" itemprop="url">git总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-19T07:55:39.000Z" itemprop="datePublished"> 发表于 2015-04-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="前提">前提</h1><p>默认进入到了工程目录，即 cd xxx。</p>
+<h1 id="查看其他指令的用途及配置指令">查看其他指令的用途及配置指令</h1><p>1、git help</p>
+<p>2、git config user.name ‘zhuli8’</p>
+<p>3、git config user.email ‘zhuli1228@163.com’</p>
+<p>4、git config —list：查看配置</p>
+<p>5、git log：查看日志</p>
+<h1 id="操作github上的已有项目">操作github上的已有项目</h1><p>注意：</p>
+<pre><code>使用Xcode工具连接github仓库时使用的用户名必须是自己GitHub上的账号名而不是邮箱。
+</code></pre><p>1、clone远程仓库</p>
+<p>git clone <a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">https://github.com/zhuli8com/transition.git</a></p>
+<p>2、添加文件</p>
+<p>git add . 或者git add test.txt</p>
+<p>3、提交到本地</p>
+<p>git commit -m ‘注释’</p>
+<p>4、提交到github主分支</p>
+<p>git push origin master</p>
+<p>5、删除文件test.txt文件</p>
+<p>git delete test.txt，重复3、4步骤</p>
+<p>6、从远程更新本地代码</p>
+<p>git pull origin master</p>
+<h1 id="创建本地仓库并上传github">创建本地仓库并上传github</h1><p>1、初始化一个版本仓库</p>
+<p>git init</p>
+<p>2、添加远程版本库</p>
+<p>git remote add [shortname] [url]</p>
+<p>git remote add origin <a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">https://github.com/zhuli8com/transition.git</a></p>
+<p>3、查看远程仓库</p>
+<p>git remote -v</p>
+<p>4、下拉远程仓库文件到本地，抓取远程仓库master分支更新合并到本地</p>
+<p>git pull origin master （最最关键的步骤）</p>
+<p>5、添加到本地暂存区</p>
+<p>git add .</p>
+<p>6、提交到本地版本库</p>
+<p>git commit -m ‘注释’</p>
+<p>7、提交到github，将本地分支推到远程主分支</p>
+<p>git push origin master</p>
+<h1 id="参考">参考</h1><p><a href="http://justcoding.iteye.com/blog/1830388" target="_blank" rel="external">git常用命令</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/git/">git</a>►<a class="article-category-link" href="/categories/git/代码管理/">代码管理</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/代码管理/">代码管理</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/19/git总结/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/19/git总结/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
@@ -856,11 +956,19 @@ uniform highp float refractiveIndex;
 		  
 		
 		  
+			<li><a href="/categories/git/" title="git">git<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/iOS/" title="iOS">iOS<sup>6</sup></a></li>
 		  
 		
 		  
 			<li><a href="/categories/swift/" title="swift">swift<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/git/代码管理/" title="代码管理">代码管理<sup>1</sup></a></li>
 		  
 		
 		  
@@ -881,11 +989,11 @@ uniform highp float refractiveIndex;
 			
 		
 			
-				<li><a href="/tags/IM/" title="IM">IM<sup>4</sup></a></li>
+				<li><a href="/tags/swift/" title="swift">swift<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/swift/" title="swift">swift<sup>4</sup></a></li>
+				<li><a href="/tags/IM/" title="IM">IM<sup>4</sup></a></li>
 			
 		
 			
@@ -897,11 +1005,15 @@ uniform highp float refractiveIndex;
 			
 		
 			
-				<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/数据存储/" title="数据存储">数据存储<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/代码管理/" title="代码管理">代码管理<sup>1</sup></a></li>
 			
 		
 			
@@ -913,7 +1025,7 @@ uniform highp float refractiveIndex;
 			
 		
 			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+				<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
 			
 		
 		</ul>

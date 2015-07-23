@@ -757,6 +757,83 @@ uniform highp float refractiveIndex;
 
 
 
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/26/iOS自定义转场/" title="iOS自定义转场" itemprop="url">iOS自定义转场</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-26T01:27:07.000Z" itemprop="datePublished"> 发表于 2015-04-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="UIViewControllerTransitioning">UIViewControllerTransitioning</h1><h2 id="UIViewControllerAnimatedTransitioning">UIViewControllerAnimatedTransitioning</h2><p>采用UIViewControllerAnimatedTransitioning协议实现自定义转场动画，它提供了两个方法：</p>
+<p>1、transitionDuration:指定转场的过渡时间。</p>
+<p>2、animateTransition:创建转场动画。</p>
+<p>在转场中涉及到的信息通过一个实现了UIViewControllerContextTransitioning的transitionContext上下文对象进行传递，使用这个transitionContext参数能移动或关闭目标控制器以及控制这个过程中持续的时间。</p>
+<p>首先，我们需要自定义一个实现了UIViewControllerAnimatedTransitioning协议的对象。创建一个类CustomPresentAnimation继承自NSObject并遵守UIViewControllerAnimatedTransitioning协议。</p>
+<p><strong>CustomPresentAnimation.h</strong></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@interface</span> <span class="attribute">CustomPresentAnimation </span>: NSObject &lt;UIViewControllerAnimatedTransitioning&gt;</span><br><span class="line"></span><br><span class="line"><span class="variable">@end</span></span><br></pre></td></tr></table></figure>
+<p><strong>CustomPresentAnimation.m</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">CustomPresentAnimation</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="built_in">NSTimeInterval</span>)transitionDuration:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1.0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)animateTransition:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//使用transitionContext可以得到参与切换的两个ViewController的信息</span></span><br><span class="line">    <span class="built_in">UIViewController</span> *toVC= [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//将控制器视图初始位置设置到屏幕下边缘，从而从屏幕下方出现</span></span><br><span class="line">    <span class="built_in">CGRect</span> finalRect=[transitionContext finalFrameForViewController:toVC];</span><br><span class="line">    toVC<span class="variable">.view</span><span class="variable">.frame</span>=<span class="built_in">CGRectOffset</span>(finalRect, <span class="number">0</span>, [[<span class="built_in">UIScreen</span> mainScreen] bounds]<span class="variable">.size</span><span class="variable">.height</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//所有的动画视图都必须放在transitionContext的containerView里</span></span><br><span class="line">    [[transitionContext containerView] addSubview:toVC<span class="variable">.view</span>];</span><br><span class="line">    </span><br><span class="line">    [<span class="built_in">UIView</span> animateWithDuration:[<span class="keyword">self</span> transitionDuration:transitionContext] delay:<span class="number">0.0</span> usingSpringWithDamping:<span class="number">0.5</span> initialSpringVelocity:<span class="number">0.5</span> options:<span class="built_in">UIViewAnimationOptionCurveEaseInOut</span> animations:^&#123;</span><br><span class="line">        toVC<span class="variable">.view</span><span class="variable">.frame</span>=finalRect;</span><br><span class="line">    &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</span><br><span class="line">        <span class="comment">//动画完成或者取消之后必须得调用的方法，系统接收到这个消息后将对控制器的状态进行维护</span></span><br><span class="line">        [transitionContext completeTransition:<span class="literal">YES</span>];</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="UIViewControllerTransitioningDelegate">UIViewControllerTransitioningDelegate</h2><p>实现UIViewControllerTransitioningDelegate协议的对象在控制器 <em>presented</em> 或者 <em>dismissed</em> 时返回上面继承自NSObject并遵守UIViewControllerAnimatedTransitioning协议的CustomPresentAnimation对象。这个接口的作用比较单一，在需要控制器切换的时候会向实现了这个接口的对象询问是否需要使用自定义的切换效果。我们可以让需要实现切换的控制器实现这个协议。</p>
+<p><strong>PresentedViewController.m</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">PresentedViewController</span> () &lt;<span class="title">UIViewControllerTransitioningDelegate</span>&gt;</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) CustomPresentAnimation *presentAnimation;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">PresentedViewController</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span><span class="variable">.transitioningDelegate</span>=<span class="keyword">self</span>;</span><br><span class="line">    <span class="keyword">self</span><span class="variable">.presentAnimation</span>=[[CustomPresentAnimation alloc] init];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">IBAction</span>)clickDismmissButton:(<span class="built_in">UIButton</span> *)sender &#123;</span><br><span class="line">    </span><br><span class="line">    [<span class="keyword">self</span> dismissViewControllerAnimated:<span class="literal">YES</span> completion:^&#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"clickDismmissButton"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animationControllerForPresentedController:(<span class="built_in">UIViewController</span> *)presented presentingController:(<span class="built_in">UIViewController</span> *)presenting sourceController:(<span class="built_in">UIViewController</span> *)source</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span><span class="variable">.presentAnimation</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>UIViewController中自定义转场动画到这就结束了，<a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">点击</a>查看的完整代码。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/26/iOS自定义转场/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/26/iOS自定义转场/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
@@ -779,7 +856,7 @@ uniform highp float refractiveIndex;
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>5</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>6</sup></a></li>
 		  
 		
 		  
@@ -800,7 +877,7 @@ uniform highp float refractiveIndex;
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>8</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>9</sup></a></li>
 			
 		
 			

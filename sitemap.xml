@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.zhuli8.com/2015/08/01/iOS%E5%BC%80%E5%8F%91%E3%80%81Mac%E4%BD%BF%E7%94%A8%E4%B8%AD%E8%BF%99%E4%BA%9B%E4%BD%A0%E7%94%A8%E4%BA%86%E5%90%97/</loc>
+    <lastmod>2015-08-01T02:11:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.zhuli8.com/2015/04/19/git%E6%80%BB%E7%BB%93/</loc>
+    <lastmod>2015-08-01T02:06:35.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.zhuli8.com/2015/05/31/%E4%B8%8E%E8%B0%83%E8%AF%95%E5%99%A8%E5%85%B1%E8%88%9E%20-%20LLDB%20%E7%9A%84%E5%8D%8E%E5%B0%94%E5%85%B9/</loc>
     <lastmod>2015-07-31T02:39:59.000Z</lastmod>
   </url>
@@ -9,11 +19,6 @@
   <url>
     <loc>http://www.zhuli8.com/2015/07/19/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/</loc>
     <lastmod>2015-07-27T08:52:27.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.zhuli8.com/2015/04/19/git%E6%80%BB%E7%BB%93/</loc>
-    <lastmod>2015-07-23T08:50:21.000Z</lastmod>
   </url>
   
   <url>

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-08-01T02:16:24.000Z</updated>
+  <updated>2015-08-01T02:22:34.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -19,57 +19,59 @@
     <link href="http://www.zhuli8.com/2015/08/01/iOS%E5%BC%80%E5%8F%91%E3%80%81Mac%E4%BD%BF%E7%94%A8%E4%B8%AD%E8%BF%99%E4%BA%9B%E4%BD%A0%E9%80%A0%E5%90%97/"/>
     <id>http://www.zhuli8.com/2015/08/01/iOS开发、Mac使用中这些你造吗/</id>
     <published>2015-08-01T02:02:14.000Z</published>
-    <updated>2015-08-01T02:16:24.000Z</updated>
+    <updated>2015-08-01T02:22:34.000Z</updated>
     <content type="html"><![CDATA[<p>子曰：工欲善其事，必先利其器。居是邦也。事其大夫之贤者，友其士之仁者。</p>
 <p>有志者事竟成，破釜沉舟，百二秦关终属楚； 苦心人天不负，卧薪尝胆，三千越甲可吞吴。 </p>
 <p>由此产生此文！</p>
-<h1 id="Mac常用快捷键">Mac常用快捷键</h1><h2 id="窗口操作">窗口操作</h2><p>Command+Q：退出程序</p>
-<p>Command+W：关闭程序的窗口，并没有真正退出程序</p>
-<p>Command（长按）+Tab：切换程序窗口</p>
-<p>Command（长按）+空格：切换输入法</p>
-<p>Ctrl+⬆️：管理多个桌面</p>
-<h2 id="文件操作">文件操作</h2><p>点击一下文件、文件夹+空格：快速预览内容，无需双击打开。</p>
-<h1 id="Xcode常用快捷键">Xcode常用快捷键</h1><h2 id="Xcode导航快捷键">Xcode导航快捷键</h2><pre><code>Command+1：工程导航器
-</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+0：显示、隐藏导航器面板</span><br></pre></td></tr></table></figure>
-<pre><code>Command+<span class="keyword">Option</span>+<span class="number">0</span>：显示、隐藏实用工具面板
-</code></pre><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在项目导航器中选中文件，执行<span class="keyword">Option</span>+左键点击操作：在辅助编辑器中打开文件</span><br></pre></td></tr></table></figure>
-<h2 id="Xcode搜索快捷键">Xcode搜索快捷键</h2><pre><code>Command+<span class="keyword">Shift</span>+F：搜索导航器(<span class="built_in">Find</span> Navigator，也就是搜索)
-</code></pre><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Control</span>+<span class="number">6</span>（键入方法/变量名+<span class="keyword">Enter</span>跳转）：文件跳转栏</span><br></pre></td></tr></table></figure>
+<h1 id="Mac常用快捷键">Mac常用快捷键</h1><h2 id="窗口操作">窗口操作</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+Q：退出程序</span><br></pre></td></tr></table></figure>
+<figure class="highlight tp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+<span class="keyword">W</span>：关闭程序的窗口，并没有真正退出程序</span><br></pre></td></tr></table></figure>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command（长按）+<span class="keyword">Tab</span>：切换程序窗口</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command（长按）+空格：切换输入法</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ctrl+⬆️：管理多个桌面</span><br></pre></td></tr></table></figure>
+<h2 id="文件操作">文件操作</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">点击一下文件、文件夹+空格：快速预览内容，无需双击打开。</span><br></pre></td></tr></table></figure>
+<h1 id="Xcode常用快捷键">Xcode常用快捷键</h1><h2 id="Xcode导航快捷键">Xcode导航快捷键</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+1：工程导航器</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+0：显示、隐藏导航器面板</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+<span class="keyword">Option</span>+<span class="number">0</span>：显示、隐藏实用工具面板</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在项目导航器中选中文件，执行<span class="keyword">Option</span>+左键点击操作：在辅助编辑器中打开文件</span><br></pre></td></tr></table></figure>
+<h2 id="Xcode搜索快捷键">Xcode搜索快捷键</h2><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+<span class="keyword">Shift</span>+F：搜索导航器(<span class="built_in">Find</span> Navigator，也就是搜索)</span><br></pre></td></tr></table></figure>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Control</span>+<span class="number">6</span>（键入方法/变量名+<span class="keyword">Enter</span>跳转）：文件跳转栏</span><br></pre></td></tr></table></figure>
 <figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command + <span class="keyword">Shift</span> + O：快速打开</span><br></pre></td></tr></table></figure>
-<pre><code><span class="keyword">Control</span> + Command + ⬆️：程序中(Objective-<span class="keyword">C</span>或<span class="keyword">C</span>++编写).h and .m文件间的快速切换
-</code></pre><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+<span class="keyword">L</span>：输入行号进行快速查找</span><br></pre></td></tr></table></figure>
-<h2 id="应用程序编译和清理">应用程序编译和清理</h2><pre><code><span class="title">Command</span> + R：运行app
-</code></pre><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command + <span class="keyword">Shift</span> + K：清除工程</span><br></pre></td></tr></table></figure>
-<pre><code><span class="title">Command</span> + B：构建应用程序
-</code></pre><h2 id="调试相关">调试相关</h2><pre><code><span class="title">Command</span> + . ：方便地暂停运行iOS模拟器
-</code></pre><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+<span class="keyword">K</span>：删除调试面板里的信息，相当于<span class="keyword">Debug</span> Workflow-&gt;<span class="keyword">Clear</span> Console</span><br></pre></td></tr></table></figure>
-<pre><code>Ctrl+Command+<span class="keyword">Y</span>：继续执行
-</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F6：跳过方法</span><br></pre></td></tr></table></figure>
-<pre><code>F7：跳入方法
-</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F8：跳出方法</span><br></pre></td></tr></table></figure>
-<h2 id="文档和帮助">文档和帮助</h2><pre><code>Command + <span class="keyword">Shift</span> + <span class="number">0</span> (Zero)：文档和参考
-</code></pre><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在类或者方法名上执行<span class="keyword">Option</span> + 左键点击操作：快速帮助</span><br></pre></td></tr></table></figure>
-<h2 id="其他快捷键">其他快捷键</h2><pre><code>Command + <span class="keyword">Shift</span> + J：可展示当前你在工程导航器中打开的文件
-</code></pre><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ctrl + <span class="number">1</span>：可打开<span class="string">"Show Related Items’弹出菜单</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Control</span> + Command + ⬆️：程序中(Objective-<span class="keyword">C</span>或<span class="keyword">C</span>++编写).h and .m文件间的快速切换</span><br></pre></td></tr></table></figure>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+<span class="keyword">L</span>：输入行号进行快速查找</span><br></pre></td></tr></table></figure>
+<h2 id="应用程序编译和清理">应用程序编译和清理</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">Command</span> + R：运行app</span><br></pre></td></tr></table></figure>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command + <span class="keyword">Shift</span> + K：清除工程</span><br></pre></td></tr></table></figure>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">Command</span> + B：构建应用程序</span><br></pre></td></tr></table></figure>
+<h2 id="调试相关">调试相关</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">Command</span> + . ：方便地暂停运行iOS模拟器</span><br></pre></td></tr></table></figure>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+<span class="keyword">K</span>：删除调试面板里的信息，相当于<span class="keyword">Debug</span> Workflow-&gt;<span class="keyword">Clear</span> Console</span><br></pre></td></tr></table></figure>
+<figure class="highlight tp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ctrl+Command+<span class="keyword">Y</span>：继续执行</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F6：跳过方法</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F7：跳入方法</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F8：跳出方法</span><br></pre></td></tr></table></figure>
+<h2 id="文档和帮助">文档和帮助</h2><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command + <span class="keyword">Shift</span> + <span class="number">0</span> (Zero)：文档和参考</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在类或者方法名上执行<span class="keyword">Option</span> + 左键点击操作：快速帮助</span><br></pre></td></tr></table></figure>
+<h2 id="其他快捷键">其他快捷键</h2><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command + <span class="keyword">Shift</span> + J：可展示当前你在工程导航器中打开的文件</span><br></pre></td></tr></table></figure>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ctrl + <span class="number">1</span>：可打开<span class="string">"Show Related Items’弹出菜单</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command + <span class="keyword">Option</span> + Shift + 左键点击操作：该组合键可展示一个小尺寸的弹出视图，你可以查看你想要打开它的地方，比如辅助编辑器、标签或者窗口等。</span><br></pre></td></tr></table></figure>
-<h1 id="VIM编辑器相关">VIM编辑器相关</h1><h2 id="VIM的运行模式">VIM的运行模式</h2><p>编辑模式：等待编辑命令输入</p>
-<p>插入模式：编辑模式下，输入 “i” 进行插入模式，插入文本信息</p>
-<p>命令模式：在编辑模式下，输入 “:” 进行命令模式</p>
-<h2 id="VIM使用的命令">VIM使用的命令</h2><pre><code><span class="pseudo">:q</span>：直接退出
-</code></pre><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pseudo">:wq</span>：保存后退出</span><br></pre></td></tr></table></figure>
-<pre><code><span class="pseudo">:q</span>!：强制退出
-</code></pre><h1 id="常见Unix指令">常见Unix指令</h1><p>因为Mac系统是基于UNIX系统的，因此可以在“终端”中输入一些UNIX指令来操作Mac系统。比如：新建文件（夹）、打开文件（夹）等。</p>
-<h2 id="文件目录操作指令">文件目录操作指令</h2><pre><code><span class="keyword">ls</span>：列出当前目录下的所有内容（文件、文件夹）
-</code></pre><blockquote>
+<h1 id="VIM编辑器相关">VIM编辑器相关</h1><h2 id="VIM的运行模式">VIM的运行模式</h2><pre><code>编辑模式：等待编辑命令输入
+
+插入模式：编辑模式下，输入 “<span class="built_in">i</span>” 进行插入模式，插入文本信息
+
+命令模式：在编辑模式下，输入 “:” 进行命令模式
+</code></pre><h2 id="VIM使用的命令">VIM使用的命令</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pseudo">:q</span>：直接退出</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pseudo">:wq</span>：保存后退出</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pseudo">:q</span>!：强制退出</span><br></pre></td></tr></table></figure>
+<h1 id="常见Unix指令">常见Unix指令</h1><p>因为Mac系统是基于UNIX系统的，因此可以在“终端”中输入一些UNIX指令来操作Mac系统。比如：新建文件（夹）、打开文件（夹）等。</p>
+<h2 id="文件目录操作指令">文件目录操作指令</h2><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ls</span>：列出当前目录下的所有内容（文件、文件夹）</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>-l：列出文件的详细信息</p>
 <p>-a：列出当前目录所有文件，包括隐藏文件</p>
 </blockquote>
-<pre><code><span class="built_in">mkdir</span>：新建一个目录
-</code></pre><blockquote>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span>：新建一个目录</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>-p：父目录不存在的情况下先生成父目录</p>
 </blockquote>
-<pre><code><span class="built_in">cd</span>：改变当前操作的目录
-</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch：新建一个文件（文件不存在才会新建）</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span>：改变当前操作的目录</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch：新建一个文件（文件不存在才会新建）</span><br></pre></td></tr></table></figure>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span>（tac）：显示文本文件内容</span><br></pre></td></tr></table></figure>
 <figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cp</span>：复制文件或目录</span><br></pre></td></tr></table></figure>
 <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">rm</span>：删除文件</span><br></pre></td></tr></table></figure>
@@ -80,8 +82,8 @@
 <pre><code>mv：移动文件或目录
 </code></pre><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span>：在文件系统中查找指定的文件</span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pwd</span>：显示当前目录的名称</span><br></pre></td></tr></table></figure>
-<pre><code><span class="keyword">open</span>：打开一个文件（夹）
-</code></pre><p><strong>注：按一下Tab键可以自动补齐指令名称、文件名、文件夹名等。</strong></p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">open</span>：打开一个文件（夹）</span><br></pre></td></tr></table></figure>
+<p><strong>注：按一下Tab键可以自动补齐指令名称、文件名、文件夹名等。</strong></p>
 <h2 id="Unix指令中的特殊路径">Unix指令中的特殊路径</h2><p>Mac系统采用的是UNIX文件系统，所有的文件都放在根目录下（即“\”）,因此没有Windows中的C盘、D盘的概念，文件路径就不再有盘符。例如：</p>
 <pre><code>Windows中：<span class="string">c:</span><span class="comment">//Users/你的用户名/Desktop</span>
 
@@ -90,16 +92,16 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 <pre><code>/：根路径
 ./：当前路径
 ../：上一级路径
-</code></pre><h2 id="系统管理命令">系统管理命令</h2><pre><code>who（w）：显示在线登陆用户
-</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami：显示用户自己的身份</span><br></pre></td></tr></table></figure>
-<pre><code><span class="built_in">hostname</span>：显示主机名称
-</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname：显示系统信息</span><br></pre></td></tr></table></figure>
-<pre><code><span class="attribute">top</span>：显示当前系统中耗费资源最多的进程
-</code></pre><figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ps</span>：显示瞬间的进程状态</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="系统管理命令">系统管理命令</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">who（w）：显示在线登陆用户</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami：显示用户自己的身份</span><br></pre></td></tr></table></figure>
+<figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">hostname</span>：显示主机名称</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname：显示系统信息</span><br></pre></td></tr></table></figure>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">top</span>：显示当前系统中耗费资源最多的进程</span><br></pre></td></tr></table></figure>
+<figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ps</span>：显示瞬间的进程状态</span><br></pre></td></tr></table></figure>
 <pre><code><span class="title">ifconfig</span> en0：显示网络接口信息
 </code></pre><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">clear</span>：清屏</span><br></pre></td></tr></table></figure>
-<pre><code><span class="keyword">man</span>：命令帮助信息查询
-</code></pre><h1 id="写在最后">写在最后</h1><p>iOS开发和Mac使用中你还有哪些能提高开发效率的小技巧和快捷键以及黑科技，在评论中一起分享吧。</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">man</span>：命令帮助信息查询</span><br></pre></td></tr></table></figure>
+<h1 id="写在最后">写在最后</h1><p>iOS开发和Mac使用中你还有哪些能提高开发效率的小技巧和快捷键以及黑科技，在评论中一起分享吧。</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>子曰：工欲善其事，必先利其器。居是邦也。事其大夫之贤者，友其士之仁者。</p>

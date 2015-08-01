@@ -1310,7 +1310,7 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
     <link href="http://www.zhuli8.com/2015/05/17/iOS%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
     <id>http://www.zhuli8.com/2015/05/17/iOS学习参考/</id>
     <published>2015-05-17T01:10:54.000Z</published>
-    <updated>2015-07-20T02:19:40.000Z</updated>
+    <updated>2015-08-01T07:48:49.000Z</updated>
     <content type="html"><![CDATA[<h1 id="社区博客">社区博客</h1><p><a href="http://www.cocoachina.com/" target="_blank" rel="external">CocoaChina</a></p>
 <p>苹果开发中文站 - 最热的iPhone开发社区，最热的苹果开发社区，最热的iPad开发社区。</p>
 <p><a href="http://www.code4app.com/" target="_blank" rel="external">Code4App</a></p>
@@ -1319,6 +1319,8 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p>分享iOS开发资讯和文章</p>
 <p><a href="http://www.oschina.net/ios/home" target="_blank" rel="external">开源中国</a></p>
 <p>iOS开发社区 - 开源中国社区</p>
+<p><a href="http://toutiao.io" target="_blank" rel="external">开发者头条</a></p>
+<p>开发者头条 - 开发者的首选阅读分享平台</p>
 <h1 id="个人博客">个人博客</h1><p><a href="http://blog.devtang.com/" target="_blank" rel="external">唐巧</a></p>
 <p>InfoQ编辑, 《iOS开发进阶》作者, 在猿题库创业。Java开发工程师，曾开发网易微博后台。 iOS开发工程师，曾开发有道云笔记、猿题库。 </p>
 <p><a href="http://www.onevcat.com/" target="_blank" rel="external">王巍</a></p>

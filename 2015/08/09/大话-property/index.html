@@ -1,0 +1,597 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>大话@property | zhuli8’blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="朱利">
+    
+
+    
+    <meta name="description" content="iOS中常见@property面试题分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大话@property">
+<meta property="og:url" content="http://www.zhuli8.com/2015/08/09/大话-property/index.html">
+<meta property="og:site_name" content="zhuli8’blog">
+<meta property="og:description" content="iOS中常见@property面试题分析">
+<meta property="og:updated_time" content="2015-08-10T06:31:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大话@property">
+<meta name="twitter:description" content="iOS中常见@property面试题分析">
+
+    
+    <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="zhuli8’blog" title="zhuli8’blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="zhuli8’blog">zhuli8’blog</a></h1>
+				<h2 class="blog-motto">Talk is cheap, show me the code.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+    <input type="text" id="st-search-input" maxlength="20" placeholder="搜索" />
+    </form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/09/大话-property/" title="大话@property" itemprop="url">大话@property</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-09T06:29:16.000Z" itemprop="datePublished"> 发表于 2015-08-09</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#@property"><span class="toc-number">1.</span> <span class="toc-text">@property</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程安全"><span class="toc-number">1.1.</span> <span class="toc-text">线程安全</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#atomic、nonatomic"><span class="toc-number">1.1.1.</span> <span class="toc-text">atomic、nonatomic</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问权限"><span class="toc-number">1.2.</span> <span class="toc-text">访问权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#readonly、readwrite"><span class="toc-number">1.2.1.</span> <span class="toc-text">readonly、readwrite</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存管理"><span class="toc-number">1.3.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#assign"><span class="toc-number">1.3.1.</span> <span class="toc-text">assign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#weak(ARC)"><span class="toc-number">1.3.2.</span> <span class="toc-text">weak(ARC)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#copy"><span class="toc-number">1.3.3.</span> <span class="toc-text">copy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Copy扩展"><span class="toc-number">1.3.4.</span> <span class="toc-text">Copy扩展</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#前提"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作用"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#浅复制和深复制"><span class="toc-number">1.3.4.3.</span> <span class="toc-text">浅复制和深复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#@property和copy"><span class="toc-number">1.3.4.4.</span> <span class="toc-text">@property和copy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自定义对象"><span class="toc-number">1.3.4.5.</span> <span class="toc-text">自定义对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#特别注意"><span class="toc-number">1.3.4.6.</span> <span class="toc-text">特别注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#strong(ARC)、retain(MRC)"><span class="toc-number">1.3.5.</span> <span class="toc-text">strong(ARC)、retain(MRC)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指定方法名称"><span class="toc-number">1.4.</span> <span class="toc-text">指定方法名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#@synthesize和@dynamic"><span class="toc-number">1.5.</span> <span class="toc-text">@synthesize和@dynamic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#@synthesize"><span class="toc-number">1.5.1.</span> <span class="toc-text">@synthesize</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#@dynamic"><span class="toc-number">1.5.2.</span> <span class="toc-text">@dynamic</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考链接"><span class="toc-number">2.</span> <span class="toc-text">参考链接</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="@property">@property</h1><p>在普通的OC对象中，@property就是编译器自动帮我们生成一个私有的成员变量和getter、setter方法的声明及实现。为了研究编译器是如何实现@property的，我们需要使用clang。clang提供一个命令，可以将OC的源码改写成c++的，借此可以研究@property具体的源码实现方式。该命令是：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">clang</span> <span class="tag">-rewrite-objc</span> <span class="tag">xxx</span><span class="class">.m</span></span><br></pre></td></tr></table></figure>
+<p>初次之后我们还可以通过苹果开源的runtime进行研究，源码地址。<a href="http://opensource.apple.com/tarballs/objc4/" target="_blank" rel="external">源码</a></p>
+<h2 id="线程安全">线程安全</h2><h3 id="atomic、nonatomic">atomic、nonatomic</h3><p>atomic为原子性，会对set方法的实现进行加锁，多线程下可以一个线程写多个线程读，主要用在mac开发；nonatomic为非原子性，set方法的实现不加锁（比atomic性能高）。因为mac开发早于iOS开发，所以默认值为atomic。（A joke!）在默认情况下，由编译器所合成的方法会通过锁定机制确保其原子性(atomicity)。如果属性具备nonatomic特质，则不使用同步锁。</p>
+<p>一般情况下并不要求属性必须是“原子的”，因为这并不能保证“线程安全” ( thread safety)，若要实现“线程安全”的操作，还需采用更为深层的锁定机制才行。例如，一个线程在连续多次读取某属性值的过程中有别的线程在同时改写该值，那么即便将属性声明为atomic，也还是会读到不同的属性值。因此，在iOS开发中，你会发现，几乎所有属性都声明为nonatomic；但是在开发Mac OS X程序时，使用 atomic属性通常都不会有性能瓶颈。</p>
+<p>问题来了：</p>
+<blockquote>
+<p>@property (strong) NSMutableArray *array; 有什么问题？</p>
+</blockquote>
+<p>线程安全特性默认为atomic，该属性使用了同步锁，会在创建属性时生成一些额外的代码用于帮助写多线程程序，这会带来性能问题，通过显示声明nonatomic可以节省这些虽然很小但是不必要的额外开销。</p>
+<h2 id="访问权限">访问权限</h2><h3 id="readonly、readwrite">readonly、readwrite</h3><p>readonly只生成get方法的声明和实现； readwrite同时生成get方法和set方法的声明和实现。</p>
+<h2 id="内存管理">内存管理</h2><p>每个对象都有一个引用计数器，每个新对象的计数器默认是1，当对象的计数器减为0时就会被销毁；通过retain可以让对象的计数器加1、release可以让对象的计数器减1，还可以通过 <strong>autorelease pool</strong> 管理内存；只要调用了alloc、copy、new、retain方法产生的新对象，都必须在最后调用一次release或者autorelease；如果使用ARC，编译器会自动生成管理内存的代码。</p>
+<h3 id="assign">assign</h3><p>set方法的实现是直接赋值，用于基本数据类型的简单赋值操作，用于非OC对象。</p>
+<h3 id="weak(ARC)">weak(ARC)</h3><p>weak表明该属性定义了一种“非拥有关系（nonowning relationship）”，set方法的实现既不release旧也不retain新值，同assign类似，然而当对象销毁的时候，指针会被自动设置为nil，weak必须用于OC对象。</p>
+<p>使用场合：</p>
+<blockquote>
+<p>*在ARC中，出现循环引用的时候，必须要有一端使用weak，比如：delegate。</p>
+<p>*自身已经对它进行一次强引用，没有必要在强引用一次，此时也会使用weak，比如@IBOutlet。</p>
+</blockquote>
+<h3 id="copy">copy</h3><p>set方法的实现是release旧值，copy新值，用于NSString、block等类型。<br>栗子来了：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">property</span>(nonatomic, <span class="keyword">copy</span>) NSString *<span class="property">name</span>;</span><br><span class="line">- (void)setName:(NSString *)<span class="property">name</span>&#123;	<span class="keyword">if</span> (_name != <span class="property">name</span>) &#123;		[_name release];		_name = [<span class="property">name</span> <span class="keyword">copy</span>];	&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>字符串使用copy是为了外部把字符串内容改了不影响该属性；block使用copy是在MRC遗留下来的，在MRC中方法内部的block是在栈区的，使用copy可以把它放到堆区。在ARC中对于block使用copy还是strong效果是一样的。</p>
+<h3 id="Copy扩展">Copy扩展</h3><h4 id="前提">前提</h4><p>实现NSCopying或NSMutableCoping。</p>
+<h4 id="作用">作用</h4><ol>
+<li>改变原对象不影响拷贝对象。</li>
+<li>改变拷贝对象不影响源对象。</li>
+</ol>
+<h4 id="浅复制和深复制">浅复制和深复制</h4><p>Copy产生的是不可变副本，MutableCopy产生的是可变副本。</p>
+<p>只要源对象是不可变类型且产生的对象也是不可变类型的时的情况是浅复制，其他情况都是深复制。浅复制是源对象和拷贝对象指向同一对象，深复制是产生了不同的对象。</p>
+<h4 id="@property和copy">@property和copy</h4><p>在set方法中release旧值copy新值，用于NSString和block，可以保证属性不会被外部变量（例如NSMutableString类型变量）的改变所影响。</p>
+<p>问题来了：</p>
+<blockquote>
+<p>@property (nonatomic，copy) NSMutableArray *array;这个写法会出什么问题？</p>
+</blockquote>
+<p>copy产生的是不可变副本，在set方法中release旧值copy新值，所以运行时类型为NSArray，编译时类型为NSMutableArray，所以对array执行添加、删除、修改数组内的元素的时候程序会因为找不到对应的方法而崩溃。</p>
+<p>栗子来了：</p>
+<blockquote>
+<p>当一个使用 <strong> initWithArray:</strong> 初始化方法创建的NSMutable对象赋值给array属性，那么之后array执行可变数组的方法，比如：<strong>removeObjectAtIndex:</strong> 时会出现”-[__NSArrayI removeObjectAtIndex:]: unrecognized selector sent to instance 0x100206cd0”的崩溃。原因在于array属性在被赋值（setter）的时候默认执行了copy方法后变为了不可变NSArray对象。</p>
+</blockquote>
+<h4 id="自定义对象">自定义对象</h4><ol>
+<li>遵守NSCopying或NSMutableCopying协议。其实也可以在代码中不写协议类的遵守，只实现里面的方法，协议只是用来方便生成快捷方法的。</li>
+<li>实现copyWithZone或mutableCopyWithZone。即用self实例化对象（[[[self class] allocWithZone: zone]init];）、属性赋值、返回对象。</li>
+</ol>
+<h4 id="特别注意">特别注意</h4><p>编译时类型和运行时类型，应以运行时类型为准。</p>
+<h3 id="strong(ARC)、retain(MRC)">strong(ARC)、retain(MRC)</h3><p>set方法的实现是release旧值，retain新值，用于OC对象类型。</p>
+<p>栗子来了：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">property</span>(nonatomic, <span class="keyword">copy</span>) NSString *<span class="property">name</span>;</span><br><span class="line">- (void)setName:(NSString *)<span class="property">name</span>&#123;	<span class="keyword">if</span> (_name != <span class="property">name</span>) &#123;		[_name release];		_name = [<span class="property">name</span> retain];	&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="指定方法名称">指定方法名称</h2><p>setter=</p>
+<p>getter=</p>
+<h2 id="@synthesize和@dynamic">@synthesize和@dynamic</h2><p>@property有两个对应的词，一个是@synthesize，一个是@dynamic。如果@synthesize和@dynamic都没写，那么默认的就是:</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="property">@synthesize</span> <span class="reserved">var</span>=_var;</span><br></pre></td></tr></table></figure>
+<h3 id="@synthesize">@synthesize</h3><p>@synthesize的语义就是，如果没有指定成员变量的名称会自动生成一个属性同名的成员变量，如果这个成员变量已经存在了就不再生成。</p>
+<p>如果你没有手动实现setter方法和getter方法，那么编译器会自动为你加上这两个方法。</p>
+<p>在@property被增强之后其实已经很少使用@synthesize</p>
+<h3 id="@dynamic">@dynamic</h3><p>@dynamic告诉编译器，属性的setter方法和getter方法由我自己实现不用自动生成（对于readonly的属性只需提供getter方法即可），如果你木有提供setter方法和getter方法，编译时是没问题，但是当程序运行时调用会由于缺少setter方法或gettr方法导致程序崩溃。</p>
+<p>编译时是靠Xcode把关，运行时靠runtiime机制来执行相应的方法，这就是所谓的动态绑定。</p>
+<h1 id="参考链接">参考链接</h1><p><a href="http://www.jianshu.com/p/4fea8fa60d75" target="_blank" rel="external">iOS面试题</a></p>
+<p><a href="http://www.90159.com/2015/07/26/71/" target="_blank" rel="external">iOS面试题集锦</a></p>
+<p><a href="https://github.com/ChenYilong/iOSInterviewQuestions/blob/master/01《招聘一个靠谱的iOS》面试题参考答案/《招聘一个靠谱的iOS》面试题参考答案（上）.md" target="_blank" rel="external">《招聘一个靠谱的iOS》面试题参考答案（上）</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://www.zhuli8.com/2015/08/09/大话-property/" data-title="大话@property | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/08/01/iOS开发、Mac使用中这些你造吗/"  title="iOS开发、Mac使用中这些你造吗">
+ <strong>下一篇：</strong><br/> 
+ <span>iOS开发、Mac使用中这些你造吗
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/08/09/大话-property/" data-title="大话@property" data-url="http://www.zhuli8.com/2015/08/09/大话-property/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#@property"><span class="toc-number">1.</span> <span class="toc-text">@property</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程安全"><span class="toc-number">1.1.</span> <span class="toc-text">线程安全</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#atomic、nonatomic"><span class="toc-number">1.1.1.</span> <span class="toc-text">atomic、nonatomic</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问权限"><span class="toc-number">1.2.</span> <span class="toc-text">访问权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#readonly、readwrite"><span class="toc-number">1.2.1.</span> <span class="toc-text">readonly、readwrite</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存管理"><span class="toc-number">1.3.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#assign"><span class="toc-number">1.3.1.</span> <span class="toc-text">assign</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#weak(ARC)"><span class="toc-number">1.3.2.</span> <span class="toc-text">weak(ARC)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#copy"><span class="toc-number">1.3.3.</span> <span class="toc-text">copy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Copy扩展"><span class="toc-number">1.3.4.</span> <span class="toc-text">Copy扩展</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#前提"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作用"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#浅复制和深复制"><span class="toc-number">1.3.4.3.</span> <span class="toc-text">浅复制和深复制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#@property和copy"><span class="toc-number">1.3.4.4.</span> <span class="toc-text">@property和copy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自定义对象"><span class="toc-number">1.3.4.5.</span> <span class="toc-text">自定义对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#特别注意"><span class="toc-number">1.3.4.6.</span> <span class="toc-text">特别注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#strong(ARC)、retain(MRC)"><span class="toc-number">1.3.5.</span> <span class="toc-text">strong(ARC)、retain(MRC)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#指定方法名称"><span class="toc-number">1.4.</span> <span class="toc-text">指定方法名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#@synthesize和@dynamic"><span class="toc-number">1.5.</span> <span class="toc-text">@synthesize和@dynamic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#@synthesize"><span class="toc-number">1.5.1.</span> <span class="toc-text">@synthesize</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#@dynamic"><span class="toc-number">1.5.2.</span> <span class="toc-text">@dynamic</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考链接"><span class="toc-number">2.</span> <span class="toc-text">参考链接</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IM/" title="IM">IM<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/swift/" title="swift">swift<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/开发利器/" title="开发利器">开发利器<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IM/" title="IM">IM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/swift/" title="swift">swift<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webRTC/" title="webRTC">webRTC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据存储/" title="数据存储">数据存储<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/代码管理/" title="代码管理">代码管理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ice/" title="ice">ice<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/GCD/" title="GCD">GCD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://casatwy.com" target="_blank" title="App架构相关文章">田伟宇</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="hexo相关学习">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://tool.lu/favicon" target="_blank" title="icon制作在线工具">Icon制作</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://yulingtianxia.com" target="_blank" title="杨萧玉目前在支付宝实习，负责移动开发">玉令天下的博客</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.callmewhy.com" target="_blank" title="汪海，全名汪海洋">Why’s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> “Hello ,I&#39;m ZhuLi in Chinasofti.” <br/>
+			“This is my blog,believe it or not.”</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/zhuli8" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/zhuli8com" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="https://www.zhihu.com/people/zhu-li-68-76" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:zhuli1228@163.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="朱利">朱利</a>
+		
+		
+		</p>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','TqhyGfTT5KJKMHcgZnBF','2.0.0');
+</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhuli8"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_3725936'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D3725936' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

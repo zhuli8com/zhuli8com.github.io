@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-08-01T02:22:34.000Z</updated>
+  <updated>2015-08-10T06:31:18.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -15,11 +15,88 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[大话@property]]></title>
+    <link href="http://www.zhuli8.com/2015/08/09/%E5%A4%A7%E8%AF%9D-property/"/>
+    <id>http://www.zhuli8.com/2015/08/09/大话-property/</id>
+    <published>2015-08-09T06:29:16.000Z</published>
+    <updated>2015-08-10T06:31:18.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="@property">@property</h1><p>在普通的OC对象中，@property就是编译器自动帮我们生成一个私有的成员变量和getter、setter方法的声明及实现。为了研究编译器是如何实现@property的，我们需要使用clang。clang提供一个命令，可以将OC的源码改写成c++的，借此可以研究@property具体的源码实现方式。该命令是：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">clang</span> <span class="tag">-rewrite-objc</span> <span class="tag">xxx</span><span class="class">.m</span></span><br></pre></td></tr></table></figure>
+<p>初次之后我们还可以通过苹果开源的runtime进行研究，源码地址。<a href="http://opensource.apple.com/tarballs/objc4/" target="_blank" rel="external">源码</a></p>
+<h2 id="线程安全">线程安全</h2><h3 id="atomic、nonatomic">atomic、nonatomic</h3><p>atomic为原子性，会对set方法的实现进行加锁，多线程下可以一个线程写多个线程读，主要用在mac开发；nonatomic为非原子性，set方法的实现不加锁（比atomic性能高）。因为mac开发早于iOS开发，所以默认值为atomic。（A joke!）在默认情况下，由编译器所合成的方法会通过锁定机制确保其原子性(atomicity)。如果属性具备nonatomic特质，则不使用同步锁。</p>
+<p>一般情况下并不要求属性必须是“原子的”，因为这并不能保证“线程安全” ( thread safety)，若要实现“线程安全”的操作，还需采用更为深层的锁定机制才行。例如，一个线程在连续多次读取某属性值的过程中有别的线程在同时改写该值，那么即便将属性声明为atomic，也还是会读到不同的属性值。因此，在iOS开发中，你会发现，几乎所有属性都声明为nonatomic；但是在开发Mac OS X程序时，使用 atomic属性通常都不会有性能瓶颈。</p>
+<p>问题来了：</p>
+<blockquote>
+<p>@property (strong) NSMutableArray *array; 有什么问题？</p>
+</blockquote>
+<p>线程安全特性默认为atomic，该属性使用了同步锁，会在创建属性时生成一些额外的代码用于帮助写多线程程序，这会带来性能问题，通过显示声明nonatomic可以节省这些虽然很小但是不必要的额外开销。</p>
+<h2 id="访问权限">访问权限</h2><h3 id="readonly、readwrite">readonly、readwrite</h3><p>readonly只生成get方法的声明和实现； readwrite同时生成get方法和set方法的声明和实现。</p>
+<h2 id="内存管理">内存管理</h2><p>每个对象都有一个引用计数器，每个新对象的计数器默认是1，当对象的计数器减为0时就会被销毁；通过retain可以让对象的计数器加1、release可以让对象的计数器减1，还可以通过 <strong>autorelease pool</strong> 管理内存；只要调用了alloc、copy、new、retain方法产生的新对象，都必须在最后调用一次release或者autorelease；如果使用ARC，编译器会自动生成管理内存的代码。</p>
+<h3 id="assign">assign</h3><p>set方法的实现是直接赋值，用于基本数据类型的简单赋值操作，用于非OC对象。</p>
+<h3 id="weak(ARC)">weak(ARC)</h3><p>weak表明该属性定义了一种“非拥有关系（nonowning relationship）”，set方法的实现既不release旧也不retain新值，同assign类似，然而当对象销毁的时候，指针会被自动设置为nil，weak必须用于OC对象。</p>
+<p>使用场合：</p>
+<blockquote>
+<p>*在ARC中，出现循环引用的时候，必须要有一端使用weak，比如：delegate。</p>
+<p>*自身已经对它进行一次强引用，没有必要在强引用一次，此时也会使用weak，比如@IBOutlet。</p>
+</blockquote>
+<h3 id="copy">copy</h3><p>set方法的实现是release旧值，copy新值，用于NSString、block等类型。<br>栗子来了：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">property</span>(nonatomic, <span class="keyword">copy</span>) NSString *<span class="property">name</span>;</span><br><span class="line">- (void)setName:(NSString *)<span class="property">name</span>&#123;	<span class="keyword">if</span> (_name != <span class="property">name</span>) &#123;		[_name release];		_name = [<span class="property">name</span> <span class="keyword">copy</span>];	&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>字符串使用copy是为了外部把字符串内容改了不影响该属性；block使用copy是在MRC遗留下来的，在MRC中方法内部的block是在栈区的，使用copy可以把它放到堆区。在ARC中对于block使用copy还是strong效果是一样的。</p>
+<h3 id="Copy扩展">Copy扩展</h3><h4 id="前提">前提</h4><p>实现NSCopying或NSMutableCoping。</p>
+<h4 id="作用">作用</h4><ol>
+<li>改变原对象不影响拷贝对象。</li>
+<li>改变拷贝对象不影响源对象。</li>
+</ol>
+<h4 id="浅复制和深复制">浅复制和深复制</h4><p>Copy产生的是不可变副本，MutableCopy产生的是可变副本。</p>
+<p>只要源对象是不可变类型且产生的对象也是不可变类型的时的情况是浅复制，其他情况都是深复制。浅复制是源对象和拷贝对象指向同一对象，深复制是产生了不同的对象。</p>
+<h4 id="@property和copy">@property和copy</h4><p>在set方法中release旧值copy新值，用于NSString和block，可以保证属性不会被外部变量（例如NSMutableString类型变量）的改变所影响。</p>
+<p>问题来了：</p>
+<blockquote>
+<p>@property (nonatomic，copy) NSMutableArray *array;这个写法会出什么问题？</p>
+</blockquote>
+<p>copy产生的是不可变副本，在set方法中release旧值copy新值，所以运行时类型为NSArray，编译时类型为NSMutableArray，所以对array执行添加、删除、修改数组内的元素的时候程序会因为找不到对应的方法而崩溃。</p>
+<p>栗子来了：</p>
+<blockquote>
+<p>当一个使用 <strong> initWithArray:</strong> 初始化方法创建的NSMutable对象赋值给array属性，那么之后array执行可变数组的方法，比如：<strong>removeObjectAtIndex:</strong> 时会出现”-[__NSArrayI removeObjectAtIndex:]: unrecognized selector sent to instance 0x100206cd0”的崩溃。原因在于array属性在被赋值（setter）的时候默认执行了copy方法后变为了不可变NSArray对象。</p>
+</blockquote>
+<h4 id="自定义对象">自定义对象</h4><ol>
+<li>遵守NSCopying或NSMutableCopying协议。其实也可以在代码中不写协议类的遵守，只实现里面的方法，协议只是用来方便生成快捷方法的。</li>
+<li>实现copyWithZone或mutableCopyWithZone。即用self实例化对象（[[[self class] allocWithZone: zone]init];）、属性赋值、返回对象。</li>
+</ol>
+<h4 id="特别注意">特别注意</h4><p>编译时类型和运行时类型，应以运行时类型为准。</p>
+<h3 id="strong(ARC)、retain(MRC)">strong(ARC)、retain(MRC)</h3><p>set方法的实现是release旧值，retain新值，用于OC对象类型。</p>
+<p>栗子来了：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">property</span>(nonatomic, <span class="keyword">copy</span>) NSString *<span class="property">name</span>;</span><br><span class="line">- (void)setName:(NSString *)<span class="property">name</span>&#123;	<span class="keyword">if</span> (_name != <span class="property">name</span>) &#123;		[_name release];		_name = [<span class="property">name</span> retain];	&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="指定方法名称">指定方法名称</h2><p>setter=</p>
+<p>getter=</p>
+<h2 id="@synthesize和@dynamic">@synthesize和@dynamic</h2><p>@property有两个对应的词，一个是@synthesize，一个是@dynamic。如果@synthesize和@dynamic都没写，那么默认的就是:</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="property">@synthesize</span> <span class="reserved">var</span>=_var;</span><br></pre></td></tr></table></figure>
+<h3 id="@synthesize">@synthesize</h3><p>@synthesize的语义就是，如果没有指定成员变量的名称会自动生成一个属性同名的成员变量，如果这个成员变量已经存在了就不再生成。</p>
+<p>如果你没有手动实现setter方法和getter方法，那么编译器会自动为你加上这两个方法。</p>
+<p>在@property被增强之后其实已经很少使用@synthesize</p>
+<h3 id="@dynamic">@dynamic</h3><p>@dynamic告诉编译器，属性的setter方法和getter方法由我自己实现不用自动生成（对于readonly的属性只需提供getter方法即可），如果你木有提供setter方法和getter方法，编译时是没问题，但是当程序运行时调用会由于缺少setter方法或gettr方法导致程序崩溃。</p>
+<p>编译时是靠Xcode把关，运行时靠runtiime机制来执行相应的方法，这就是所谓的动态绑定。</p>
+<h1 id="参考链接">参考链接</h1><p><a href="http://www.jianshu.com/p/4fea8fa60d75" target="_blank" rel="external">iOS面试题</a></p>
+<p><a href="http://www.90159.com/2015/07/26/71/" target="_blank" rel="external">iOS面试题集锦</a></p>
+<p><a href="https://github.com/ChenYilong/iOSInterviewQuestions/blob/master/01《招聘一个靠谱的iOS》面试题参考答案/《招聘一个靠谱的iOS》面试题参考答案（上）.md" target="_blank" rel="external">《招聘一个靠谱的iOS》面试题参考答案（上）</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[iOS中常见@property面试题分析]]>
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[iOS开发、Mac使用中这些你造吗]]></title>
     <link href="http://www.zhuli8.com/2015/08/01/iOS%E5%BC%80%E5%8F%91%E3%80%81Mac%E4%BD%BF%E7%94%A8%E4%B8%AD%E8%BF%99%E4%BA%9B%E4%BD%A0%E9%80%A0%E5%90%97/"/>
     <id>http://www.zhuli8.com/2015/08/01/iOS开发、Mac使用中这些你造吗/</id>
     <published>2015-08-01T02:02:14.000Z</published>
-    <updated>2015-08-01T02:22:34.000Z</updated>
+    <updated>2015-08-01T02:23:39.000Z</updated>
     <content type="html"><![CDATA[<p>子曰：工欲善其事，必先利其器。居是邦也。事其大夫之贤者，友其士之仁者。</p>
 <p>有志者事竟成，破釜沉舟，百二秦关终属楚； 苦心人天不负，卧薪尝胆，三千越甲可吞吴。 </p>
 <p>由此产生此文！</p>
@@ -177,7 +254,7 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
     <link href="http://www.zhuli8.com/2015/07/19/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/"/>
     <id>http://www.zhuli8.com/2015/07/19/构建支持armv7和arm64的webRTC静态库/</id>
     <published>2015-07-19T04:13:57.000Z</published>
-    <updated>2015-07-27T08:52:27.000Z</updated>
+    <updated>2015-08-04T05:04:21.000Z</updated>
     <content type="html"><![CDATA[<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
 <p><strong>目前为止Apple移动设备默认指令集</strong></p>
 <hr>
@@ -196,6 +273,7 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 <p><strong>之前的指令用在音频没有问题，但是用在视频只有声音没有图像。最后检查发现没有使用strip优化之前的包可以使用，而且不能包括iOS生成的静态库。
 </strong></p>
 <h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
+<p><strong>lipo -info libWebRTC.a，可以查看支持的架构信息</strong></p>
 <h1 id="其他">其他</h1><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。</p>
 <h2 id="XCode中与指令集相关的选项（Build_Settings_面板下_Architectures）：">XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</h2><p>1.Architectures：      </p>
 <p>指明选定Target要求被编译生成的二进制包所支持的指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而会造成最终编译生成的包很大。</p>
@@ -416,11 +494,12 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
     <link href="http://www.zhuli8.com/2015/06/28/swift%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
     <id>http://www.zhuli8.com/2015/06/28/swift学习参考/</id>
     <published>2015-06-28T04:41:20.000Z</published>
-    <updated>2015-07-20T02:17:28.000Z</updated>
+    <updated>2015-08-09T02:27:55.000Z</updated>
     <content type="html"><![CDATA[<h1 id="官方文档">官方文档</h1><p><a href="https://developer.apple.com/swift/" target="_blank" rel="external">苹果出品，必属精品！</a></p>
 <p><a href="https://github.com/zhuli8com/Welcome-to-Swift" target="_blank" rel="external">Welcome-to-Swift</a>（中文版）</p>
 <p><a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/" target="_blank" rel="external">The Swift Programming Language</a></p>
 <p><a href="http://www.cocoachina.com/ios/20150701/12328.html" target="_blank" rel="external">没机会参加 WWDC 2015，那你可以看看这10个视频</a></p>
+<p><a href="http://wiki.jikexueyuan.com/project/swift/" target="_blank" rel="external">swift 2.0</a>(中文版)</p>
 <h1 id="精彩博文">精彩博文</h1><p><a href="http://southpeak.github.io/blog/2015/06/30/ioszhi-shi-xiao-ji-di-san-qi-2015-dot-06-dot-30/" target="_blank" rel="external">Tint Color\Build Configurations in Swift\键盘事件</a></p>
 <p><a href="http://www.cocoachina.com/swift/20150630/12305.html" target="_blank" rel="external">怎样在Swift中使用CocoaPods</a></p>
 <p><a href="http://www.cocoachina.com/ios/20150629/12298.html" target="_blank" rel="external">使用Xcode HeaderDoc和Doxygen文档化你的Objective-C和Swift代码</a></p>
@@ -1310,7 +1389,7 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
     <link href="http://www.zhuli8.com/2015/05/17/iOS%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
     <id>http://www.zhuli8.com/2015/05/17/iOS学习参考/</id>
     <published>2015-05-17T01:10:54.000Z</published>
-    <updated>2015-08-01T07:48:49.000Z</updated>
+    <updated>2015-08-09T02:24:35.000Z</updated>
     <content type="html"><![CDATA[<h1 id="社区博客">社区博客</h1><p><a href="http://www.cocoachina.com/" target="_blank" rel="external">CocoaChina</a></p>
 <p>苹果开发中文站 - 最热的iPhone开发社区，最热的苹果开发社区，最热的iPad开发社区。</p>
 <p><a href="http://www.code4app.com/" target="_blank" rel="external">Code4App</a></p>
@@ -1321,6 +1400,8 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p>iOS开发社区 - 开源中国社区</p>
 <p><a href="http://toutiao.io" target="_blank" rel="external">开发者头条</a></p>
 <p>开发者头条 - 开发者的首选阅读分享平台</p>
+<p><a href="http://weekly.manong.io" target="_blank" rel="external">码农周刊</a></p>
+<p>码农周刊是一份专为程序员打造的IT技术周刊。我们会为你精选一周IT技术干货，每周一发送，完全免费。</p>
 <h1 id="个人博客">个人博客</h1><p><a href="http://blog.devtang.com/" target="_blank" rel="external">唐巧</a></p>
 <p>InfoQ编辑, 《iOS开发进阶》作者, 在猿题库创业。Java开发工程师，曾开发网易微博后台。 iOS开发工程师，曾开发有道云笔记、猿题库。 </p>
 <p><a href="http://www.onevcat.com/" target="_blank" rel="external">王巍</a></p>
@@ -1330,7 +1411,11 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p><a href="http://www.cnblogs.com/chijianqiang/" target="_blank" rel="external">池建强</a></p>
 <p>70后程序员。先后从事互联网和企业级应用开发。目前就职瑞友科技（原用友软件工程）IT应用研究院，任职副院长。技术创新控，坚持年轻时的理想，倒霉的乐观者，关注互联网技术、应用平台研发、领域驱动，OSGi，动态语言应用 、云计算、Mac OS相关技术。喜欢的一句话：虽万千人，吾往矣</p>
 <p><a href="http://casatwy.com" target="_blank" rel="external">田伟宇</a></p>
-<p>Currently working at Alibaba.inc as an iOS engineer for food.</p>
+<p>Currently working at Alibaba.inc as an iOS engineer for food。</p>
+<p><a href="http://blog.leichunfeng.com" target="_blank" rel="external">雷纯锋的技术博客</a></p>
+<p> iOS 开发者，GitBucket 的作者，热衷于分享。</p>
+<p><a href="https://github.com/ChenYilong" target="_blank" rel="external">iOS程序员</a></p>
+<p>r p y b b</p>
 <h1 id="其他推荐">其他推荐</h1><p><a href="http://objccn.io" target="_blank" rel="external">objc中国</a></p>
 <p>为中国 Objective-C 社区带来最佳实践和先进技术</p>
 <p><a href="http://tech.glowing.com" target="_blank" rel="external">Glow技术团队博客</a></p>
@@ -1892,7 +1977,7 @@ uniform highp float refractiveIndex;
     <link href="http://www.zhuli8.com/2015/04/19/git%E6%80%BB%E7%BB%93/"/>
     <id>http://www.zhuli8.com/2015/04/19/git总结/</id>
     <published>2015-04-19T07:55:39.000Z</published>
-    <updated>2015-08-01T02:06:35.000Z</updated>
+    <updated>2015-08-01T03:00:49.000Z</updated>
     <content type="html"><![CDATA[<p>Git 是一个开源的分布式版本控制系统，用以有效、高速的处理从很小到非常大的项目版本管理。Git 是 Linux Torvalds 为了帮助管理 Linux 内核开发而开发的一个开放源码的版本控制软件。 在分布式版本控制上，使用 Git 会比其他解决方案更可靠。</p>
 <h1 id="前提">前提</h1><p>默认进入到了工程目录，即 cd xxx。</p>
 <h1 id="查看其他指令的用途及配置指令">查看其他指令的用途及配置指令</h1><p>1、git help</p>

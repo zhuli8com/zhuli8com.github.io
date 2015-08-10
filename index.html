@@ -96,7 +96,7 @@
         
         <h1 id="@property">@property</h1><p>在普通的OC对象中，@property就是编译器自动帮我们生成一个私有的成员变量和getter、setter方法的声明及实现。为了研究编译器是如何实现@property的，我们需要使用clang。clang提供一个命令，可以将OC的源码改写成c++的，借此可以研究@property具体的源码实现方式。该命令是：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">clang</span> <span class="tag">-rewrite-objc</span> <span class="tag">xxx</span><span class="class">.m</span></span><br></pre></td></tr></table></figure>
-<p>初次之后我们还可以通过苹果开源的runtime进行研究，源码地址。<a href="http://opensource.apple.com/tarballs/objc4/" target="_blank" rel="external">源码</a></p>
+<p>除此之外我们还可以通过苹果开源的runtime进行研究，源码地址。<a href="http://opensource.apple.com/tarballs/objc4/" target="_blank" rel="external">源码</a></p>
 <h2 id="线程安全">线程安全</h2><h3 id="atomic、nonatomic">atomic、nonatomic</h3><p>atomic为原子性，会对set方法的实现进行加锁，多线程下可以一个线程写多个线程读，主要用在mac开发；nonatomic为非原子性，set方法的实现不加锁（比atomic性能高）。因为mac开发早于iOS开发，所以默认值为atomic。（A joke!）在默认情况下，由编译器所合成的方法会通过锁定机制确保其原子性(atomicity)。如果属性具备nonatomic特质，则不使用同步锁。</p>
 <p>一般情况下并不要求属性必须是“原子的”，因为这并不能保证“线程安全” ( thread safety)，若要实现“线程安全”的操作，还需采用更为深层的锁定机制才行。例如，一个线程在连续多次读取某属性值的过程中有别的线程在同时改写该值，那么即便将属性声明为atomic，也还是会读到不同的属性值。因此，在iOS开发中，你会发现，几乎所有属性都声明为nonatomic；但是在开发Mac OS X程序时，使用 atomic属性通常都不会有性能瓶颈。</p>
 <p>问题来了：</p>

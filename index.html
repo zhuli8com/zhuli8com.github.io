@@ -298,6 +298,7 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 <pre><code><span class="title">ifconfig</span> en0：显示网络接口信息
 </code></pre><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">clear</span>：清屏</span><br></pre></td></tr></table></figure>
 <figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">man</span>：命令帮助信息查询</span><br></pre></td></tr></table></figure>
+<h2 id="其他">其他</h2><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export</span><br><span class="line"></span><br><span class="line">设置或显示环境变量，但是只在本次登陆中有效。在shell中执行程序时，shell会提供一组环境变量，export可新增、修改或删除环境变量，供后续执行的程序使用，效力仅及于此登陆操作。export设置环境变量是暂时的，只在本次登陆中有效。=前的<span class="constant">PATH变</span>量不加<span class="variable">$符</span>号，再增加的路径用<span class="symbol">:</span>追加。</span><br><span class="line"></span><br><span class="line">export <span class="constant">PATH=</span><span class="variable">$PATH</span><span class="symbol">:/Library/Developer/IceTouch-</span><span class="number">1.3</span>/<span class="constant">SDKs/Objc/</span>bin</span><br></pre></td></tr></table></figure>
 <h1 id="写在最后">写在最后</h1><p>iOS开发和Mac使用中你还有哪些能提高开发效率的小技巧和快捷键以及黑科技，在评论中一起分享吧。</p>
 
         
@@ -657,9 +658,10 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
     <div class="article-content">
         
         <h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
-<li>全称是Grand Central Dispatch ，可译为“大中央调度”</li>
+<li>全程是Grand Central Dispatch，可译为“大中央调度”</li>
 <li>纯C语言，提供了非常多强大的函数库</li>
-<li><h2 id="GCD的优势">GCD的优势</h2></li>
+</ul>
+<h2 id="GCD的优势">GCD的优势</h2><ul>
 <li>GCD是苹果公司为<strong>多核</strong>的<strong>并行</strong>运算提出的解决方案</li>
 <li>GCD会自动利用更多的CPU内核（比如双核、四核）</li>
 <li>GCD会自动管理线程的生命周期（创建线程、调度任务、销毁线程）</li>
@@ -768,6 +770,9 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 </span>-<span class="ruby"> (oneway void)release {}
 </span>-<span class="ruby"> (id)autorelease { <span class="keyword">return</span> <span class="keyword">self</span>; }</span>
 </code></pre><h1 id="推荐阅读">推荐阅读</h1><p><a href="http://www.jianshu.com/p/50c060bab0ff" target="_blank" rel="external">Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2</a><br><a href="[Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2](http://www.jianshu.com/p/50c060bab0ff">cocoachina：Grand Central Dispatch 基础教程：Part 2/2</a>)<br><a href="http://www.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">唐巧：使用GCD</a><br><a href="http://www.cocoachina.com/ios/20140428/8248.html" target="_blank" rel="external">GCD 深入理解（一）</a><br><a href="http://www.cocoachina.com/ios/20140515/8433.html" target="_blank" rel="external">GCD 深入理解（二）</a></p>
+<h1 id="NSOperation&amp;NSOperationQueue">NSOperation&amp;NSOperationQueue</h1><p><a href="http://blog.leichunfeng.com/blog/2015/07/29/ios-concurrency-programming-operation-queues/" target="_blank" rel="external">iOS 并发编程之 Operation Queues</a></p>
+<p><a href="http://blog.xcodev.com/archives/operation-queue-intro/" target="_blank" rel="external">并发编程之Operation Queue</a></p>
+<p><a href="http://www.jianshu.com/p/0b0d9b1f1f19#" target="_blank" rel="external">关于iOS多线程，你看我就够了</a></p>
 
         
         

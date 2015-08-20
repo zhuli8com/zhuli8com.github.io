@@ -488,6 +488,27 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 </strong></p>
 <h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
 <p><strong>lipo -info libWebRTC.a，可以查看支持的架构信息</strong></p>
+<p><strong>2015年8月19日更新</strong><br><strong>当测试armv7指令集通过后，在原来的工程中删掉armv7添加arm64对应的库时编译通不过，因为同一个文件下包含了两种架构信息所导致。解决方案：</strong></p>
+<ol>
+<li>选择工程, 编译的 (targets)</li>
+<li>选择 Build Settings 菜单</li>
+<li>查找 Library Search Paths 和 Framework Search Paths， 删掉编译报warning的路径即OK</li>
+</ol>
+<p><strong>关于Category位于静态库时,引用该静态库的工程使用Category,出现”unrecognized selector sent to class”提示。</strong></p>
+<blockquote>
+<p>标准UNIX静态库与Objective-C之间Linker的差异：在标准的UNIX静态库内,linker symbol是依照每一个类别而产生的,但由于Category并没有真正产生一个类别,所以出错。</p>
+</blockquote>
+<ol>
+<li>在该静态库的Taraget-&gt;Build Settings-&gt;Other Linker Flags-&gt;加上 -ObjC</li>
+<li>在使用该静态库的工程Taraget-&gt;Build Settings-&gt;Other Linker Flags-&gt;加上-all_load或-force_load</li>
+</ol>
+<p><strong>如果你的项目使用的非ARC模式，则为ARC模式的代码文件加入-fobjc-arc标签。如果你的项目使用的ARC模式，则为非ARC模式的代码文件加入 -fno-objc-arc标签。添加标签的方法:</strong></p>
+<ol>
+<li>打开target - Bulid Phases -Compile Sources</li>
+<li>双击对应的*.m文件</li>
+<li>在弹出的窗口中输入上面提到的标签 -fobjc-arc / -fno-objc-arc4</li>
+<li>按Enter键保存</li>
+</ol>
 <h1 id="其他">其他</h1><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。</p>
 <h2 id="XCode中与指令集相关的选项（Build_Settings_面板下_Architectures）：">XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</h2><p>1.Architectures：      </p>
 <p>指明选定Target要求被编译生成的二进制包所支持的指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而会造成最终编译生成的包很大。</p>
@@ -520,6 +541,12 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 <li>QuartzCore.framework</li>
 </ul>
 </blockquote>
+<p><strong>由于公司c++人员打包webRTC时模拟器的包有点问题，还有之前和linphone的libvpx.a的冲突最后删掉了linphone的而公用webRTC的，以至于模拟器缺少i386的libvpx.a库，解决办法：</strong></p>
+<ol>
+<li>将lib库拆分出armv7、armv7s、i386类型的.a，较麻烦<br>lipo -extract_family armv7 -output libDomobOfferWallSDK_arm.a libDomobOfferWallSDK.a<br>lipo -info libDomobOfferWallSDK_arm.a</li>
+<li>对于i386则不用上述那么麻烦，直接用第一句-extract_family指令就能分离出只含i386版本的库<br>lipo -extract_family i386 -output libDomobOfferWallSDK_i386.a libDomobOfferWallSDK.a</li>
+<li><a href="http://www.cnblogs.com/wengzilin/p/3800856.html" target="_blank" rel="external">http://www.cnblogs.com/wengzilin/p/3800856.html</a></li>
+</ol>
 
         
         
@@ -780,6 +807,8 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 <h1 id="NSOperation&amp;NSOperationQueue">NSOperation&amp;NSOperationQueue</h1><p><a href="http://blog.leichunfeng.com/blog/2015/07/29/ios-concurrency-programming-operation-queues/" target="_blank" rel="external">iOS 并发编程之 Operation Queues</a></p>
 <p><a href="http://blog.xcodev.com/archives/operation-queue-intro/" target="_blank" rel="external">并发编程之Operation Queue</a></p>
 <p><a href="http://www.jianshu.com/p/0b0d9b1f1f19#" target="_blank" rel="external">关于iOS多线程，你看我就够了</a></p>
+<p><a href="http://limboy.me/ios/2015/08/08/advanced-nsoperations.html" target="_blank" rel="external">Advanced NSOperations</a></p>
+<p><a href="http://oncenote.com/2015/03/22/Threading-Run-Loop/" target="_blank" rel="external">iOS并发编程（Concurrency Programming）系列</a></p>
 
         
         

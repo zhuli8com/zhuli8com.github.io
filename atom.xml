@@ -262,7 +262,7 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
     <link href="http://www.zhuli8.com/2015/07/19/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/"/>
     <id>http://www.zhuli8.com/2015/07/19/构建支持armv7和arm64的webRTC静态库/</id>
     <published>2015-07-19T04:13:57.000Z</published>
-    <updated>2015-08-04T05:04:21.000Z</updated>
+    <updated>2015-08-19T10:12:18.000Z</updated>
     <content type="html"><![CDATA[<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
 <p><strong>目前为止Apple移动设备默认指令集</strong></p>
 <hr>
@@ -282,6 +282,27 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 </strong></p>
 <h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
 <p><strong>lipo -info libWebRTC.a，可以查看支持的架构信息</strong></p>
+<p><strong>2015年8月19日更新</strong><br><strong>当测试armv7指令集通过后，在原来的工程中删掉armv7添加arm64对应的库时编译通不过，因为同一个文件下包含了两种架构信息所导致。解决方案：</strong></p>
+<ol>
+<li>选择工程, 编译的 (targets)</li>
+<li>选择 Build Settings 菜单</li>
+<li>查找 Library Search Paths 和 Framework Search Paths， 删掉编译报warning的路径即OK</li>
+</ol>
+<p><strong>关于Category位于静态库时,引用该静态库的工程使用Category,出现”unrecognized selector sent to class”提示。</strong></p>
+<blockquote>
+<p>标准UNIX静态库与Objective-C之间Linker的差异：在标准的UNIX静态库内,linker symbol是依照每一个类别而产生的,但由于Category并没有真正产生一个类别,所以出错。</p>
+</blockquote>
+<ol>
+<li>在该静态库的Taraget-&gt;Build Settings-&gt;Other Linker Flags-&gt;加上 -ObjC</li>
+<li>在使用该静态库的工程Taraget-&gt;Build Settings-&gt;Other Linker Flags-&gt;加上-all_load或-force_load</li>
+</ol>
+<p><strong>如果你的项目使用的非ARC模式，则为ARC模式的代码文件加入-fobjc-arc标签。如果你的项目使用的ARC模式，则为非ARC模式的代码文件加入 -fno-objc-arc标签。添加标签的方法:</strong></p>
+<ol>
+<li>打开target - Bulid Phases -Compile Sources</li>
+<li>双击对应的*.m文件</li>
+<li>在弹出的窗口中输入上面提到的标签 -fobjc-arc / -fno-objc-arc4</li>
+<li>按Enter键保存</li>
+</ol>
 <h1 id="其他">其他</h1><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。</p>
 <h2 id="XCode中与指令集相关的选项（Build_Settings_面板下_Architectures）：">XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</h2><p>1.Architectures：      </p>
 <p>指明选定Target要求被编译生成的二进制包所支持的指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而会造成最终编译生成的包很大。</p>
@@ -314,6 +335,12 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 <li>QuartzCore.framework</li>
 </ul>
 </blockquote>
+<p><strong>由于公司c++人员打包webRTC时模拟器的包有点问题，还有之前和linphone的libvpx.a的冲突最后删掉了linphone的而公用webRTC的，以至于模拟器缺少i386的libvpx.a库，解决办法：</strong></p>
+<ol>
+<li>将lib库拆分出armv7、armv7s、i386类型的.a，较麻烦<br>lipo -extract_family armv7 -output libDomobOfferWallSDK_arm.a libDomobOfferWallSDK.a<br>lipo -info libDomobOfferWallSDK_arm.a</li>
+<li>对于i386则不用上述那么麻烦，直接用第一句-extract_family指令就能分离出只含i386版本的库<br>lipo -extract_family i386 -output libDomobOfferWallSDK_i386.a libDomobOfferWallSDK.a</li>
+<li><a href="http://www.cnblogs.com/wengzilin/p/3800856.html" target="_blank" rel="external">http://www.cnblogs.com/wengzilin/p/3800856.html</a></li>
+</ol>
 ]]></content>
     <summary type="html">
     <![CDATA[<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，]]>
@@ -368,7 +395,7 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
     <link href="http://www.zhuli8.com/2015/07/05/Grand-Central-Dispatch-gcd/"/>
     <id>http://www.zhuli8.com/2015/07/05/Grand-Central-Dispatch-gcd/</id>
     <published>2015-07-05T06:50:07.000Z</published>
-    <updated>2015-08-11T09:30:54.000Z</updated>
+    <updated>2015-08-13T01:59:29.000Z</updated>
     <content type="html"><![CDATA[<h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
 <li>全程是Grand Central Dispatch，可译为“大中央调度”</li>
 <li>纯C语言，提供了非常多强大的函数库</li>
@@ -485,6 +512,8 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 <h1 id="NSOperation&amp;NSOperationQueue">NSOperation&amp;NSOperationQueue</h1><p><a href="http://blog.leichunfeng.com/blog/2015/07/29/ios-concurrency-programming-operation-queues/" target="_blank" rel="external">iOS 并发编程之 Operation Queues</a></p>
 <p><a href="http://blog.xcodev.com/archives/operation-queue-intro/" target="_blank" rel="external">并发编程之Operation Queue</a></p>
 <p><a href="http://www.jianshu.com/p/0b0d9b1f1f19#" target="_blank" rel="external">关于iOS多线程，你看我就够了</a></p>
+<p><a href="http://limboy.me/ios/2015/08/08/advanced-nsoperations.html" target="_blank" rel="external">Advanced NSOperations</a></p>
+<p><a href="http://oncenote.com/2015/03/22/Threading-Run-Loop/" target="_blank" rel="external">iOS并发编程（Concurrency Programming）系列</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
@@ -639,7 +668,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
     <link href="http://www.zhuli8.com/2015/05/31/%E4%B8%8E%E8%B0%83%E8%AF%95%E5%99%A8%E5%85%B1%E8%88%9E%20-%20LLDB%20%E7%9A%84%E5%8D%8E%E5%B0%94%E5%85%B9/"/>
     <id>http://www.zhuli8.com/2015/05/31/与调试器共舞 - LLDB 的华尔兹/</id>
     <published>2015-05-31T12:40:39.000Z</published>
-    <updated>2015-07-31T02:39:59.000Z</updated>
+    <updated>2015-08-20T09:15:47.000Z</updated>
     <content type="html"><![CDATA[<p>你是否曾经苦恼于理解你的代码，而去尝试打印一个变量的值？</p>
 
 <pre><code>NSLog(@"%@", whatIsInsideThisThing);
@@ -1264,6 +1293,8 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p>bt：打印函数栈</p>
 <p>expression：表达式</p>
 <h2 id="异常断点的作用">异常断点的作用</h2><p>数组越界访问时程序运行崩溃，但是崩溃停在了main函数里面，就算看了栈信息也不能马上定位到到底是那个数组越界访问了。为什么崩溃不能停在数组越界哪里？这是因为数组越界访问不一定会导致程序崩溃的，数组越界访问会导致异常抛出，而抛出的异常没有得到处理才会导致程序崩溃。因此最后会导致崩溃停在CoreFoundation框架里面。这个时候就需要设置Exception Breakpoint产生断点来定位错误了。</p>
+<h2 id="打印View_Controller_Hierarchy">打印View Controller Hierarchy</h2><p>_printHierarchy是 UIViewController 的一个私有方法，你可以用它将view controller 层次打印到控制台。</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">po <span class="comment">[<span class="comment">[<span class="comment">[<span class="comment">[UIApplication sharedApplication]</span> keyWindow]</span> rootViewController]</span> _printHierarchy]</span></span><br></pre></td></tr></table></figure>
 <h1 id="来源:objcio-cn">来源:<a href="http://objccn.io/issue-19-2/" target="_blank" rel="external">objcio.cn</a></h1>]]></content>
     <summary type="html">
     <![CDATA[与调试器共舞 - LLDB 的华尔兹]]>

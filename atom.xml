@@ -96,7 +96,7 @@
     <link href="http://www.zhuli8.com/2015/08/01/iOS%E5%BC%80%E5%8F%91%E3%80%81Mac%E4%BD%BF%E7%94%A8%E4%B8%AD%E8%BF%99%E4%BA%9B%E4%BD%A0%E9%80%A0%E5%90%97/"/>
     <id>http://www.zhuli8.com/2015/08/01/iOS开发、Mac使用中这些你造吗/</id>
     <published>2015-08-01T02:02:14.000Z</published>
-    <updated>2015-08-11T09:53:13.000Z</updated>
+    <updated>2015-08-26T07:48:59.000Z</updated>
     <content type="html"><![CDATA[<p>子曰：工欲善其事，必先利其器。居是邦也。事其大夫之贤者，友其士之仁者。</p>
 <p>有志者事竟成，破釜沉舟，百二秦关终属楚； 苦心人天不负，卧薪尝胆，三千越甲可吞吴。 </p>
 <p>由此产生此文！</p>
@@ -133,10 +133,14 @@
 
 插入模式：编辑模式下，输入 “<span class="built_in">i</span>” 进行插入模式，插入文本信息
 
-命令模式：在编辑模式下，输入 “:” 进行命令模式
+命令模式：在编辑模式下按Esc键，输入 “:” 进行命令模式
 </code></pre><h2 id="VIM使用的命令">VIM使用的命令</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pseudo">:q</span>：直接退出</span><br></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pseudo">:wq</span>：保存后退出</span><br></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pseudo">:q</span>!：强制退出</span><br></pre></td></tr></table></figure>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Shift</span>+v：选中光标行</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y：复制选中行</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p：粘贴选中行</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x：删除光标前的一个字符</span><br></pre></td></tr></table></figure>
 <h1 id="常见Unix指令">常见Unix指令</h1><p>因为Mac系统是基于UNIX系统的，因此可以在“终端”中输入一些UNIX指令来操作Mac系统。比如：新建文件（夹）、打开文件（夹）等。</p>
 <h2 id="文件目录操作指令">文件目录操作指令</h2><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ls</span>：列出当前目录下的所有内容（文件、文件夹）</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -169,6 +173,18 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 <pre><code>/：根路径
 ./：当前路径
 ../：上一级路径
+/：根目录，以斜杠表示，其他所有文件和目录在根目录下展开。
+/bin：“binary”的缩写，存放提供用户级基础功能的二进制文件，如ls、ps等。
+/boot：存放能使系统成功启动的所有文件，这些文件一般在内核用户程序开始执行前得到调用。在iOS中此目录为空。
+/dev：“device”的简写，存放BSD设备文件。每个文件代表系统的一个块设备或字符设备，一般来说，“块设备”以块为单位传输数据，如硬盘；而“字符设备”以字符为单位传输数据，如调整解调器。
+/sbin：“system binaries”的简写，存放提供系统级基础功能的二进制文件，如netstat、reboot等。
+<span class="regexp">/etc：“et cetera”的简写，存放系统脚本及配置文件，如passwd、hosts等。在iOS中，/</span>etc是一个符号链接，实际指向<span class="regexp">/private/</span>etc。
+/lib：存放系统库文件、内核模块及设备驱动等。iOS中此目录为空。
+/mnt：“mount”的简写，存放临时的文件系统挂载点。iOS中此目录为空。
+<span class="regexp">/private：存放两个目录，分别是/</span><span class="keyword">private</span><span class="regexp">/etc和/</span><span class="keyword">private</span>/var。
+<span class="regexp">/tmp：临时目录。在iOS中，/</span>tmp是一个符号链接，实际指向<span class="regexp">/private/</span>tmp。
+<span class="regexp">/usr：包含了大多数用户工具和程序。/</span>usr<span class="regexp">/bin包含那些/</span>bin和<span class="regexp">/sbin中未出现的基础功能，如nm、killall等；/</span>usr<span class="regexp">/include包含所有的标准C头文件；/</span>usr/lib存放库文件。
+<span class="regexp">/var：“variable”的简写，存放一些经常更改的文件，如日志、用户数据、临时文件等。其中/</span>var<span class="regexp">/mobile/</span>Applications下存放了所有App Store App，是要重点关注的目录之一。
 </code></pre><h2 id="系统管理命令">系统管理命令</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">who（w）：显示在线登陆用户</span><br></pre></td></tr></table></figure>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami：显示用户自己的身份</span><br></pre></td></tr></table></figure>
 <figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">hostname</span>：显示主机名称</span><br></pre></td></tr></table></figure>

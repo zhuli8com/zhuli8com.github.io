@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-08-10T06:32:58.000Z</updated>
+  <updated>2015-08-26T09:02:49.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -13,6 +13,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Shell 编程]]></title>
+    <link href="http://www.zhuli8.com/2015/08/16/Shell-%E7%BC%96%E7%A8%8B/"/>
+    <id>http://www.zhuli8.com/2015/08/16/Shell-编程/</id>
+    <published>2015-08-16T09:01:09.000Z</published>
+    <updated>2015-08-26T09:02:49.000Z</updated>
+    <content type="html"><![CDATA[<p>这里开始使用markdown格式输入你的正文。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>这里开始使用markdown格式输入你的正文。</p>
+]]>
+    </summary>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="开发利器" scheme="http://www.zhuli8.com/tags/%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8/"/>
+    
+      <category term="开发利器" scheme="http://www.zhuli8.com/categories/%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[大话@property]]></title>
@@ -552,7 +573,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
     <link href="http://www.zhuli8.com/2015/06/28/swift%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
     <id>http://www.zhuli8.com/2015/06/28/swift学习参考/</id>
     <published>2015-06-28T04:41:20.000Z</published>
-    <updated>2015-08-11T10:01:03.000Z</updated>
+    <updated>2015-08-28T03:11:22.000Z</updated>
     <content type="html"><![CDATA[<h1 id="官方文档">官方文档</h1><p><a href="https://developer.apple.com/swift/" target="_blank" rel="external">苹果出品，必属精品！</a></p>
 <p><a href="https://github.com/zhuli8com/Welcome-to-Swift" target="_blank" rel="external">Welcome-to-Swift</a>（中文版）</p>
 <p><a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/" target="_blank" rel="external">The Swift Programming Language</a></p>
@@ -567,6 +588,11 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 <p><a href="http://www.cocoachina.com/ios/20150617/12165.html" target="_blank" rel="external">10步成为专业iOS开发者——从零起步</a></p>
 <p><a href="http://www.cocoachina.com/swift/" target="_blank" rel="external">cocoachina-swift集锦</a></p>
 <p><a href="http://www.cocoachina.com/special/xcode/" target="_blank" rel="external">cocoachina-xcode集锦</a></p>
+<h1 id="swift函数">swift函数</h1><p><a href="http://swift.gg/2015/08/06/swift-2-flatmap/" target="_blank" rel="external">Swift 2.0: 理解 flatMap</a></p>
+<p><a href="http://swift.gg/2015/08/28/swift_when_the_functional_approach_is_not_right/" target="_blank" rel="external">Swift:什么时候不适合使用函数式方法</a></p>
+<p><a href="http://www.cocoachina.com/industry/20140619/8885.html" target="_blank" rel="external">Swift中的标准函数</a></p>
+<p><a href="http://www.cocoachina.com/swift/20150619/12173.html" target="_blank" rel="external">Swift高阶函数：Map，Filter，Reduce等-Part 1</a></p>
+<h1 id="其他">其他</h1><p><a href="http://www.niaogebiji.com/article-6325-1.html" target="_blank" rel="external">App store最新审核标准公布</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h1 id="官方文档">官方文档</h1><p><a href="https://developer.apple.com/swift/" target="_blank" rel="external">苹果出品，必属精品！</a></p>

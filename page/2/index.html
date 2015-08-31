@@ -81,76 +81,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/07/OBJC和DYNAMIC/" title="@OBJC和DYNAMIC" itemprop="url">@OBJC和DYNAMIC</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-07T02:44:45.000Z" itemprop="datePublished"> 发表于 2015-06-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p><div class="post-content clearfix"><br>        <p>虽然说 Swift 语言的初衷是希望能摆脱 Objective-C 的沉重的历史包袱和约束，但是不可否认的是经过了二十多年的洗礼，Cocoa 框架早就烙上了不可磨灭的 Objective-C 的印记。无数的第三方库是用 Objective-C 写成的，这些积累无论是谁都不能小觑。因此，在最初的版本中，Swift 不得不考虑与 Objective-C 的兼容。</p></div></p>
-<p>Apple 采取的做法是允许我们在同一个项目中同时使用 Swift 和 Objective-C 来进行开发。其实一个项目中的 Objective-C 文件和 Swift 文件是处于两个不同世界中的，为了让它们能相互联通，我们需要添加一些桥梁。</p><br><p>首先通过添加 <code>{product-module-name}-Bridging-Header.h</code> 文件，并在其中填写想要使用的头文件名称，我们就可以很容易地在 Swift 中使用 Objective-C 代码了。Xcode 为了简化这个设定，甚至在 Swift 项目中第一次导入 Objective-C 文件时会主动弹框进行询问是否要自动创建这个文件，可以说是非常方便。</p><br><p>但是如果想要在 Objective-C 中使用 Swift 的类型的时候，事情就复杂一些。如果是来自外部的框架，那么这个框架与 Objective-C 项目肯定不是处在同一个 target 中的，我们需要对外部的 Swift module 进行导入。这个其实和使用 Objective-C 的原来的 Framework 是一样的，对于一个项目来说，外界框架是由 Swift 写的还是 Objective-C 写的，两者并没有太大区别。我们通过使用 2013 年新引入的 <code>@import</code> 来引入 module：</p><br><pre><code>@import MySwiftKit;<br></code></pre><br><p>之后就可以正常使用这个 Swift 写的框架了。</p><br><p>如果想要在 Objective-C 里使用的是同一个项目中的 Swift 的源文件的话，可以直接导入自动生成的头文件 <code>{product-module-name}-Swift.h</code> 来完成。比如项目的 target 叫做 <code>MyApp</code> 的话，我们就需要在 Objective-C 文件中写</p><br><pre><code>#import “MyApp-Swift.h”<br></code></pre><br><p>但这只是故事的开始。Objective-C 和 Swift 在底层使用的是两套完全不同的机制，Cocoa 中的 Objective-C 对象是基于运行时的，它从骨子里遵循了 KVC (Key-Value Coding，通过类似字典的方式存储对象信息) 以及动态派发 (Dynamic Dispatch，在运行调用时再决定实际调用的具体实现)。而 Swift 为了追求性能，如果没有特殊需要的话，是不会在运行时再来决定这些的。也就是说，Swift 类型的成员或者方法在编译时就已经决定，而运行时便不再需要经过一次查找，而可以直接使用。</p><br><p>显而易见，这带来的问题是如果我们要使用 Objective-C 的代码或者特性来调用纯 Swift 的类型时候，我们会因为找不到所需要的这些运行时信息，而导致失败。解决起来也很简单，在 Swift 类型文件中，我们可以将需要暴露给 Objective-C 使用的任何地方 (包括类，属性和方法等) 的声明前面加上 <code>@objc</code> 修饰符。注意这个步骤只需要对那些不是继承自 <code>NSObject</code> 的类型进行，如果你用 Swift 写的 class 是继承自 <code>NSObject</code> 的话，Swift 会默认自动为所有的非 private 的类和成员加上 <code>@objc</code>。这就是说，对一个 <code>NSObject</code> 的子类，你只需要导入相应的头文件就可以在 Objective-C 里使用这个类了。</p><br><p><code>@objc</code> 修饰符的另一个作用是为 Objective-C 侧重新声明方法或者变量的名字。虽然绝大部分时候自动转换的方法名已经足够好用 (比如会将 Swift 中类似 <code>init(name: String)</code> 的方法转换成 <code>-initWithName:(NSString *)name</code> 这样)，但是有时候我们还是期望 Objective-C 里使用和 Swift 中不一样的方法名或者类的名字，比如 Swift 里这样的一个类：</p><br><pre><code>class 我的类 {<br>    func 打招呼(名字: String) {<br>        println(“哈喽，(名字)”)<br>    }<br>}<br>我的类().打招呼(“小明”)<br></code></pre><br><p>Objective-C 的话是无法使用中文来进行调用的，因此我们<strong>必须</strong>使用 <code>@objc</code> 将其转为 ASCII 才能在 Objective-C 里访问：</p>
-
-<p><pre><code>@objc(MyClass)<br>class 我的类 {<br>    @objc(greeting:)<br>    func 打招呼(名字: String) {<br>        println(“哈喽，(名字)”)<br>    }<br>}<br></code></pre></p>
-<p></p><p>这样，我们在 Objective-C 里就能调用 <code>[[MyClass new] greeting:@”XiaoMing”]</code> 这样的代码了 (虽然比起原来一点都不好玩了)。另外，正如上面所说的以及在 <a href="http://swifter.tips/selector/" target="_blank" rel="external">Selector</a> 一节中所提到的，即使是 <code>NSObject</code> 的子类，Swift 也不会在被标记为 <code>private</code> 的方法或成员上自动加 <code>@objc</code>。如果我们需要使用这些内容的动态特性的话，我们需要手动给它们加上 <code>@objc</code> 修饰。</p><p></p>
-<p></p><p>添加 <code>@objc</code> 修饰符并不意味着这个方法或者属性会变成动态派发，Swift 依然可能会将其优化为静态调用。如果你需要和 Objective-C 里动态调用时相同的运行时特性的话，你需要使用的修饰符是 <code>dynamic</code>。一般情况下在做 app 开发时应该用不上，但是在施展一些像动态替换方法或者运行时再决定实现这样的 “黑魔法” 的时候，我们就需要用到 <code>dynamic</code> 修饰符了。在之后的 KVO 一节中，我们还会提到一个关于使用 <code>dynamic</code> 的实例。</p><br>    <br>作者王巍 <a href="http://swifter.tips/" target="_blank" rel="external">(@onevcat)</a> 原文地址 <a href="http://swifter.tips/objc-dynamic/" target="_blank" rel="external">http://swifter.tips/objc-dynamic/</a><p></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/swift/">swift</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/swift/">swift</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/07/OBJC和DYNAMIC/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/07/OBJC和DYNAMIC/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-  
-
- 
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2015/05/31/与调试器共舞 - LLDB 的华尔兹/" title="与调试器共舞 - LLDB 的华尔兹" itemprop="url">与调试器共舞 - LLDB 的华尔兹</a>
   </h1>
   <p class="article-author">By
@@ -1794,6 +1724,8 @@ uniform highp float refractiveIndex;
         
         <p>Git 是一个开源的分布式版本控制系统，用以有效、高速的处理从很小到非常大的项目版本管理。Git 是 Linux Torvalds 为了帮助管理 Linux 内核开发而开发的一个开放源码的版本控制软件。 在分布式版本控制上，使用 Git 会比其他解决方案更可靠。</p>
 <h1 id="前提">前提</h1><p>默认进入到了工程目录，即 cd xxx。</p>
+<p>在安装好git后第一件是是设置你的名字和电子邮箱，因为每次提交都要用到这些信息：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --user<span class="class">.name</span> <span class="string">"Your name"</span></span><br><span class="line">git config --user<span class="class">.email</span> <span class="string">"Your email"</span></span><br></pre></td></tr></table></figure>
 <h1 id="查看其他指令的用途及配置指令">查看其他指令的用途及配置指令</h1><p>1、git help</p>
 <p>2、git config user.name ‘zhuli8’</p>
 <p>3、git config user.email ‘zhuli1228@163.com’</p>
@@ -1872,6 +1804,107 @@ uniform highp float refractiveIndex;
 
 
 
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/12/C语言预处理指令/" title="C语言预处理指令" itemprop="url">C语言预处理指令</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-12T08:39:02.000Z" itemprop="datePublished"> 发表于 2015-04-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="宏定义">宏定义</h1><h2 id="不带参数的宏定义">不带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名 字符串</span><br></pre></td></tr></table></figure>
+<p>它的作用是在编译预处理时，将源程序中所有”宏名”替换成右边的”字符串”，常用来定义常量。</p>
+<blockquote>
+<p>1.宏名一般用大写字母，以便与变量名区别开来，但用小写也没有语法错误</p>
+<p>2.在编译预处理用字符串替换宏名时，不作语法检查，只是简单的字符串替换。只有在编译的时候才对已经展开宏名的源程序进行语法检查</p>
+<p>3.宏名的有效范围是从定义位置到文件结束。如果需要终止宏定义的作用域，可以用#undef命令</p>
+</blockquote>
+<h2 id="带参数的宏定义">带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名(参数列表) 字符串</span><br></pre></td></tr></table></figure>
+<p>在编译预处理时，将源程序中所有宏名替换成字符串，并且将 字符串中的参数 用 宏名右边参数列表 中的参数替换</p>
+<blockquote>
+<p>1.宏名和参数列表之间不能有空格，否则空格后面的所有字符串都作为替换的字符串</p>
+<p>2.带参数的宏在展开时，只作简单的字符和参数的替换，不进行任何计算操作。所以在定义宏时，一般用一个小括号括住字符串的参数。</p>
+<p>3.计算结果最好也用括号括起来</p>
+</blockquote>
+<h1 id="条件编译">条件编译</h1><p>在很多情况下，我们希望程序的其中一部分代码只有在满足一定条件时才进行编译，否则不参与编译(只有参与编译的代码最终才能被执行)，这就是条件编译。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#if</span> 条件<span class="number">1</span></span><br><span class="line"> ..<span class="class">.code1</span>...</span><br><span class="line"><span class="id">#elif</span> 条件<span class="number">2</span></span><br><span class="line"> ..<span class="class">.code2</span>...</span><br><span class="line"><span class="id">#else</span></span><br><span class="line"> ..<span class="class">.code3</span>...</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h1 id="if_和_#elif后面的条件一般是判断宏定义而不是判断变量，因为条件编译是在编译之前做的判断，宏定义也是编译之前定义的，而变量是在运行时才产生的、才有使用的意义">if 和 #elif后面的条件一般是判断宏定义而不是判断变量，因为条件编译是在编译之前做的判断，宏定义也是编译之前定义的，而变量是在运行时才产生的、才有使用的意义</h1></blockquote>
+<h2 id="其他">其他</h2><ol>
+<li><h1 id="if_defined()和#if_!defined()">if defined()和#if !defined()</h1></li>
+<li><h1 id="ifdef和#ifndef">ifdef和#ifndef</h1></li>
+</ol>
+<h1 id="文件包含">文件包含</h1><blockquote>
+<h1 id="include的作用纯粹就是内容拷贝">include的作用纯粹就是内容拷贝</h1></blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>　&lt;文件名&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>直接到C语言库函数头文件所在的目录中寻找文件</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>　"文件名"</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>系统会先在源程序当前目录下寻找，若找不到，再到操作系统的path路径中查找，最后才到C语言库函数头文件所在目录中查找</p>
+</blockquote>
+<h2 id="其他-1">其他</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">one.h</span><br><span class="line"><span class="preprocessor">#ifndef _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">tow.h</span><br><span class="line"><span class="preprocessor">#ifndef _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "one.h"</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">main.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "one.h"</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "two.h"</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>最后的main.h的文件相当于下面的代码：</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// #include "one.h"</span></span><br><span class="line"><span class="preprocessor">#ifndef _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// #include "two.h"</span></span><br><span class="line"><span class="preprocessor">#ifndef _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// #include "one.h"</span></span><br><span class="line"><span class="preprocessor">#ifndef _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/12/C语言预处理指令/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/12/C语言预处理指令/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
@@ -1894,7 +1927,7 @@ uniform highp float refractiveIndex;
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>7</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>8</sup></a></li>
 		  
 		
 		  
@@ -1902,7 +1935,7 @@ uniform highp float refractiveIndex;
 		  
 		
 		  
-			<li><a href="/categories/开发利器/" title="开发利器">开发利器<sup>3</sup></a></li>
+			<li><a href="/categories/开发利器/" title="开发利器">开发利器<sup>2</sup></a></li>
 		  
 		
 		  
@@ -1931,7 +1964,7 @@ uniform highp float refractiveIndex;
 			
 		
 			
-				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>3</sup></a></li>
+				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>2</sup></a></li>
 			
 		
 			

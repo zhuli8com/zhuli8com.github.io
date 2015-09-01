@@ -1842,10 +1842,11 @@ uniform highp float refractiveIndex;
 <h1 id="条件编译">条件编译</h1><p>在很多情况下，我们希望程序的其中一部分代码只有在满足一定条件时才进行编译，否则不参与编译(只有参与编译的代码最终才能被执行)，这就是条件编译。</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#if</span> 条件<span class="number">1</span></span><br><span class="line"> ..<span class="class">.code1</span>...</span><br><span class="line"><span class="id">#elif</span> 条件<span class="number">2</span></span><br><span class="line"> ..<span class="class">.code2</span>...</span><br><span class="line"><span class="id">#else</span></span><br><span class="line"> ..<span class="class">.code3</span>...</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
 <blockquote>
-<h1 id="if_和_#elif后面的条件一般是判断宏定义而不是判断变量，因为条件编译是在编译之前做的判断，宏定义也是编译之前定义的，而变量是在运行时才产生的、才有使用的意义">if 和 #elif后面的条件一般是判断宏定义而不是判断变量，因为条件编译是在编译之前做的判断，宏定义也是编译之前定义的，而变量是在运行时才产生的、才有使用的意义</h1></blockquote>
+<p>#if 和 #elif后面的条件一般是判断宏定义而不是判断变量，因为条件编译是在编译之前做的判断，宏定义也是编译之前定义的，而变量是在运行时才产生的、才有使用的意义</p>
+</blockquote>
 <h2 id="其他">其他</h2><ol>
-<li><h1 id="if_defined()和#if_!defined()">if defined()和#if !defined()</h1></li>
-<li><h1 id="ifdef和#ifndef">ifdef和#ifndef</h1></li>
+<li>#if defined()和#if !defined()</li>
+<li>#ifdef和#ifndef</li>
 </ol>
 <h1 id="文件包含">文件包含</h1><blockquote>
 <h1 id="include的作用纯粹就是内容拷贝">include的作用纯粹就是内容拷贝</h1></blockquote>

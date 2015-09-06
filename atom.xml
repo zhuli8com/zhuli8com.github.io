@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-08-10T06:32:58.000Z</updated>
+  <updated>2015-09-06T03:14:59.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -13,6 +13,75 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Runtime]]></title>
+    <link href="http://www.zhuli8.com/2015/08/16/Runtime/"/>
+    <id>http://www.zhuli8.com/2015/08/16/Runtime/</id>
+    <published>2015-08-16T03:12:52.000Z</published>
+    <updated>2015-09-06T03:14:59.000Z</updated>
+    <content type="html"><![CDATA[<p>Objective-C是基于C语言加入了 <strong>面向对象特性</strong> 和 <strong>消息转发机制</strong> 的动态语言，这意味着它不仅需要一个编译器，还需要 <strong>Runtime系统</strong> 来动态创建类和对象，进行消息发送和转发。</p>
+<p>Runtime即运行时，是系统在运行的时候的一些机制，属于动态调用过程，在编译的时候并不能决定真正调用哪个函数，只有在真正运行的时候才会根据 <strong>函数的名称</strong> 找到对应的函数来调用。</p>
+<blockquote>
+<p>事实证明，在编译阶段，OC可以调用任何函数，即使这个函数并未实现，只要声明过就不会报错。而C语言在这种情况下，编译阶段就会报错。对于C语言，函数的调用在编译的时候就会决定调用哪个函数，编译完成之后直接顺序执行，无任何二议性。</p>
+</blockquote>
+<p><a href="http://opensource.apple.com/tarballs/objc4/" target="_blank" rel="external">RunTime源码</a>，它是一套比较底层的纯C语言API，属于一个C语言库，包含了很多底层的C语言API。平时编写的OC代码，在程序运行过程中，其实最终都是转成了Runtime的C语言代码，Runtime算是OC的幕后工作者。</p>
+<h1 id="数据结构">数据结构</h1><h2 id="SEL">SEL</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_selector *SEL;</span><br></pre></td></tr></table></figure>
+<p>SEL其主要作用是快速的通过方法名字查找到对应方法的函数指针，然后调用其函数。SEL其本身是一个Int类型的一个地址，地址中存放着方法的名字。对于一个类中每一个方法对应着一个SEL,所以iOS类中不能存在2个名称相同的方法，即使参数类型不同，因为SEL是根据方法名字生成的，相同的方法名称只能对应一个SEL。</p>
+<p>可以通过Objc编译器命令@selector()或者Runtime系统的sel_registerName函数来获取一个SEL类型的方法选择器。如果你知道selector对应的方法名是什么，可以通过NSString* NSStringFromSelector(SEL aSelector)方法将SEL转化为字符串，再用NSLog打印。</p>
+<h2 id="id">id</h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_object *<span class="keyword">id</span>;</span><br></pre></td></tr></table></figure>
+<p>id是通用类型指针，能够表示任何对象。id其实就是一个指向objc_object结构体指针，它包含一个Class isa成员，根据isa指针就可以顺藤摸瓜找到对象所属的类。</p>
+<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">objc_object</span> </span>&#123; Class isa; &#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>isa指针不总是指向实例对象所属的类，不能依靠它来确定类型，而是应该用class方法来确定实例对象的类。因为KVO的实现机理就是将被观察对象的isa指针指向一个中间类而不是真实的类，这是一种叫做 isa-swizzling 的技术，<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/KeyValueObserving/Articles/KVOImplementation.html" target="_blank" rel="external">详见官方文档</a>。</p>
+</blockquote>
+<h2 id="Class">Class</h2><figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_class *Class;</span><br><span class="line"><span class="keyword">struct</span> objc_class &#123;</span><br><span class="line">  Class isa; <span class="comment">// 指向metaclass</span></span><br><span class="line">   </span><br><span class="line">  Class super_class ; <span class="comment">// 指向其父类</span></span><br><span class="line">  <span class="keyword">const</span> <span class="built_in">char</span> *name ; <span class="comment">// 类名</span></span><br><span class="line">  <span class="built_in">long</span> <span class="keyword">version</span> ; <span class="comment">// 类的版本信息，初始化默认为0，可以通过runtime函数class_setVersion和class_getVersion进行修改、读取</span></span><br><span class="line">  <span class="built_in">long</span> info; <span class="comment">// 一些标识信息,如CLS_CLASS (0x1L) 表示该类为普通 class ，其中包含对象方法和成员变量;CLS_META (0x2L) 表示该类为 metaclass，其中包含类方法;</span></span><br><span class="line">  <span class="built_in">long</span> instance_size ; <span class="comment">// 该类的实例变量大小(包括从父类继承下来的实例变量);</span></span><br><span class="line">  <span class="keyword">struct</span> objc_ivar_list *ivars; <span class="comment">// 用于存储每个成员变量的地址</span></span><br><span class="line">  <span class="keyword">struct</span> objc_method_list **methodLists ; <span class="comment">// 与 info 的一些标志位有关,如CLS_CLASS (0x1L),则存储对象方法，如CLS_META (0x2L)，则存储类方法;</span></span><br><span class="line">  <span class="keyword">struct</span> objc_cache *cache; <span class="comment">// 指向最近使用的方法的指针，用于提升效率；</span></span><br><span class="line">  <span class="keyword">struct</span> objc_protocol_list *protocols; <span class="comment">// 存储该类遵守的协议</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到运行时一个类还关联了它的超类指针，类名，成员变量，方法，缓存，还有附属的协议。</p>
+<p>在objc_class结构体中：ivars是objc_ivar_list指针；methodLists是指向objc_method_list指针的指针。也就是说可以动态修改*methodLists的值来添加成员方法，这也是Category实现的原理，同样解释了Category不能添加属性的原因。关于二级指针，可以参考<a href="http://www.fenesky.com/blog/2014/07/03/pointers-to-pointers.html" target="_blank" rel="external">这篇文章</a>。</p>
+<h2 id="Method">Method</h2><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct objc_method *<span class="function"><span class="keyword">Method</span>;</span></span><br><span class="line">struct objc_method <span class="comment">&#123;</span><br><span class="line">    SEL method_name                                          OBJC2_UNAVAILABLE;</span><br><span class="line">    char *method_types                                       OBJC2_UNAVAILABLE;</span><br><span class="line">    IMP method_imp                                           OBJC2_UNAVAILABLE;</span><br><span class="line">&#125;</span>                                                            OBJC2_UNAVAILABLE;</span><br></pre></td></tr></table></figure>
+<p>Method表示类中的某个方法，是一个指向objc_method结构体指针，它存储了方法名(method_name)、方法类型(method_types)和方法实现(method_imp)等信息。</p>
+<h2 id="IMP">IMP</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typedef id <span class="list">(<span class="keyword">*IMP</span>)</span><span class="list">(<span class="keyword">id</span>, SEL, ...)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>IMP指向的方法与objc_msgSend函数类型相同，参数都包含id和SEL类型。每个方法名都对应一个SEL类型的方法选择器，而每个实例对象中的SEL对应的方法实现肯定是唯一的，通过一组id和SEL参数就能确定唯一的方法实现地址；反之亦然。它就是一个函数指针，这是由编译器生成的。当你发起一个 ObjC 消息之后，最终它会执行的那段代码，就是由这个函数指针指定的。而 IMP 这个函数指针就指向了这个方法的实现。</p>
+<h2 id="Ivar">Ivar</h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// An opaque type that represents an instance variable.</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_ivar *Ivar;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> objc_ivar &#123;</span><br><span class="line">    <span class="keyword">char</span> *ivar_name                                          OBJC2_UN<span class="built_in">AVAILABLE</span>;</span><br><span class="line">    <span class="keyword">char</span> *ivar_type                                          OBJC2_UN<span class="built_in">AVAILABLE</span>;</span><br><span class="line">    <span class="keyword">int</span> ivar_offset                                          OBJC2_UN<span class="built_in">AVAILABLE</span>;</span><br><span class="line"><span class="preprocessor">#ifdef __LP64__</span></span><br><span class="line">    <span class="keyword">int</span> space                                                OBJC2_UN<span class="built_in">AVAILABLE</span>;</span><br><span class="line"><span class="preprocessor">#endif</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Ivar表示类中的实例变量，是一个指向objc_ivar结构体指针，它包含了变量名(ivar_name)、变量类型(ivar_type)等信息。</p>
+<h2 id="Property">Property</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_property *Property;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_property *<span class="keyword">objc_property_t</span>;<span class="comment">//这个更常用</span></span><br></pre></td></tr></table></figure>
+<p>Property代表类中的属性，它是一个指向objc_property结构体的指针。可以通过class_copyPropertyList 和 protocol_copyPropertyList方法来获取类和协议中的属性：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">objc_property_t</span> *class_copyPropertyList(Class cls, <span class="keyword">unsigned</span> <span class="keyword">int</span> *outCount)</span><br><span class="line"><span class="keyword">objc_property_t</span> *protocol_copyPropertyList(Protocol *proto, <span class="keyword">unsigned</span> <span class="keyword">int</span> *outCount)</span><br></pre></td></tr></table></figure>
+<p>返回类型为指向指针的指针，因为属性列表是个数组，每个元素内容都是一个objc_property_t指针，而这两个函数返回的值是指向这个数组的指针。</p>
+<h2 id="Cache">Cache</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> objc_cache *Cache</span><br></pre></td></tr></table></figure>
+<p>Cache为方法调用的性能进行优化，通俗地讲，每当实例对象接收到一个消息时，它不会直接在isa指向的类的方法列表中遍历查找能够响应消息的方法，因为这样效率太低了，而是优先在Cache中查找。Runtime 系统会把被调用的方法存到Cache中（理论上讲一个方法如果被调用，那么它有可能今后还会被调用），下次查找的时候效率更高。这根计算机组成原理中学过的 CPU 绕过主存先访问Cache的道理挺像。</p>
+<h1 id="消息">消息</h1><p>Objc 中发送消息是用中括号（[]）把接收者和消息括起来，而直到运行时才会把消息与方法实现绑定。下面详细叙述下消息发送步骤：</p>
+<ol>
+<li>检测这个 selector 是不是要忽略的。比如 Mac OS X 开发，有了垃圾回收就不理会 retain, release 这些函数了。</li>
+<li>检测这个 target 是不是 nil 对象。ObjC 的特性是允许对一个 nil 对象执行任何一个方法不会 Crash，因为会被忽略掉。</li>
+<li>如果上面两个都过了，那就开始查找这个类的 IMP，先从 cache 里面找，完了找得到就跳到对应的函数去执行。</li>
+<li>如果 cache 找不到就找Class中的方法列表。</li>
+<li>如果Class中的方法列表找不到就到超类的Class中的方法列表去找，一直找，直到找到NSObject类为止。</li>
+<li>如果还找不到就要开始进入动态方法解析了。</li>
+</ol>
+<h1 id="应用">应用</h1><p>Runtime是属于OC的底层，可以进行一下非常底层的操作：</p>
+<ol>
+<li>在程序运行过程中动态地创建一个类（比如KVO底层的实现）。</li>
+<li>在程序运行过程中动态地为某个类添加属性、方法，修改属性值和方法。</li>
+<li>遍历一个类的所有成员变量、属性、方法。如：字典转模型利用Runtime遍历模型对象的所有属性，根据属性名从字典中取出对应的值设置到模型的属性上。</li>
+</ol>
+<p>相关的头文件：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;objc/runtime.h&gt;</span></span><br><span class="line"><span class="tag">&lt;objc/message.h&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="参考资料">参考资料</h1><p><a href="http://chun.tips" target="_blank" rel="external">刨根问底Objective－C Runtime</a></p>
+<p><a href="http://www.jianshu.com/p/25a319aee33d#" target="_blank" rel="external">Objective-C特性：Runtime</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[Runtime是属于OC的底层，可以进行一下非常底层的操作。]]>
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="开发利器" scheme="http://www.zhuli8.com/tags/%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8/"/>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[大话@property]]></title>

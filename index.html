@@ -81,6 +81,82 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/23/Shell编程实践/" title="Shell编程实践" itemprop="url">Shell编程实践</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-23T08:15:35.000Z" itemprop="datePublished"> 发表于 2015-08-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="概述">概述</h1><p>简单的说Shell就是一个包含若干行Shell或者Linux命令的文件。对于一次编写，多次使用的大量命令，就可以使用单独的文件保存下来，以便日后使用。</p>
+<p>通常Shell脚本以.sh为后缀。如果要执行该脚本，必须先使其可执行</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">chmod</span> +x filename</span><br></pre></td></tr></table></figure>
+<p>此后在该脚本所在目录下，输入./filename即可执行该脚本。</p>
+<p>还有一种更简单的方法就是直接在终端用sh指令来执行。</p>
+<p>最近打包webRTC库时重复的工作和容易出错的机会让我想到了Shell脚本。基本需求就是把C++工程师那边的arm64、armv7、i386三个架构的zip包（webRTC静态库包的压缩文件）打成一个.a静态库。</p>
+<p>下面就是这个过程中解决的两个版本。</p>
+<h1 id="第一个版本">第一个版本</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">\<span class="comment">#!/usr/sh</span></span><br><span class="line">\<span class="comment"># arm64包的名称</span></span><br><span class="line">arm64=Release-iphoneos</span><br><span class="line">\<span class="comment"># armv7包的名称</span></span><br><span class="line">armv7=Release-iphoneos</span><br><span class="line">\<span class="comment"># i386包的名称</span></span><br><span class="line">i386=Debug-iphonesimulator</span><br><span class="line"></span><br><span class="line">\<span class="comment"># 解压缩该目录下的$arm64.zip文件到该目录下的$arm64文件夹下,不提示的情况下覆盖文件</span></span><br><span class="line">unzip -o <span class="operator">-d</span> arm64/<span class="variable">$arm64</span>  arm64/<span class="variable">$arm64</span></span><br><span class="line">\<span class="comment"># 解压缩该目录下的$armv7.zip文件到该目录下的$armv7文件夹下,不提示的情况下覆盖文件</span></span><br><span class="line">unzip -o <span class="operator">-d</span> armv7/<span class="variable">$armv7</span>  armv7/<span class="variable">$armv7</span></span><br><span class="line">\<span class="comment"># 解压缩该目录下的$i386.zip文件到该目录下的$i386文件夹下,不提示的情况下覆盖文件</span></span><br><span class="line">unzip -o <span class="operator">-d</span> i386/<span class="variable">$i386</span>  i386/<span class="variable">$i386</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"解压缩成功"</span></span><br><span class="line"></span><br><span class="line">\<span class="comment"># 将上面的两个静态库移到其上一个目录</span></span><br><span class="line">mv arm64/<span class="variable">$arm64</span>/<span class="variable">$arm64</span>/<span class="variable">$capture</span> arm64/<span class="variable">$arm64</span>/<span class="variable">$arm64</span>/<span class="variable">$render</span> arm64/<span class="variable">$arm64</span>/</span><br><span class="line">mv armv7/<span class="variable">$armv7</span>/<span class="variable">$armv7</span>/<span class="variable">$capture</span> armv7/<span class="variable">$armv7</span>/<span class="variable">$armv7</span>/<span class="variable">$render</span> armv7/<span class="variable">$armv7</span>/</span><br><span class="line">mv i386/<span class="variable">$i386</span>/<span class="variable">$i386</span>/<span class="variable">$capture</span> i386/<span class="variable">$i386</span>/<span class="variable">$i386</span>/<span class="variable">$render</span> i386/<span class="variable">$i386</span>/</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"成功移动两个特殊的静态库"</span></span><br><span class="line"></span><br><span class="line">\<span class="comment"># 合并arm64/$arm64/$arm64/下所有*.a构建arm64为libWebRTC-arm64.a</span></span><br><span class="line">libtool -static -o arm64/<span class="variable">$arm64</span>/libWebRTC-arm64.a arm64/<span class="variable">$arm64</span>/<span class="variable">$arm64</span>/*.a</span><br><span class="line">\<span class="comment"># 合并armv7/$armv7/$armv7/下所有*.a构建armv7为libWebRTC-armv7.a</span></span><br><span class="line">libtool -static -o armv7/<span class="variable">$armv7</span>/libWebRTC-armv7.a armv7/<span class="variable">$armv7</span>/<span class="variable">$armv7</span>/*.a</span><br><span class="line">\<span class="comment"># 合并i386/$i386/$i386/下所有*.a构建i386为libWebRTC-i386.a</span></span><br><span class="line">libtool -static -o i386/<span class="variable">$i386</span>/libWebRTC-i386.a i386/<span class="variable">$i386</span>/<span class="variable">$i386</span>/*.a</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"成功构建libWebRTC-arm64.a、libWebRTC-armv7.a、libWebRTC-i386.a"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"正在执行最后的合成操作，请稍后..."</span></span><br><span class="line"></span><br><span class="line">\<span class="comment"># 创建支持arm64、armv7、i386的libWebRTC</span></span><br><span class="line">lipo -create arm64/<span class="variable">$arm64</span>/<span class="variable">$capture</span> armv7/<span class="variable">$armv7</span>/<span class="variable">$capture</span> i386/<span class="variable">$i386</span>/<span class="variable">$capture</span> -output libVideoCapture.a</span><br><span class="line">lipo -create arm64/<span class="variable">$arm64</span>/<span class="variable">$render</span> armv7/<span class="variable">$armv7</span>/<span class="variable">$render</span> i386/<span class="variable">$i386</span>/<span class="variable">$render</span> -output libVideoRender.a</span><br><span class="line">lipo -create arm64/<span class="variable">$arm64</span>/libWebRTC-arm64.a armv7/<span class="variable">$armv7</span>/libWebRTC-armv7.a i386/<span class="variable">$i386</span>/libWebRTC-i386.a -output libWebRTC.a</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"成功创建支持arm64、armv7、i386的libWebRTC"</span></span><br><span class="line"></span><br><span class="line">\<span class="comment"># 清理中间垃圾文件(把子目录及子目录中所有档案删除,并且不用一一确认)</span></span><br><span class="line">rm -rf arm64/<span class="variable">$arm64</span></span><br><span class="line">rm -rf armv7/<span class="variable">$armv7</span></span><br><span class="line">rm -rf i386/<span class="variable">$i386</span></span><br></pre></td></tr></table></figure>
+<h1 id="第二个版本">第二个版本</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">\<span class="comment"># arm64包的名称</span></span><br><span class="line">arm64=Release-iphoneos</span><br><span class="line">\<span class="comment"># armv7包的名称</span></span><br><span class="line">armv7=Release-iphoneos</span><br><span class="line">\<span class="comment"># i386包的名称</span></span><br><span class="line">i386=Debug-iphonesimulator</span><br><span class="line"></span><br><span class="line">tempArm64Path=arm64/<span class="variable">$arm64</span></span><br><span class="line">tempArmv7Path=armv7/<span class="variable">$armv7</span></span><br><span class="line">tempI386Path=i386/<span class="variable">$i386</span></span><br><span class="line"></span><br><span class="line">\<span class="comment"># 定义需要移动的两个静态库的别名</span></span><br><span class="line">capture=libvideo_capture_module_internal_impl.a</span><br><span class="line">render=libvideo_render_module_internal_impl.a</span><br><span class="line"></span><br><span class="line">\<span class="comment"># 解压缩第一个参数下的zip文件到该目录下，不提示的情况覆盖文件</span></span><br><span class="line"><span class="function"><span class="title">funUnzip</span></span>()&#123;</span><br><span class="line">    unzip -o <span class="operator">-d</span> <span class="variable">$&#123;1&#125;</span> <span class="variable">$&#123;1&#125;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"解压缩<span class="variable">$&#123;1&#125;</span>成功"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">\<span class="comment"># 将上面的两个静态库移到其上一个目录</span></span><br><span class="line"><span class="function"><span class="title">funMoveStatic</span></span>()&#123;</span><br><span class="line">    funUnzip <span class="variable">$&#123;1&#125;</span></span><br><span class="line"></span><br><span class="line">    mv <span class="variable">$&#123;1&#125;</span>/<span class="variable">$&#123;2&#125;</span>/<span class="variable">$capture</span> <span class="variable">$&#123;1&#125;</span>/<span class="variable">$&#123;2&#125;</span>/<span class="variable">$render</span> <span class="variable">$&#123;1&#125;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"成功移动<span class="variable">$&#123;1&#125;</span>/<span class="variable">$&#123;2&#125;</span>中两个特殊的静态库"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">\<span class="comment"># 合并arm64/$arm64/$arm64/下所有*.a构建arm64为libWebRTC-arm64.a这种情况</span></span><br><span class="line"><span class="function"><span class="title">funMergeStatic</span></span>()&#123;</span><br><span class="line">    funMoveStatic <span class="variable">$&#123;1&#125;</span> <span class="variable">$&#123;2&#125;</span></span><br><span class="line"></span><br><span class="line">    libtool -static -o <span class="variable">$&#123;1&#125;</span>/libWebRTC-<span class="variable">$&#123;3&#125;</span>.a <span class="variable">$&#123;1&#125;</span>/<span class="variable">$&#123;2&#125;</span>/*.a</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"成功构建libWebRTC-<span class="variable">$&#123;3&#125;</span>.a"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">funBuildWebRTC</span></span>()&#123;</span><br><span class="line">    funMergeStatic <span class="variable">$&#123;tempArm64Path&#125;</span> <span class="variable">$&#123;arm64&#125;</span> <span class="string">"arm64"</span></span><br><span class="line">    funMergeStatic <span class="variable">$&#123;tempArmv7Path&#125;</span> <span class="variable">$&#123;armv7&#125;</span> <span class="string">"armv7"</span></span><br><span class="line">    funMergeStatic <span class="variable">$&#123;tempI386Path&#125;</span> <span class="variable">$&#123;i386&#125;</span> <span class="string">"i386"</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"正在执行最后的合成操作，请稍后..."</span></span><br><span class="line"></span><br><span class="line">    \<span class="comment"># 创建支持arm64、armv7、i386的libWebRTC</span></span><br><span class="line">    lipo -create <span class="variable">$&#123;tempArm64Path&#125;</span>/<span class="variable">$capture</span> <span class="variable">$&#123;tempArmv7Path&#125;</span>/<span class="variable">$capture</span> <span class="variable">$&#123;tempI386Path&#125;</span>/<span class="variable">$capture</span> -output libVideoCapture.a</span><br><span class="line">    lipo -create <span class="variable">$&#123;tempArm64Path&#125;</span>/<span class="variable">$render</span> <span class="variable">$&#123;tempArmv7Path&#125;</span>/<span class="variable">$render</span> <span class="variable">$&#123;tempI386Path&#125;</span>/<span class="variable">$render</span> -output libVideoRender.a</span><br><span class="line">    lipo -create <span class="variable">$&#123;tempArm64Path&#125;</span>/libWebRTC-arm64.a <span class="variable">$&#123;tempArmv7Path&#125;</span>/libWebRTC-armv7.a <span class="variable">$&#123;tempI386Path&#125;</span>/libWebRTC-i386.a -output libWebRTC.a</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"成功创建支持arm64、armv7、i386的libWebRTC"</span></span><br><span class="line"></span><br><span class="line">    \<span class="comment"># 清理中间垃圾文件(把子目录及子目录中所有档案删除,并且不用一一确认)</span></span><br><span class="line">    rm -rf <span class="variable">$&#123;tempArm64Path&#125;</span></span><br><span class="line">    rm -rf <span class="variable">$&#123;tempArmv7Path&#125;</span></span><br><span class="line">    rm -rf <span class="variable">$&#123;tempI386Path&#125;</span></span><br><span class="line">&#125;</span><br><span class="line">funBuildWebRTC</span><br></pre></td></tr></table></figure>
+<h1 id="参考文章">参考文章</h1><p><a href="http://www.lampweb.org/linux/1/" target="_blank" rel="external">shell 命令</a></p>
+<p><a href="http://c.biancheng.net/cpp/shell/" target="_blank" rel="external">Linux Shell脚本教程：30分钟玩转Shell脚本编程</a></p>
+<p><a href="http://segmentfault.com/a/1190000002924882#articleHeader16" target="_blank" rel="external">Shell常用招式大全之入门篇</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/开发利器/">开发利器</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/23/Shell编程实践/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/23/Shell编程实践/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/08/16/Runtime/" title="Runtime" itemprop="url">Runtime</a>
   </h1>
   <p class="article-author">By
@@ -1142,90 +1218,6 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 
 
 
-  
-
- 
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/14/中介者模式-MM们打麻将我来算账/" title="swift版设计模式之中介者模式-MM们打麻将我来算账" itemprop="url">swift版设计模式之中介者模式-MM们打麻将我来算账</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-14T04:05:10.000Z" itemprop="datePublished"> 发表于 2015-06-14</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="中介者模式比喻">中介者模式比喻</h1><p>四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。</p>
-<h1 id="中介者模式意图">中介者模式意图</h1><p>中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
-<h1 id="中介者模式类图">中介者模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/mediator.gif" alt=""></p>
-<h1 id="中介者模式实现">中介者模式实现</h1><p>抽象中介者，定义了MM需要什么样的中介者</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Mediator</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(money:Double,girl:Girl)</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>具体中介者对象，实现抽象类的方法，他需要知道所有具体的MM，并给MM核算服务</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Boy</span>: <span class="title">Mediator</span> </span>&#123;</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl1:<span class="type">FirstGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl2:<span class="type">SecondGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl3:<span class="type">ThirdGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl4:<span class="type">FourthGirl</span>?</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(<span class="keyword">var</span> money: Double, girl: Girl)</span></span> &#123;</span><br><span class="line">        money=money*<span class="number">10</span><span class="comment">////中介者的处理，此处业务比较简单假设一个筹码代表10</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> girl===girl1&#123;</span><br><span class="line">            girl1?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl2&#123;</span><br><span class="line">            girl2?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl3&#123;</span><br><span class="line">            girl3?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl4&#123;</span><br><span class="line">            girl4?.getResult(money)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>抽象女孩类</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> mediator:<span class="type">Mediator</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(mediator:<span class="type">Mediator</span>)&#123;</span><br><span class="line">        <span class="keyword">self</span>.mediator=mediator<span class="comment">////得到中介者对象</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span><br><span class="line">    告诉中介者筹码数，让其帮我核算</span><br><span class="line">    */</span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">notify</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        mediator.calculate(money, girl: <span class="keyword">self</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>女孩1，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识且依靠中介者对象核算</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FirstGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The FirstGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>女孩2，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SecondGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The SecondGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>女孩3，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThirdGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The ThirdGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>女孩4，每个女孩只知道自己的行为，而不了解其他MM的情况，但它们都认识依靠中介者对象</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FourthGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The FourthGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>中介者模式客户端应用</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> boy=<span class="function"><span class="title">Boy</span><span class="params">()</span></span><span class="comment">//核算中介</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个打麻将的MM</span></span><br><span class="line"><span class="tag">var</span> girl1=<span class="function"><span class="title">FirstGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl2=<span class="function"><span class="title">SecondGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl3=<span class="function"><span class="title">ThirdGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl4=<span class="function"><span class="title">FourthGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个MM让我调节</span></span><br><span class="line">boy.girl1=girl1</span><br><span class="line">boy.girl2=girl2</span><br><span class="line">boy.girl3=girl3</span><br><span class="line">boy.girl4=girl4</span><br><span class="line">girl1.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">10</span>)</span></span></span><br><span class="line">girl2.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">20</span>)</span></span></span><br><span class="line">girl3.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">20</span>)</span></span></span><br><span class="line">girl4.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">10</span>)</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="中介者模式总结">中介者模式总结</h1><p>中介者的出现减少了MM们的耦合，使得可以独立地改变和复用各个Mediator和Girl，具体女孩类的改变不会影响到其他女孩类，而只是Boy发生变化。Boy把对象如何协作进行了抽象，将中介作为一个独立的概念并将其封装在一个对象中，关注的对象就从对象各自本身的行为转移到她们之间的交互上来。即中介者模式包装了一系列对象相互作用的方式，使得这些对象不必相互明显作用。从而是它们可以松散耦合。当某些对象之间的作用发生改变时，不会立即影响其他的一些对象，保证这些作用可以彼此独立的变化。中介者模式将多对多的相互作用转化为一对多的相互作用。中介者模式将对象的行为和协作抽象化，把对象在小尺度的行为上与其他对象的相互作用分开处理。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/swift/">swift</a><a href="/tags/设计模式/">设计模式</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/14/中介者模式-MM们打麻将我来算账/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/14/中介者模式-MM们打麻将我来算账/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -1248,7 +1240,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>9</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>10</sup></a></li>
 		  
 		
 		  
@@ -1273,7 +1265,11 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>13</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>4</sup></a></li>
 			
 		
 			
@@ -1282,10 +1278,6 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 		
 			
 				<li><a href="/tags/swift/" title="swift">swift<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>3</sup></a></li>
 			
 		
 			

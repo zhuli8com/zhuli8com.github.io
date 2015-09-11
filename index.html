@@ -81,6 +81,114 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/30/设计模式总结/" title="设计模式总结" itemprop="url">设计模式总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-30T06:08:47.000Z" itemprop="datePublished"> 发表于 2015-08-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>开始前请先看<a href="https://github.com/zhuli8com/DesignPattern.git" target="_blank" rel="external">源码Demo</a>。</p>
+<h1 id="概述">概述</h1><p>在软件设计领域，设计模式是对通用问题的可复用的解决方案。设计模式是一系列帮你写出更可理解和复用代码的模板，设计模式帮你创建松耦合的代码以便你不需要费多大力就可以改变或者替换代码中的组件。</p>
+<p>创建型：单利（单态）和 抽象工厂</p>
+<p>结构型：模型-视图-控制器、装饰器、适配器、外观（门面)和组合模式</p>
+<p>行为型：观察者、备忘录、责任链和命令模式</p>
+<h1 id="MVC（模型-视图-控制器）">MVC（模型-视图-控制器）</h1><p>模型-视图-控制器（MVC) 是Cocoa的构建块之一，毫无疑问它是使用最频繁的设计模式。它根据通用的角色去划分类，这样就使得类的职责可以根据角色清晰的划分开来。</p>
+<blockquote>
+<p>Model:模型保存应用程序的数据，定义了怎么去操作它。例如在本应用中模型就是Album类。</p>
+<p>View:  视图是模型的可视化表示以及用户交互的控件；基本上来说，所有的UIView对象以及它的子类都属于视图。在本应用中AlbumView代表了视图。</p>
+<p>Controller:控制器是一个协调所有工作的中介者（Mediator）。它访问模型中的数据并在视图中展示它们，同时它们还监听事件和根据需要操作数据。例如在本应用中ViewController。</p>
+</blockquote>
+<p>模型会把任何数据的变更通知控制器，然后控制器更新视图数据。视图对象通知控制器用户的操作，控制器要么根据需要来更新模型，要么检索任何被请求的数据。</p>
+<p>你可能在想为什么不能仅仅使用控制器，在一个类中实现视图和模型，这样貌似更加容易? </p>
+<p>所有的这些都归结于代码关注点分离以及复用。在理想的状态下，视图应该和模型完全的分离。如果视图不依赖某个实际的模型，那么视图就可以被复用来展示不同模型的数据。</p>
+<p>举个例子来说，如果将来你打算加入电影或者书籍到你的资料库中，你仍然可以使用同样的AlbumView去显示电影和书籍数据。更进一步来说，如果你想创建一个新的与专辑有关联的工程，你可以很简单的复用Album类，因为它不依赖任何视图。这就是MVC的强大之处。</p>
+<h1 id="单例模式">单例模式</h1><p>单例设计模式确保对于一个给定的类只有一个实例存在，这个实例有一个全局唯一的访问点。它通常采用懒加载的方式在第一次用到实例的时候再去创建它。</p>
+<p>苹果大量使用了此模式。例如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[NSUserDefaults standardUserDefaults]</span><br><span class="line">[UIApplication sharedApplication]</span><br><span class="line">[UIScreen mainScreen]</span><br><span class="line">[NSFileManager defaultManager]</span><br></pre></td></tr></table></figure>
+<p>有一些情况下，只有一个实例显得非常合理。举例来说，你不需要有多个Logger的实例，除非你想去写多个日志文件。或者一个全局的配置处理类：实现线程安全的方式访问共享实例是容易的，比如一个配置文件，有好多个类同时修改这个文件。</p>
+<h1 id="外观模式">外观模式</h1><p>外观模式针对复杂的子系统提供了单一的接口，不需要暴漏一系列的类和API给用户，你仅仅暴漏一个简单统一的API。这个API的使用者完全不需要关心背后的复杂性。这个模式非常适合有一大堆很难使用或者理解的类的情况。外观模式解耦了使用系统的代码和需要隐藏的接口和实现类。它也降低了外部代码对内部子系统的依赖性。当隐藏在外观之后的类很容易发生变化的时候，此模式就很有用了，因为当背后的类发生变化的时候，外观类始终保持了同样的API。</p>
+<p>本应用中用PersistencyManager本地保存专辑数据，使用HTTPClient处理远程连接，工程中的其它类暂时与本次实现的逻辑无关。</p>
+<p>为了实现这个模式，只有LibraryAPI应该保存PersistencyManager和HTTPClient的实例，然后LibraryAPI将暴漏一个简单的API去访问这些服务。LibraryAPI将暴漏给其它代码，但是它隐藏了HTTPClient和PersistencyManager的复杂性。</p>
+<h1 id="装饰器（Decorator）模式">装饰器（Decorator）模式</h1><p>装饰器模式在不修改原来代码的情况下动态的给对象增加新的行为和职责，它通过一个对象包装被装饰对象的方法来修改类的行为，这种方法可以做为子类化的一种替代方法。<br>在Objective-C中，存在两种非常常见的实现:Category(类别）和Delegation（委托）。</p>
+<h2 id="Category(类别)">Category(类别)</h2><p>Category(类别)是一种不需要子类化就可以让你能动态的给已经存在的类增加方法的强有力的机制。新增的方法是在编译期增加的，这些方法执行的时候和被扩展的类的其它方法是一样的。它可能与装饰器设计模式的定义稍微有点不同，因为Category(类别)不会保存被扩展类的引用。</p>
+<p>除了可以扩展你自己的类以外，还可以给Cocoa自己的类增加方法。</p>
+<p>本应用中需要让Album(专辑)对象显示在一个表格视图（TableView）中：专辑的标题从何而来？因为专辑是模型对象，它本身不需要关心你如何显示它的数据。你需要增加一些代码去扩展专辑类的行为，但是不需要直接修改专辑类。创建一个专辑类扩展的类别，定义一个新的方法，这个方法会返回能很容易和UITableViews使用的数据结构。 </p>
+<h2 id="Delegation(委托)">Delegation(委托)</h2><p>当你使用UITableView的时候，你必须要实现tableView:numberOfRowsInSection:方法。<br>你不可能让UITableView知道它需要在每个区域显示多少行，因为这些是应用特定的数据。因此计算每个区域需要显示多少行的职责就给了UITableView的委托。这就让UITableView类独立于它要显示的数据。</p>
+<p>UITableView的职责就是显示一个表格视图。然而最终它需要一些它自身没有的信息。那么它就求助于它的委托，通过发送消息给委托来获取信息。在Objective-C实现委托模式的时候，一个类可以通过协议（Protocol）来声明可选以及必要的方法。</p>
+<p>这个是一个重要的模式。苹果在UIKit类中大量使用了它：UITableView, UITextView, UITextField, UIWebView, UIAlert, UIActionSheet, UICollectionView, UIPickerView,UIGestureRecognizer, UIScrollView等等等。</p>
+<h1 id="适配器（Adapter）模式">适配器（Adapter）模式</h1><p>适配器可以让一些接口不兼容的类一起工作。它包装一个对象然后暴漏一个标准的交互接口。</p>
+<p>苹果通过一个稍微不同的方式来实现它-苹果使用了协议的方式来实现。你可能已经熟悉UITableViewDelegate, UIScrollViewDelegate, NSCoding 和 NSCopying协议。举个例子，使用NSCopying协议，任何类都可以提供一个标准的copy方法。</p>
+<h1 id="观察者（Observer）模式">观察者（Observer）模式</h1><p>在观察者模式中，一个对象任何状态的变更都会通知另外的对改变感兴趣的对象。这些对象之间不需要知道彼此的存在，这其实是一种松耦合的设计。当某个属性变化的时候，我们通常使用这个模式去通知其它对象。</p>
+<p>此模式的通用实现中，观察者注册自己感兴趣的其它对象的状态变更事件。当状态发生变化的时候，所有的观察者都会得到通知。苹果的推送通知（Push Notification）就是一个此模式的例子。</p>
+<p>如果你要遵从MVC模式的概念，你需要让模型对象和视图对象在不相互直接引用的情况下通信。这正是观察者模式的用武之地。</p>
+<p>Cocoa通过通知（Notifications）和Key-Value Observing(KVO)来实现观察者模式。</p>
+<h2 id="通知（Notifications）">通知（Notifications）</h2><p>不要和远程推送以及本地通知所混淆，通知是一种基于订阅-发布模式的模型，它让发布者可以给订阅者发送消息，并且发布者不需要对订阅者有任何的了解。</p>
+<p>通知在苹果官方被大量的使用。举例来说，当键盘弹出或者隐藏的时候，系统会独立发送UIKeyboardWillShowNotification/UIKeyboardWillHideNotification通知。当你的应用进入后台运行的时候，系统会发送一个UIApplicationDidEnterBackgroundNotification通知。</p>
+<h2 id="Key-Value_Observing(KVO)模式">Key-Value Observing(KVO)模式</h2><p>在KVO中，一个对象可以要求在它自身或者其它对象的属性发送变化的时候得到通知。</p>
+<p>KVO机制让对象可以感知到属性的变化。在本例中，你可以使用KVO去观察UIImageView的image属性的变化。</p>
+<h1 id="备忘录（Memento）模式">备忘录（Memento）模式</h1><p>备忘录模式快照对象的内部状态并将其保存到外部。换句话说，它将状态保存到某处，过会你可以不破坏封装的情况下恢复对象的状态，也就是说原来对象中的私有数据仍然是私有的。</p>
+<h2 id="归档（Archiving）">归档（Archiving）</h2><p>归档是苹果对于备忘录模式的特定实现之一。这种机制可以转换一个对象到一个可保存的数据流中，过会可以在不暴漏私有属性给外部的情况下重建它们。</p>
+<h1 id="命令模式">命令模式</h1><p>命令模式将一个请求封装为一个对象。封装以后的请求会比原生的请求更加灵活，因为这些封装后的请求可以在多个对象之间传递，存储以便以后使用，还可以动态的修改，或者放进一个队列中。苹果通过Target-Action机制和Invocation实现命令模式。</p>
+<p>你可以通过苹果的官方在线文档阅读更多关于Target-Action的内容，至于Invocation，它采用了NSInvocation类，这个类包含了一个目标对象，方法选择器，以及一些参数。这个对象可以动态的修改并且可以按需执行。实践中它是一个命令模式很好的例子。它解耦了发送对象和接受对象，并且可以保存一个或者多个请求。</p>
+<h1 id="参考文章">参考文章</h1><p><a href="http://xmuzyq.iteye.com/blog/1942376" target="_blank" rel="external">IOS设计模式之一（MVC模式，单例模式）</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/设计模式/">设计模式</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/30/设计模式总结/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/30/设计模式总结/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/08/23/Shell编程实践/" title="Shell编程实践" itemprop="url">Shell编程实践</a>
   </h1>
   <p class="article-author">By
@@ -1142,86 +1250,9 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 
 
 
-  
-
- 
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/21/代理模式-Proxy程序替你聊天/" title="swift版设计模式之代理模式-Proxy程序替你聊天" itemprop="url">swift版设计模式之代理模式-Proxy程序替你聊天</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-21T09:05:10.000Z" itemprop="datePublished"> 发表于 2015-06-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="代理模式比喻">代理模式比喻</h1><p>跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。</p>
-<h1 id="代理模式意图">代理模式意图</h1><p>代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。</p>
-<h1 id="代理模式类图">代理模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/proxy.gif" alt=""></p>
-<h1 id="代理模式实现">代理模式实现</h1><p>定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Proxy所代表的真实实体</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span>: <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> mm:<span class="type">Girl</span></span><br><span class="line">    <span class="keyword">init</span>(mm:<span class="type">Girl</span>)&#123;</span><br><span class="line">        <span class="keyword">self</span>.mm=mm</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> mm.word!&#123;<span class="comment">//记得强制解包哦</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">"hi,你好"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"hi,你好"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你从哪里来呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"火星"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你多大了？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="number">18</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"身高多少呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"2.5m"</span>)</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            say()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">say</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"我出场了……"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>保存一个RealSubject引用，使得代理可以访问实体并提供一个与Subject相同的接口来代替实体</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Proxy</span>: <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> rs:<span class="type">RealSubject</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(mm:<span class="type">Girl</span>)&#123;</span><br><span class="line">        rs=<span class="type">RealSubject</span>(mm: mm)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span> &#123;</span><br><span class="line">        rs.operation()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>聊天的MM</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> word:<span class="built_in">String</span>?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>代理模式客户端应用</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> mm=<span class="function"><span class="title">Girl</span><span class="params">()</span></span></span><br><span class="line">mm.word=<span class="string">"hi,你好"</span></span><br><span class="line"></span><br><span class="line"><span class="tag">var</span> proxy=<span class="function"><span class="title">Proxy</span><span class="params">(mm: mm)</span></span></span><br><span class="line">proxy.<span class="function"><span class="title">operation</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="代理模式总结">代理模式总结</h1><p>吼吼，这是不是就是传说中的机器人聊天原理啊！代理模式给某一个对象提供一个代理对象，由代理对象控制对源对象的引用。代理就是一个人或一个结构代表另一个人或者一个机构采取行动。我们身边到处都是代理模式，如远程代理、虚拟代理、安全代理、智能指引等。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/swift/">swift</a><a href="/tags/设计模式/">设计模式</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/21/代理模式-Proxy程序替你聊天/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/21/代理模式-Proxy程序替你聊天/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
@@ -1253,7 +1284,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 		  
 		
 		  
-			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
 		  
 		
 		</ul>
@@ -1266,7 +1297,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>15</sup></a></li>
 			
 		
 			
@@ -1282,15 +1313,15 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 			
 		
 			
-				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/webRTC/" title="webRTC">webRTC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
 			
 		
 			

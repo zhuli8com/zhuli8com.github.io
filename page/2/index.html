@@ -81,6 +81,83 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/21/代理模式-Proxy程序替你聊天/" title="swift版设计模式之代理模式-Proxy程序替你聊天" itemprop="url">swift版设计模式之代理模式-Proxy程序替你聊天</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-21T09:05:10.000Z" itemprop="datePublished"> 发表于 2015-06-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="代理模式比喻">代理模式比喻</h1><p>跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。</p>
+<h1 id="代理模式意图">代理模式意图</h1><p>代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。</p>
+<h1 id="代理模式类图">代理模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/proxy.gif" alt=""></p>
+<h1 id="代理模式实现">代理模式实现</h1><p>定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Proxy所代表的真实实体</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span>: <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> mm:<span class="type">Girl</span></span><br><span class="line">    <span class="keyword">init</span>(mm:<span class="type">Girl</span>)&#123;</span><br><span class="line">        <span class="keyword">self</span>.mm=mm</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> mm.word!&#123;<span class="comment">//记得强制解包哦</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">"hi,你好"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"hi,你好"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你从哪里来呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"火星"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你多大了？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="number">18</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"身高多少呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"2.5m"</span>)</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            say()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">say</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"我出场了……"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>保存一个RealSubject引用，使得代理可以访问实体并提供一个与Subject相同的接口来代替实体</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Proxy</span>: <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> rs:<span class="type">RealSubject</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(mm:<span class="type">Girl</span>)&#123;</span><br><span class="line">        rs=<span class="type">RealSubject</span>(mm: mm)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span> &#123;</span><br><span class="line">        rs.operation()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>聊天的MM</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> word:<span class="built_in">String</span>?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代理模式客户端应用</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> mm=<span class="function"><span class="title">Girl</span><span class="params">()</span></span></span><br><span class="line">mm.word=<span class="string">"hi,你好"</span></span><br><span class="line"></span><br><span class="line"><span class="tag">var</span> proxy=<span class="function"><span class="title">Proxy</span><span class="params">(mm: mm)</span></span></span><br><span class="line">proxy.<span class="function"><span class="title">operation</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<h1 id="代理模式总结">代理模式总结</h1><p>吼吼，这是不是就是传说中的机器人聊天原理啊！代理模式给某一个对象提供一个代理对象，由代理对象控制对源对象的引用。代理就是一个人或一个结构代表另一个人或者一个机构采取行动。我们身边到处都是代理模式，如远程代理、虚拟代理、安全代理、智能指引等。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/swift/">swift</a><a href="/tags/设计模式/">设计模式</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/21/代理模式-Proxy程序替你聊天/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/21/代理模式-Proxy程序替你聊天/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/14/中介者模式-MM们打麻将我来算账/" title="swift版设计模式之中介者模式-MM们打麻将我来算账" itemprop="url">swift版设计模式之中介者模式-MM们打麻将我来算账</a>
   </h1>
   <p class="article-author">By
@@ -1114,6 +1191,8 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p>开发者头条 - 开发者的首选阅读分享平台</p>
 <p><a href="http://weekly.manong.io" target="_blank" rel="external">码农周刊</a></p>
 <p>码农周刊是一份专为程序员打造的IT技术周刊。我们会为你精选一周IT技术干货，每周一发送，完全免费。</p>
+<p><a href="http://h2ex.com/fulishe" target="_blank" rel="external">福利社</a></p>
+<p>各种经典博文整理。</p>
 <h1 id="个人博客">个人博客</h1><p><a href="http://blog.devtang.com/" target="_blank" rel="external">唐巧</a></p>
 <p>InfoQ编辑, 《iOS开发进阶》作者, 在猿题库创业。Java开发工程师，曾开发网易微博后台。 iOS开发工程师，曾开发有道云笔记、猿题库。 </p>
 <p><a href="http://www.onevcat.com/" target="_blank" rel="external">王巍</a></p>
@@ -1130,6 +1209,12 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p>孙源（sunnyxx），目前就职于百度，负责百度知道 iOS 客户端的开发工作，对技术喜欢刨根问底和总结最佳实践，热爱分享和开源，维护一个叫 forkingdog 的开源小组。</p>
 <p><a href="https://github.com/ChenYilong" target="_blank" rel="external">iOS程序员</a></p>
 <p>r p y b b</p>
+<p><a href="http://springox.w18.net" target="_blank" rel="external">springox的博客</a></p>
+<p>只因Objective-C与Runtime这么一篇文章而被吸引。</p>
+<p><a href="http://southpeak.github.io/blog/archives/" target="_blank" rel="external">南峰子的技术博客</a></p>
+<p>各种好文，各种源码解析。</p>
+<p><a href="http://lvwenhan.com/sort/ios" target="_blank" rel="external">岁寒</a></p>
+<p>网络封装的博文很精彩。</p>
 <h1 id="其他推荐">其他推荐</h1><p><a href="http://objccn.io" target="_blank" rel="external">objc中国</a></p>
 <p>为中国 Objective-C 社区带来最佳实践和先进技术</p>
 <p><a href="http://tech.glowing.com" target="_blank" rel="external">Glow技术团队博客</a></p>
@@ -1151,6 +1236,7 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p><a href="http://my.oschina.net/lujianing/blog/394367" target="_blank" rel="external">Java转iOS-第一个项目总结(1)</a></p>
 <p><a href="http://my.oschina.net/lujianing/blog/404080" target="_blank" rel="external">Java转iOS-第一个项目总结(2)</a></p>
 <p><a href="http://www.cocoachina.com/ios/20150423/11658.html" target="_blank" rel="external">详解Xcode 6的视图调试</a></p>
+<p><a href="http://supermao.cn/xiao-xin-bie-rang-yuan-jiao-cheng-liao-ni-lie-biao-de-zheng-shu-sha-shou/" target="_blank" rel="external">小心别让圆角成了你列表的帧数杀手</a></p>
 <h1 id="写在最后">写在最后</h1><p>在长的路，一步步也能走完；在短的路，不迈开双脚也无法到达！</p>
 
         
@@ -1915,6 +2001,7 @@ uniform highp float refractiveIndex;
 <p>7、提交到github，将本地分支推到远程主分支</p>
 <p>git push origin master</p>
 <h1 id="参考">参考</h1><p><a href="http://justcoding.iteye.com/blog/1830388" target="_blank" rel="external">git常用命令</a></p>
+<p><a href="http://jingyan.baidu.com/article/ab0b5630936ab6c15afa7d1c.html" target="_blank" rel="external">Xcode 6.3 用 GitHub 托管项目</a></p>
 
         
         
@@ -1958,112 +2045,9 @@ uniform highp float refractiveIndex;
 
 
 
-  
-
- 
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/12/C语言预处理指令/" title="C语言预处理指令" itemprop="url">C语言预处理指令</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-12T08:39:02.000Z" itemprop="datePublished"> 发表于 2015-04-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="宏定义">宏定义</h1><h2 id="不带参数的宏定义">不带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名 字符串</span><br></pre></td></tr></table></figure>
-<p>它的作用是在编译预处理时，将源程序中所有”宏名”替换成右边的”字符串”，常用来定义常量。</p>
-<blockquote>
-<p>1.宏名一般用大写字母，以便与变量名区别开来，但用小写也没有语法错误</p>
-<p>2.在编译预处理用字符串替换宏名时，不作语法检查，只是简单的字符串替换。只有在编译的时候才对已经展开宏名的源程序进行语法检查</p>
-<p>3.宏名的有效范围是从定义位置到文件结束。如果需要终止宏定义的作用域，可以用#undef命令</p>
-</blockquote>
-<h2 id="带参数的宏定义">带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名(参数列表) 字符串</span><br></pre></td></tr></table></figure>
-<p>在编译预处理时，将源程序中所有宏名替换成字符串，并且将 字符串中的参数 用 宏名右边参数列表 中的参数替换</p>
-<blockquote>
-<p>1.宏名和参数列表之间不能有空格，否则空格后面的所有字符串都作为替换的字符串</p>
-<p>2.带参数的宏在展开时，只作简单的字符和参数的替换，不进行任何计算操作。所以在定义宏时，一般用一个小括号括住字符串的参数。</p>
-<p>3.计算结果最好也用括号括起来</p>
-</blockquote>
-<h1 id="条件编译">条件编译</h1><p>在很多情况下，我们希望程序的其中一部分代码只有在满足一定条件时才进行编译，否则不参与编译(只有参与编译的代码最终才能被执行)，这就是条件编译。</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#if</span> 条件<span class="number">1</span></span><br><span class="line"> ..<span class="class">.code1</span>...</span><br><span class="line"><span class="id">#elif</span> 条件<span class="number">2</span></span><br><span class="line"> ..<span class="class">.code2</span>...</span><br><span class="line"><span class="id">#else</span></span><br><span class="line"> ..<span class="class">.code3</span>...</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>#if 和 #elif后面的条件一般是判断宏定义而不是判断变量，因为条件编译是在编译之前做的判断，宏定义也是编译之前定义的，而变量是在运行时才产生的、才有使用的意义</p>
-</blockquote>
-<h2 id="其他">其他</h2><ol>
-<li>#if defined()和#if !defined()</li>
-<li>#ifdef和#ifndef</li>
-</ol>
-<h1 id="文件包含">文件包含</h1><blockquote>
-<p>#include的作用纯粹就是内容拷贝</p>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>　&lt;文件名&gt;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>直接到C语言库函数头文件所在的目录中寻找文件</p>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>　"文件名"</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>系统会先在源程序当前目录下寻找，若找不到，再到操作系统的path路径中查找，最后才到C语言库函数头文件所在目录中查找</p>
-</blockquote>
-<h2 id="其他-1">其他</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">one.h</span><br><span class="line"><span class="preprocessor">#ifndef _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">tow.h</span><br><span class="line"><span class="preprocessor">#ifndef _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "one.h"</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">main.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "one.h"</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "two.h"</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>最后的main.h的文件相当于下面的代码：</p>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// #include "one.h"</span></span><br><span class="line"><span class="preprocessor">#ifndef _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// #include "two.h"</span></span><br><span class="line"><span class="preprocessor">#ifndef _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// #include "one.h"</span></span><br><span class="line"><span class="preprocessor">#ifndef _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/iOS/">iOS</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/iOS/">iOS</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/12/C语言预处理指令/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/12/C语言预处理指令/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
   </nav>
 
 </div>
@@ -2095,7 +2079,7 @@ uniform highp float refractiveIndex;
 		  
 		
 		  
-			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
 		  
 		
 		</ul>
@@ -2108,7 +2092,7 @@ uniform highp float refractiveIndex;
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>15</sup></a></li>
 			
 		
 			
@@ -2124,15 +2108,15 @@ uniform highp float refractiveIndex;
 			
 		
 			
-				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/webRTC/" title="webRTC">webRTC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
 			
 		
 			

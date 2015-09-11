@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-09-07T08:21:28.000Z</updated>
+  <updated>2015-09-11T06:13:22.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -13,6 +13,70 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[设计模式总结]]></title>
+    <link href="http://www.zhuli8.com/2015/08/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/"/>
+    <id>http://www.zhuli8.com/2015/08/30/设计模式总结/</id>
+    <published>2015-08-30T06:08:47.000Z</published>
+    <updated>2015-09-11T06:13:22.000Z</updated>
+    <content type="html"><![CDATA[<p>开始前请先看<a href="https://github.com/zhuli8com/DesignPattern.git" target="_blank" rel="external">源码Demo</a>。</p>
+<h1 id="概述">概述</h1><p>在软件设计领域，设计模式是对通用问题的可复用的解决方案。设计模式是一系列帮你写出更可理解和复用代码的模板，设计模式帮你创建松耦合的代码以便你不需要费多大力就可以改变或者替换代码中的组件。</p>
+<p>创建型：单利（单态）和 抽象工厂</p>
+<p>结构型：模型-视图-控制器、装饰器、适配器、外观（门面)和组合模式</p>
+<p>行为型：观察者、备忘录、责任链和命令模式</p>
+<h1 id="MVC（模型-视图-控制器）">MVC（模型-视图-控制器）</h1><p>模型-视图-控制器（MVC) 是Cocoa的构建块之一，毫无疑问它是使用最频繁的设计模式。它根据通用的角色去划分类，这样就使得类的职责可以根据角色清晰的划分开来。</p>
+<blockquote>
+<p>Model:模型保存应用程序的数据，定义了怎么去操作它。例如在本应用中模型就是Album类。</p>
+<p>View:  视图是模型的可视化表示以及用户交互的控件；基本上来说，所有的UIView对象以及它的子类都属于视图。在本应用中AlbumView代表了视图。</p>
+<p>Controller:控制器是一个协调所有工作的中介者（Mediator）。它访问模型中的数据并在视图中展示它们，同时它们还监听事件和根据需要操作数据。例如在本应用中ViewController。</p>
+</blockquote>
+<p>模型会把任何数据的变更通知控制器，然后控制器更新视图数据。视图对象通知控制器用户的操作，控制器要么根据需要来更新模型，要么检索任何被请求的数据。</p>
+<p>你可能在想为什么不能仅仅使用控制器，在一个类中实现视图和模型，这样貌似更加容易? </p>
+<p>所有的这些都归结于代码关注点分离以及复用。在理想的状态下，视图应该和模型完全的分离。如果视图不依赖某个实际的模型，那么视图就可以被复用来展示不同模型的数据。</p>
+<p>举个例子来说，如果将来你打算加入电影或者书籍到你的资料库中，你仍然可以使用同样的AlbumView去显示电影和书籍数据。更进一步来说，如果你想创建一个新的与专辑有关联的工程，你可以很简单的复用Album类，因为它不依赖任何视图。这就是MVC的强大之处。</p>
+<h1 id="单例模式">单例模式</h1><p>单例设计模式确保对于一个给定的类只有一个实例存在，这个实例有一个全局唯一的访问点。它通常采用懒加载的方式在第一次用到实例的时候再去创建它。</p>
+<p>苹果大量使用了此模式。例如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[NSUserDefaults standardUserDefaults]</span><br><span class="line">[UIApplication sharedApplication]</span><br><span class="line">[UIScreen mainScreen]</span><br><span class="line">[NSFileManager defaultManager]</span><br></pre></td></tr></table></figure>
+<p>有一些情况下，只有一个实例显得非常合理。举例来说，你不需要有多个Logger的实例，除非你想去写多个日志文件。或者一个全局的配置处理类：实现线程安全的方式访问共享实例是容易的，比如一个配置文件，有好多个类同时修改这个文件。</p>
+<h1 id="外观模式">外观模式</h1><p>外观模式针对复杂的子系统提供了单一的接口，不需要暴漏一系列的类和API给用户，你仅仅暴漏一个简单统一的API。这个API的使用者完全不需要关心背后的复杂性。这个模式非常适合有一大堆很难使用或者理解的类的情况。外观模式解耦了使用系统的代码和需要隐藏的接口和实现类。它也降低了外部代码对内部子系统的依赖性。当隐藏在外观之后的类很容易发生变化的时候，此模式就很有用了，因为当背后的类发生变化的时候，外观类始终保持了同样的API。</p>
+<p>本应用中用PersistencyManager本地保存专辑数据，使用HTTPClient处理远程连接，工程中的其它类暂时与本次实现的逻辑无关。</p>
+<p>为了实现这个模式，只有LibraryAPI应该保存PersistencyManager和HTTPClient的实例，然后LibraryAPI将暴漏一个简单的API去访问这些服务。LibraryAPI将暴漏给其它代码，但是它隐藏了HTTPClient和PersistencyManager的复杂性。</p>
+<h1 id="装饰器（Decorator）模式">装饰器（Decorator）模式</h1><p>装饰器模式在不修改原来代码的情况下动态的给对象增加新的行为和职责，它通过一个对象包装被装饰对象的方法来修改类的行为，这种方法可以做为子类化的一种替代方法。<br>在Objective-C中，存在两种非常常见的实现:Category(类别）和Delegation（委托）。</p>
+<h2 id="Category(类别)">Category(类别)</h2><p>Category(类别)是一种不需要子类化就可以让你能动态的给已经存在的类增加方法的强有力的机制。新增的方法是在编译期增加的，这些方法执行的时候和被扩展的类的其它方法是一样的。它可能与装饰器设计模式的定义稍微有点不同，因为Category(类别)不会保存被扩展类的引用。</p>
+<p>除了可以扩展你自己的类以外，还可以给Cocoa自己的类增加方法。</p>
+<p>本应用中需要让Album(专辑)对象显示在一个表格视图（TableView）中：专辑的标题从何而来？因为专辑是模型对象，它本身不需要关心你如何显示它的数据。你需要增加一些代码去扩展专辑类的行为，但是不需要直接修改专辑类。创建一个专辑类扩展的类别，定义一个新的方法，这个方法会返回能很容易和UITableViews使用的数据结构。 </p>
+<h2 id="Delegation(委托)">Delegation(委托)</h2><p>当你使用UITableView的时候，你必须要实现tableView:numberOfRowsInSection:方法。<br>你不可能让UITableView知道它需要在每个区域显示多少行，因为这些是应用特定的数据。因此计算每个区域需要显示多少行的职责就给了UITableView的委托。这就让UITableView类独立于它要显示的数据。</p>
+<p>UITableView的职责就是显示一个表格视图。然而最终它需要一些它自身没有的信息。那么它就求助于它的委托，通过发送消息给委托来获取信息。在Objective-C实现委托模式的时候，一个类可以通过协议（Protocol）来声明可选以及必要的方法。</p>
+<p>这个是一个重要的模式。苹果在UIKit类中大量使用了它：UITableView, UITextView, UITextField, UIWebView, UIAlert, UIActionSheet, UICollectionView, UIPickerView,UIGestureRecognizer, UIScrollView等等等。</p>
+<h1 id="适配器（Adapter）模式">适配器（Adapter）模式</h1><p>适配器可以让一些接口不兼容的类一起工作。它包装一个对象然后暴漏一个标准的交互接口。</p>
+<p>苹果通过一个稍微不同的方式来实现它-苹果使用了协议的方式来实现。你可能已经熟悉UITableViewDelegate, UIScrollViewDelegate, NSCoding 和 NSCopying协议。举个例子，使用NSCopying协议，任何类都可以提供一个标准的copy方法。</p>
+<h1 id="观察者（Observer）模式">观察者（Observer）模式</h1><p>在观察者模式中，一个对象任何状态的变更都会通知另外的对改变感兴趣的对象。这些对象之间不需要知道彼此的存在，这其实是一种松耦合的设计。当某个属性变化的时候，我们通常使用这个模式去通知其它对象。</p>
+<p>此模式的通用实现中，观察者注册自己感兴趣的其它对象的状态变更事件。当状态发生变化的时候，所有的观察者都会得到通知。苹果的推送通知（Push Notification）就是一个此模式的例子。</p>
+<p>如果你要遵从MVC模式的概念，你需要让模型对象和视图对象在不相互直接引用的情况下通信。这正是观察者模式的用武之地。</p>
+<p>Cocoa通过通知（Notifications）和Key-Value Observing(KVO)来实现观察者模式。</p>
+<h2 id="通知（Notifications）">通知（Notifications）</h2><p>不要和远程推送以及本地通知所混淆，通知是一种基于订阅-发布模式的模型，它让发布者可以给订阅者发送消息，并且发布者不需要对订阅者有任何的了解。</p>
+<p>通知在苹果官方被大量的使用。举例来说，当键盘弹出或者隐藏的时候，系统会独立发送UIKeyboardWillShowNotification/UIKeyboardWillHideNotification通知。当你的应用进入后台运行的时候，系统会发送一个UIApplicationDidEnterBackgroundNotification通知。</p>
+<h2 id="Key-Value_Observing(KVO)模式">Key-Value Observing(KVO)模式</h2><p>在KVO中，一个对象可以要求在它自身或者其它对象的属性发送变化的时候得到通知。</p>
+<p>KVO机制让对象可以感知到属性的变化。在本例中，你可以使用KVO去观察UIImageView的image属性的变化。</p>
+<h1 id="备忘录（Memento）模式">备忘录（Memento）模式</h1><p>备忘录模式快照对象的内部状态并将其保存到外部。换句话说，它将状态保存到某处，过会你可以不破坏封装的情况下恢复对象的状态，也就是说原来对象中的私有数据仍然是私有的。</p>
+<h2 id="归档（Archiving）">归档（Archiving）</h2><p>归档是苹果对于备忘录模式的特定实现之一。这种机制可以转换一个对象到一个可保存的数据流中，过会可以在不暴漏私有属性给外部的情况下重建它们。</p>
+<h1 id="命令模式">命令模式</h1><p>命令模式将一个请求封装为一个对象。封装以后的请求会比原生的请求更加灵活，因为这些封装后的请求可以在多个对象之间传递，存储以便以后使用，还可以动态的修改，或者放进一个队列中。苹果通过Target-Action机制和Invocation实现命令模式。</p>
+<p>你可以通过苹果的官方在线文档阅读更多关于Target-Action的内容，至于Invocation，它采用了NSInvocation类，这个类包含了一个目标对象，方法选择器，以及一些参数。这个对象可以动态的修改并且可以按需执行。实践中它是一个命令模式很好的例子。它解耦了发送对象和接受对象，并且可以保存一个或者多个请求。</p>
+<h1 id="参考文章">参考文章</h1><p><a href="http://xmuzyq.iteye.com/blog/1942376" target="_blank" rel="external">IOS设计模式之一（MVC模式，单例模式）</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[在软件设计领域，设计模式是对通用问题的可复用的解决方案。设计模式是一系列帮你写出更可理解和复用代码的模板，设计模式帮你创建松耦合的代码以便你不需要费多大力就可以改变或者替换代码中的组件。]]>
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="设计模式" scheme="http://www.zhuli8.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="设计模式" scheme="http://www.zhuli8.com/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Shell编程实践]]></title>
@@ -1558,7 +1622,7 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
     <link href="http://www.zhuli8.com/2015/05/17/iOS%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83/"/>
     <id>http://www.zhuli8.com/2015/05/17/iOS学习参考/</id>
     <published>2015-05-17T01:10:54.000Z</published>
-    <updated>2015-08-10T06:42:18.000Z</updated>
+    <updated>2015-09-08T07:21:52.000Z</updated>
     <content type="html"><![CDATA[<h1 id="社区博客">社区博客</h1><p><a href="http://www.cocoachina.com/" target="_blank" rel="external">CocoaChina</a></p>
 <p>苹果开发中文站 - 最热的iPhone开发社区，最热的苹果开发社区，最热的iPad开发社区。</p>
 <p><a href="http://www.code4app.com/" target="_blank" rel="external">Code4App</a></p>
@@ -1571,6 +1635,8 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p>开发者头条 - 开发者的首选阅读分享平台</p>
 <p><a href="http://weekly.manong.io" target="_blank" rel="external">码农周刊</a></p>
 <p>码农周刊是一份专为程序员打造的IT技术周刊。我们会为你精选一周IT技术干货，每周一发送，完全免费。</p>
+<p><a href="http://h2ex.com/fulishe" target="_blank" rel="external">福利社</a></p>
+<p>各种经典博文整理。</p>
 <h1 id="个人博客">个人博客</h1><p><a href="http://blog.devtang.com/" target="_blank" rel="external">唐巧</a></p>
 <p>InfoQ编辑, 《iOS开发进阶》作者, 在猿题库创业。Java开发工程师，曾开发网易微博后台。 iOS开发工程师，曾开发有道云笔记、猿题库。 </p>
 <p><a href="http://www.onevcat.com/" target="_blank" rel="external">王巍</a></p>
@@ -1587,6 +1653,12 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p>孙源（sunnyxx），目前就职于百度，负责百度知道 iOS 客户端的开发工作，对技术喜欢刨根问底和总结最佳实践，热爱分享和开源，维护一个叫 forkingdog 的开源小组。</p>
 <p><a href="https://github.com/ChenYilong" target="_blank" rel="external">iOS程序员</a></p>
 <p>r p y b b</p>
+<p><a href="http://springox.w18.net" target="_blank" rel="external">springox的博客</a></p>
+<p>只因Objective-C与Runtime这么一篇文章而被吸引。</p>
+<p><a href="http://southpeak.github.io/blog/archives/" target="_blank" rel="external">南峰子的技术博客</a></p>
+<p>各种好文，各种源码解析。</p>
+<p><a href="http://lvwenhan.com/sort/ios" target="_blank" rel="external">岁寒</a></p>
+<p>网络封装的博文很精彩。</p>
 <h1 id="其他推荐">其他推荐</h1><p><a href="http://objccn.io" target="_blank" rel="external">objc中国</a></p>
 <p>为中国 Objective-C 社区带来最佳实践和先进技术</p>
 <p><a href="http://tech.glowing.com" target="_blank" rel="external">Glow技术团队博客</a></p>
@@ -1608,6 +1680,7 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <p><a href="http://my.oschina.net/lujianing/blog/394367" target="_blank" rel="external">Java转iOS-第一个项目总结(1)</a></p>
 <p><a href="http://my.oschina.net/lujianing/blog/404080" target="_blank" rel="external">Java转iOS-第一个项目总结(2)</a></p>
 <p><a href="http://www.cocoachina.com/ios/20150423/11658.html" target="_blank" rel="external">详解Xcode 6的视图调试</a></p>
+<p><a href="http://supermao.cn/xiao-xin-bie-rang-yuan-jiao-cheng-liao-ni-lie-biao-de-zheng-shu-sha-shou/" target="_blank" rel="external">小心别让圆角成了你列表的帧数杀手</a></p>
 <h1 id="写在最后">写在最后</h1><p>在长的路，一步步也能走完；在短的路，不迈开双脚也无法到达！</p>
 ]]></content>
     <summary type="html">
@@ -2151,7 +2224,7 @@ uniform highp float refractiveIndex;
     <link href="http://www.zhuli8.com/2015/04/19/git%E6%80%BB%E7%BB%93/"/>
     <id>http://www.zhuli8.com/2015/04/19/git总结/</id>
     <published>2015-04-19T07:55:39.000Z</published>
-    <updated>2015-08-29T00:49:48.000Z</updated>
+    <updated>2015-09-10T04:34:28.000Z</updated>
     <content type="html"><![CDATA[<p>Git 是一个开源的分布式版本控制系统，用以有效、高速的处理从很小到非常大的项目版本管理。Git 是 Linux Torvalds 为了帮助管理 Linux 内核开发而开发的一个开放源码的版本控制软件。 在分布式版本控制上，使用 Git 会比其他解决方案更可靠。</p>
 <h1 id="前提">前提</h1><p>默认进入到了工程目录，即 cd xxx。</p>
 <p>在安装好git后第一件是是设置你的名字和电子邮箱，因为每次提交都要用到这些信息：</p>
@@ -2191,6 +2264,7 @@ uniform highp float refractiveIndex;
 <p>7、提交到github，将本地分支推到远程主分支</p>
 <p>git push origin master</p>
 <h1 id="参考">参考</h1><p><a href="http://justcoding.iteye.com/blog/1830388" target="_blank" rel="external">git常用命令</a></p>
+<p><a href="http://jingyan.baidu.com/article/ab0b5630936ab6c15afa7d1c.html" target="_blank" rel="external">Xcode 6.3 用 GitHub 托管项目</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[工作中使用git的心得体会]]>
@@ -2204,63 +2278,6 @@ uniform highp float refractiveIndex;
       <category term="开发利器" scheme="http://www.zhuli8.com/tags/%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8/"/>
     
       <category term="开发利器" scheme="http://www.zhuli8.com/categories/%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[C语言预处理指令]]></title>
-    <link href="http://www.zhuli8.com/2015/04/12/C%E8%AF%AD%E8%A8%80%E9%A2%84%E5%A4%84%E7%90%86%E6%8C%87%E4%BB%A4/"/>
-    <id>http://www.zhuli8.com/2015/04/12/C语言预处理指令/</id>
-    <published>2015-04-12T08:39:02.000Z</published>
-    <updated>2015-09-01T01:09:23.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="宏定义">宏定义</h1><h2 id="不带参数的宏定义">不带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名 字符串</span><br></pre></td></tr></table></figure>
-<p>它的作用是在编译预处理时，将源程序中所有”宏名”替换成右边的”字符串”，常用来定义常量。</p>
-<blockquote>
-<p>1.宏名一般用大写字母，以便与变量名区别开来，但用小写也没有语法错误</p>
-<p>2.在编译预处理用字符串替换宏名时，不作语法检查，只是简单的字符串替换。只有在编译的时候才对已经展开宏名的源程序进行语法检查</p>
-<p>3.宏名的有效范围是从定义位置到文件结束。如果需要终止宏定义的作用域，可以用#undef命令</p>
-</blockquote>
-<h2 id="带参数的宏定义">带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名(参数列表) 字符串</span><br></pre></td></tr></table></figure>
-<p>在编译预处理时，将源程序中所有宏名替换成字符串，并且将 字符串中的参数 用 宏名右边参数列表 中的参数替换</p>
-<blockquote>
-<p>1.宏名和参数列表之间不能有空格，否则空格后面的所有字符串都作为替换的字符串</p>
-<p>2.带参数的宏在展开时，只作简单的字符和参数的替换，不进行任何计算操作。所以在定义宏时，一般用一个小括号括住字符串的参数。</p>
-<p>3.计算结果最好也用括号括起来</p>
-</blockquote>
-<h1 id="条件编译">条件编译</h1><p>在很多情况下，我们希望程序的其中一部分代码只有在满足一定条件时才进行编译，否则不参与编译(只有参与编译的代码最终才能被执行)，这就是条件编译。</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#if</span> 条件<span class="number">1</span></span><br><span class="line"> ..<span class="class">.code1</span>...</span><br><span class="line"><span class="id">#elif</span> 条件<span class="number">2</span></span><br><span class="line"> ..<span class="class">.code2</span>...</span><br><span class="line"><span class="id">#else</span></span><br><span class="line"> ..<span class="class">.code3</span>...</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>#if 和 #elif后面的条件一般是判断宏定义而不是判断变量，因为条件编译是在编译之前做的判断，宏定义也是编译之前定义的，而变量是在运行时才产生的、才有使用的意义</p>
-</blockquote>
-<h2 id="其他">其他</h2><ol>
-<li>#if defined()和#if !defined()</li>
-<li>#ifdef和#ifndef</li>
-</ol>
-<h1 id="文件包含">文件包含</h1><blockquote>
-<p>#include的作用纯粹就是内容拷贝</p>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>　&lt;文件名&gt;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>直接到C语言库函数头文件所在的目录中寻找文件</p>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>　"文件名"</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>系统会先在源程序当前目录下寻找，若找不到，再到操作系统的path路径中查找，最后才到C语言库函数头文件所在目录中查找</p>
-</blockquote>
-<h2 id="其他-1">其他</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">one.h</span><br><span class="line"><span class="preprocessor">#ifndef _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">tow.h</span><br><span class="line"><span class="preprocessor">#ifndef _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "one.h"</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">main.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "one.h"</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> "two.h"</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>最后的main.h的文件相当于下面的代码：</p>
-</blockquote>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// #include "one.h"</span></span><br><span class="line"><span class="preprocessor">#ifndef _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// #include "two.h"</span></span><br><span class="line"><span class="preprocessor">#ifndef _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// #include "one.h"</span></span><br><span class="line"><span class="preprocessor">#ifndef _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-    <summary type="html">
-    <![CDATA[C语言提供的预处理指令主要有：宏定义、文件包含、条件编译]]>
-    
-    </summary>
-    
-      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
-    
-      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
     
   </entry>
   

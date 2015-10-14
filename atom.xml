@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-10-14T06:32:08.000Z</updated>
+  <updated>2015-09-11T06:13:22.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -13,21 +13,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title><![CDATA[test]]></title>
-    <link href="http://www.zhuli8.com/2015/10/14/test/"/>
-    <id>http://www.zhuli8.com/2015/10/14/test/</id>
-    <published>2015-10-14T06:32:08.000Z</published>
-    <updated>2015-10-14T06:32:08.000Z</updated>
-    <content type="html"><![CDATA[<p>这里开始使用markdown格式输入你的正文。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>这里开始使用markdown格式输入你的正文。</p>
-]]>
-    </summary>
-    
-  </entry>
   
   <entry>
     <title><![CDATA[设计模式总结]]></title>
@@ -2233,6 +2218,68 @@ uniform highp float refractiveIndex;
       <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
     
       <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[git总结]]></title>
+    <link href="http://www.zhuli8.com/2015/04/19/git%E6%80%BB%E7%BB%93/"/>
+    <id>http://www.zhuli8.com/2015/04/19/git总结/</id>
+    <published>2015-04-19T07:55:39.000Z</published>
+    <updated>2015-09-10T04:34:28.000Z</updated>
+    <content type="html"><![CDATA[<p>Git 是一个开源的分布式版本控制系统，用以有效、高速的处理从很小到非常大的项目版本管理。Git 是 Linux Torvalds 为了帮助管理 Linux 内核开发而开发的一个开放源码的版本控制软件。 在分布式版本控制上，使用 Git 会比其他解决方案更可靠。</p>
+<h1 id="前提">前提</h1><p>默认进入到了工程目录，即 cd xxx。</p>
+<p>在安装好git后第一件是是设置你的名字和电子邮箱，因为每次提交都要用到这些信息：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --user<span class="class">.name</span> <span class="string">"Your name"</span></span><br><span class="line">git config --user<span class="class">.email</span> <span class="string">"Your email"</span></span><br></pre></td></tr></table></figure>
+<h1 id="查看其他指令的用途及配置指令">查看其他指令的用途及配置指令</h1><p>1、git help</p>
+<p>2、git config user.name ‘zhuli8’</p>
+<p>3、git config user.email ‘zhuli1228@163.com’</p>
+<p>4、git config —list：查看配置</p>
+<p>5、git log：查看日志</p>
+<h1 id="操作github上的已有项目">操作github上的已有项目</h1><p>注意：</p>
+<pre><code>使用Xcode工具连接github仓库时使用的用户名必须是自己GitHub上的账号名而不是邮箱。
+</code></pre><p>1、clone远程仓库</p>
+<p>git clone <a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">https://github.com/zhuli8com/transition.git</a></p>
+<p>2、添加文件</p>
+<p>git add . 或者git add test.txt</p>
+<p>3、提交到本地</p>
+<p>git commit -m ‘注释’</p>
+<p>4、提交到github主分支</p>
+<p>git push origin master</p>
+<p>5、删除文件test.txt文件</p>
+<p>git delete test.txt，重复3、4步骤</p>
+<p>6、从远程更新本地代码</p>
+<p>git pull origin master</p>
+<h1 id="创建本地仓库并上传github">创建本地仓库并上传github</h1><p>1、初始化一个版本仓库</p>
+<p>git init</p>
+<p>2、添加远程版本库</p>
+<p>git remote add [shortname] [url]</p>
+<p>git remote add origin <a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">https://github.com/zhuli8com/transition.git</a></p>
+<p>3、查看远程仓库</p>
+<p>git remote -v</p>
+<p>4、下拉远程仓库文件到本地，抓取远程仓库master分支更新合并到本地</p>
+<p>git pull origin master （最最关键的步骤）</p>
+<p>5、添加到本地暂存区</p>
+<p>git add .</p>
+<p>6、提交到本地版本库</p>
+<p>git commit -m ‘注释’</p>
+<p>7、提交到github，将本地分支推到远程主分支</p>
+<p>git push origin master</p>
+<h1 id="参考">参考</h1><p><a href="http://justcoding.iteye.com/blog/1830388" target="_blank" rel="external">git常用命令</a></p>
+<p><a href="http://jingyan.baidu.com/article/ab0b5630936ab6c15afa7d1c.html" target="_blank" rel="external">Xcode 6.3 用 GitHub 托管项目</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[工作中使用git的心得体会]]>
+    
+    </summary>
+    
+      <category term="git" scheme="http://www.zhuli8.com/tags/git/"/>
+    
+      <category term="代码管理" scheme="http://www.zhuli8.com/tags/%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/"/>
+    
+      <category term="开发利器" scheme="http://www.zhuli8.com/tags/%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8/"/>
+    
+      <category term="开发利器" scheme="http://www.zhuli8.com/categories/%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8/"/>
     
   </entry>
   

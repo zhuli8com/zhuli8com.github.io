@@ -81,6 +81,110 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/19/git总结/" title="git总结" itemprop="url">git总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-19T07:55:39.000Z" itemprop="datePublished"> 发表于 2015-04-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Git 是一个开源的分布式版本控制系统，用以有效、高速的处理从很小到非常大的项目版本管理。Git 是 Linux Torvalds 为了帮助管理 Linux 内核开发而开发的一个开放源码的版本控制软件。 在分布式版本控制上，使用 Git 会比其他解决方案更可靠。</p>
+<h1 id="前提">前提</h1><p>默认进入到了工程目录，即 cd xxx。</p>
+<p>在安装好git后第一件是是设置你的名字和电子邮箱，因为每次提交都要用到这些信息：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --user<span class="class">.name</span> <span class="string">"Your name"</span></span><br><span class="line">git config --user<span class="class">.email</span> <span class="string">"Your email"</span></span><br></pre></td></tr></table></figure>
+<h1 id="查看其他指令的用途及配置指令">查看其他指令的用途及配置指令</h1><p>1、git help</p>
+<p>2、git config user.name ‘zhuli8’</p>
+<p>3、git config user.email ‘zhuli1228@163.com’</p>
+<p>4、git config —list：查看配置</p>
+<p>5、git log：查看日志</p>
+<h1 id="操作github上的已有项目">操作github上的已有项目</h1><p>注意：</p>
+<pre><code>使用Xcode工具连接github仓库时使用的用户名必须是自己GitHub上的账号名而不是邮箱。
+</code></pre><p>1、clone远程仓库</p>
+<p>git clone <a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">https://github.com/zhuli8com/transition.git</a></p>
+<p>2、添加文件</p>
+<p>git add . 或者git add test.txt</p>
+<p>3、提交到本地</p>
+<p>git commit -m ‘注释’</p>
+<p>4、提交到github主分支</p>
+<p>git push origin master</p>
+<p>5、删除文件test.txt文件</p>
+<p>git delete test.txt，重复3、4步骤</p>
+<p>6、从远程更新本地代码</p>
+<p>git pull origin master</p>
+<h1 id="创建本地仓库并上传github">创建本地仓库并上传github</h1><p>1、初始化一个版本仓库</p>
+<p>git init</p>
+<p>2、添加远程版本库</p>
+<p>git remote add [shortname] [url]</p>
+<p>git remote add origin <a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">https://github.com/zhuli8com/transition.git</a></p>
+<p>3、查看远程仓库</p>
+<p>git remote -v</p>
+<p>4、下拉远程仓库文件到本地，抓取远程仓库master分支更新合并到本地</p>
+<p>git pull origin master （最最关键的步骤）</p>
+<p>5、添加到本地暂存区</p>
+<p>git add .</p>
+<p>6、提交到本地版本库</p>
+<p>git commit -m ‘注释’</p>
+<p>7、提交到github，将本地分支推到远程主分支</p>
+<p>git push origin master</p>
+<h1 id="参考">参考</h1><p><a href="http://justcoding.iteye.com/blog/1830388" target="_blank" rel="external">git常用命令</a></p>
+<p><a href="http://jingyan.baidu.com/article/ab0b5630936ab6c15afa7d1c.html" target="_blank" rel="external">Xcode 6.3 用 GitHub 托管项目</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/开发利器/">开发利器</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/git/">git</a><a href="/tags/代码管理/">代码管理</a><a href="/tags/开发利器/">开发利器</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/19/git总结/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/19/git总结/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/12/C语言预处理指令/" title="C语言预处理指令" itemprop="url">C语言预处理指令</a>
   </h1>
   <p class="article-author">By

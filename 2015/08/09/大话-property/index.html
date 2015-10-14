@@ -148,7 +148,7 @@
 <h2 id="指定方法名称">指定方法名称</h2><p>setter=</p>
 <p>getter=</p>
 <h2 id="@synthesize和@dynamic">@synthesize和@dynamic</h2><p>@property有两个对应的词，一个是@synthesize，一个是@dynamic。如果@synthesize和@dynamic都没写，那么默认的就是:</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="property">@synthesize</span> <span class="reserved">var</span>=_var;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="at_rule">@<span class="keyword">synthesize</span> var=_var</span>;</span><br></pre></td></tr></table></figure>
 <h3 id="@synthesize">@synthesize</h3><p>@synthesize的语义就是，如果没有指定成员变量的名称会自动生成一个属性同名的成员变量，如果这个成员变量已经存在了就不再生成。</p>
 <p>如果你没有手动实现setter方法和getter方法，那么编译器会自动为你加上这两个方法。</p>
 <p>在@property被增强之后其实已经很少使用@synthesize</p>

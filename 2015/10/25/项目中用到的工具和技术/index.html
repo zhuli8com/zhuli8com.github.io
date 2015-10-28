@@ -1,0 +1,605 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>项目中用到的工具和技术 | zhuli8’blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="朱利">
+    
+
+    
+    <meta name="description" content="项目中用到的工具和技术">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目中用到的工具和技术">
+<meta property="og:url" content="http://www.zhuli8.com/2015/10/25/项目中用到的工具和技术/index.html">
+<meta property="og:site_name" content="zhuli8’blog">
+<meta property="og:description" content="项目中用到的工具和技术">
+<meta property="og:updated_time" content="2015-10-28T08:00:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="项目中用到的工具和技术">
+<meta name="twitter:description" content="项目中用到的工具和技术">
+
+    
+    <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="zhuli8’blog" title="zhuli8’blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="zhuli8’blog">zhuli8’blog</a></h1>
+				<h2 class="blog-motto">Talk is cheap, show me the code.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+    <input type="text" id="st-search-input" maxlength="20" placeholder="搜索" />
+    </form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/10/25/项目中用到的工具和技术/" title="项目中用到的工具和技术" itemprop="url">项目中用到的工具和技术</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-10-25T07:58:16.000Z" itemprop="datePublished"> 发表于 2015-10-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#图标"><span class="toc-number">1.</span> <span class="toc-text">图标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CocoaPods"><span class="toc-number">2.</span> <span class="toc-text">CocoaPods</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程方案"><span class="toc-number">3.</span> <span class="toc-text">线程方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RunLoop"><span class="toc-number">4.</span> <span class="toc-text">RunLoop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS8适配"><span class="toc-number">5.</span> <span class="toc-text">iOS8适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS9适配"><span class="toc-number">6.</span> <span class="toc-text">iOS9适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS性能调优"><span class="toc-number">7.</span> <span class="toc-text">iOS性能调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze静态分析"><span class="toc-number">7.1.</span> <span class="toc-text">Analyze静态分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Leaks内存泄露"><span class="toc-number">7.2.</span> <span class="toc-text">Leaks内存泄露</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Allocation内存使用"><span class="toc-number">7.3.</span> <span class="toc-text">Allocation内存使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zombies僵尸对象（EXC_BAD_ACCESS）"><span class="toc-number">7.4.</span> <span class="toc-text">Zombies僵尸对象（EXC_BAD_ACCESS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">7.5.</span> <span class="toc-text">参考文章</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自动化部署"><span class="toc-number">8.</span> <span class="toc-text">自动化部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#stackoverflow"><span class="toc-number">9.</span> <span class="toc-text">stackoverflow</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">10.</span> <span class="toc-text">其他</span></a></li></ol>
+		
+		</div>
+		
+		<p>总结一下项目中用到的工具和技术，以便以后的查看。</p>
+<h1 id="图标">图标</h1><p><a href="http://devhelpers.com/app/icon/resizer/" target="_blank" rel="external">在线通过1024 * 1024图片生成iPhone 1倍、2倍、3倍图片</a></p>
+<h1 id="CocoaPods">CocoaPods</h1><p><a href="http://blog.csdn.net/wzzvictory/article/details/18737437" target="_blank" rel="external">CocoaPods详解之——使用篇</a></p>
+<p><a href="http://blog.csdn.net/wzzvictory/article/details/19178709" target="_blank" rel="external">CocoaPods详解之——进阶篇</a></p>
+<p><a href="http://blog.csdn.net/wzzvictory/article/details/20067595" target="_blank" rel="external">CocoaPods详解之——制作篇</a></p>
+<p><a href="http://www.cocoachina.com/swift/20150630/12305.html" target="_blank" rel="external">怎样在Swift中使用CocoaPods</a></p>
+<p><a href="http://www.cocoachina.com/swift/20150806/12831.html" target="_blank" rel="external">怎样在swift中创建一个CocoaPods</a></p>
+<p><a href="http://blog.wtlucky.com/blog/2015/02/26/create-private-podspec/" target="_blank" rel="external">使用Cocoapods创建私有podspec</a></p>
+<h1 id="线程方案">线程方案</h1><p>在iOS开发中其实有4套多线程方案，他们分别是：</p>
+<p><strong> pthreads </strong></p>
+<blockquote>
+<p>POSIX线程（POSIX threads），简称pthreads，是线程的POSIX标准。该标准定义了创建和操作线程的一整套API。在类Unix操作系统（Unix、Linux、Mac OS X等）中都使用pthreads作为操作系统的线程。</p>
+</blockquote>
+<p><strong> NSThread </strong></p>
+<p><strong> GCD</strong></p>
+<p><strong> NSOperation&amp;NSOperationQueue </strong></p>
+<p><a href="http://blog.leichunfeng.com/blog/2015/07/29/ios-concurrency-programming-operation-queues/" target="_blank" rel="external">iOS 并发编程之 Operation Queues</a></p>
+<p><a href="http://blog.xcodev.com/archives/operation-queue-intro/" target="_blank" rel="external">并发编程之Operation Queue</a></p>
+<p><a href="http://www.jianshu.com/p/0b0d9b1f1f19#" target="_blank" rel="external">关于iOS多线程，你看我就够了</a></p>
+<h1 id="RunLoop">RunLoop</h1><p><a href="http://www.jianshu.com/p/b35793b3749d" target="_blank" rel="external">RunLoop的简单介绍</a></p>
+<h1 id="iOS8适配">iOS8适配</h1><p><a href="http://www.jianshu.com/p/86f933850df8" target="_blank" rel="external">在iOS 8中使用UIAlertController</a></p>
+<p><a href="http://www.cocoachina.com/industry/20140729/9269.html" target="_blank" rel="external">WWDC 2014 Session笔记 - iOS界面开发的大一统</a></p>
+<p><a href="http://www.jianshu.com/p/f1208b5e42d9" target="_blank" rel="external">Alamofire网络库基础教程</a></p>
+<h1 id="iOS9适配">iOS9适配</h1><p><a href="http://www.liuchungui.com/blog/2015/10/11/ios9zhi-gua-pei-ats/" target="_blank" rel="external">iOS9之适配ATS</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150821/13140.html" target="_blank" rel="external">如何使用ATS提高应用的安全性</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150717/12650.html" target="_blank" rel="external">苹果新『应用通信安全』的理解和使用</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150820/13118.html" target="_blank" rel="external">UIStackView如何让你的开发更简单</a></p>
+<p><a href="http://www.cnblogs.com/dsxniubility/p/4821184.html" target="_blank" rel="external">整理iOS9适配中出现的坑（图文）</a></p>
+<h1 id="iOS性能调优">iOS性能调优</h1><h2 id="Analyze静态分析">Analyze静态分析</h2><p>逻辑错误、声明错误、api调用错误基本在编译时都会有警告，Analyze的主要的优势在于静态分析内存泄露及代码逻辑错误。</p>
+<ol>
+<li>逻辑错误：访问空指针或未初始化的变量等。</li>
+<li>内存管理错误：如内存泄露等。</li>
+<li>声明错误：从未使用过的变量。</li>
+<li>api调用错误：未包含使用的库和框架。</li>
+</ol>
+<h2 id="Leaks内存泄露">Leaks内存泄露</h2><p>把Snapshot Interval 间隔时间设置为10秒，勾选Automatic Snapshotting，Leaks会自动进行内存捕捉分析。在你怀疑有内存泄露的操作前和操作后点击Snapshot Now进行手动捕捉。</p>
+<p>Leaked Object的表格中显示了内存泄露的类型、数量及内存空间。</p>
+<p>点击具体的某个内存泄露对象，在右侧Detail窗口中会出现导致泄露可能的位置，其中黑色部分代表了最可能的位置。双击即可进入代码。</p>
+<p><strong>开启了ARC并不是就不会存在内存问题，苹果有句名言：ARC is only for NSObject。</strong></p>
+<h2 id="Allocation内存使用">Allocation内存使用</h2><ol>
+<li>在进入一个视图前或操作前，我们在Allocation面板左侧点击Mark Generation，这时候会产生Generation A节点，显示内存当前的情况。</li>
+<li>在进入视图后再点一次Mark Generation。</li>
+<li>在视图退出后再点一次Mark</li>
+</ol>
+<p>这样三次产生的 Generation分别记录了进入前、进入后、关闭后，在最后一个Generation应该内存被合理释放，否则就代表了在这个视图或操作中有泄漏或不合理的地方。</p>
+<h2 id="Zombies僵尸对象（EXC_BAD_ACCESS）">Zombies僵尸对象（EXC_BAD_ACCESS）</h2><p>用于查找那些被过度释放的僵尸对象（overreleased objects）。</p>
+<ol>
+<li>启动Instruments，选择Zombies。</li>
+<li>对之前产生EXC_BAD_ACCESS的测试用例重新运行，直到程序崩溃，如果发生EXC_BAD_ACCESS错误，会出现对应界面。</li>
+<li>通过滑动箭头来查看错误细节，例如可以看到该对象的内存操作过程，如malloc、autorelease、retain、release等操作。</li>
+<li>查看底部的详细历史，选择相应的行可以定位到相应的代码，找出产生错误的代码</li>
+</ol>
+<h2 id="参考文章">参考文章</h2><p><a href="http://yyny.me/ios/一次TableView性能优化经历/" target="_blank" rel="external">一次TableView性能优化经历</a></p>
+<p><a href="http://www.cnblogs.com/ym123/category/668845.html" target="_blank" rel="external">iOS性能调优系列</a></p>
+<h1 id="自动化部署">自动化部署</h1><p>deliver用于上传应用的二进制代码、应用截屏和原数据到应用商店</p>
+<p>snapshot可以自动化iOS应用在每个设备上的本地化截屏过程</p>
+<p>frameit用于在应用截屏外添加设备框架</p>
+<p>PEM可以自动化地生成和更新应用推送通知描述文件</p>
+<p>sigh可以生成并下载开发者的应用商店配置文件</p>
+<p><a href="http://www.infoq.com/cn/news/2015/01/fastlane-ios-continuous-deploy" target="_blank" rel="external">Fastlane为iOS带来持续部署</a></p>
+<p><a href="http://www.jianshu.com/users/384f80cdc57b/latest_articles" target="_blank" rel="external">马建成系列</a></p>
+<h1 id="stackoverflow">stackoverflow</h1><p>stackoverflow在中国被墙了，不能登陆进行答题和收藏，所以在此记录工作中有所帮助的问题！根据链家基本上就能看出大概的问题了，以此来纪念那些被解决的问题！</p>
+<p><a href="http://stackoverflow.com/questions/26865132/strings-in-switch-statements-string-does-not-conform-to-protocol-intervaltyp#" target="_blank" rel="external">http://stackoverflow.com/questions/26865132/strings-in-switch-statements-string-does-not-conform-to-protocol-intervaltyp#</a></p>
+<p><a href="http://stackoverflow.com/questions/25951195/swift-print-vs-println-vs-nslog#" target="_blank" rel="external">http://stackoverflow.com/questions/25951195/swift-print-vs-println-vs-nslog#</a></p>
+<p><a href="http://stackoverflow.com/questions/28427458/ios-webrtc-library-supporting-both-armv7-arm64" target="_blank" rel="external">http://stackoverflow.com/questions/28427458/ios-webrtc-library-supporting-both-armv7-arm64</a></p>
+<h1 id="其他">其他</h1><p><a href="http://www.jianshu.com/p/802f52c5f13a" target="_blank" rel="external">如何利用搜索框</a></p>
+<p><a href="http://blog.sina.com.cn/s/blog_4caf02490102vr4s.html" target="_blank" rel="external">Xcode各版本官方下载及百度云盘下载, Mac和IOS及Xcode版本历史.</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://www.zhuli8.com/2015/10/25/项目中用到的工具和技术/" data-title="项目中用到的工具和技术 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/08/30/设计模式总结/"  title="设计模式总结">
+ <strong>下一篇：</strong><br/> 
+ <span>设计模式总结
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/10/25/项目中用到的工具和技术/" data-title="项目中用到的工具和技术" data-url="http://www.zhuli8.com/2015/10/25/项目中用到的工具和技术/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#图标"><span class="toc-number">1.</span> <span class="toc-text">图标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CocoaPods"><span class="toc-number">2.</span> <span class="toc-text">CocoaPods</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程方案"><span class="toc-number">3.</span> <span class="toc-text">线程方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RunLoop"><span class="toc-number">4.</span> <span class="toc-text">RunLoop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS8适配"><span class="toc-number">5.</span> <span class="toc-text">iOS8适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS9适配"><span class="toc-number">6.</span> <span class="toc-text">iOS9适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS性能调优"><span class="toc-number">7.</span> <span class="toc-text">iOS性能调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze静态分析"><span class="toc-number">7.1.</span> <span class="toc-text">Analyze静态分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Leaks内存泄露"><span class="toc-number">7.2.</span> <span class="toc-text">Leaks内存泄露</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Allocation内存使用"><span class="toc-number">7.3.</span> <span class="toc-text">Allocation内存使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zombies僵尸对象（EXC_BAD_ACCESS）"><span class="toc-number">7.4.</span> <span class="toc-text">Zombies僵尸对象（EXC_BAD_ACCESS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">7.5.</span> <span class="toc-text">参考文章</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自动化部署"><span class="toc-number">8.</span> <span class="toc-text">自动化部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#stackoverflow"><span class="toc-number">9.</span> <span class="toc-text">stackoverflow</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">10.</span> <span class="toc-text">其他</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IM/" title="IM">IM<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/swift/" title="swift">swift<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/开发利器/" title="开发利器">开发利器<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IM/" title="IM">IM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/swift/" title="swift">swift<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webRTC/" title="webRTC">webRTC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据存储/" title="数据存储">数据存储<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/代码管理/" title="代码管理">代码管理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ice/" title="ice">ice<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/GCD/" title="GCD">GCD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://casatwy.com" target="_blank" title="App架构相关文章">田伟宇</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="hexo相关学习">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://tool.lu/favicon" target="_blank" title="icon制作在线工具">Icon制作</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://yulingtianxia.com" target="_blank" title="杨萧玉目前在支付宝实习，负责移动开发">玉令天下的博客</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.callmewhy.com" target="_blank" title="汪海，全名汪海洋">Why’s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> “Hello ,I&#39;m ZhuLi in Chinasofti.” <br/>
+			“This is my blog,believe it or not.”</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/zhuli8" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/zhuli8com" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="https://www.zhihu.com/people/zhu-li-68-76" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:zhuli1228@163.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="朱利">朱利</a>
+		
+		
+		</p>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','TqhyGfTT5KJKMHcgZnBF','2.0.0');
+</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhuli8"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_3725936'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D3725936' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

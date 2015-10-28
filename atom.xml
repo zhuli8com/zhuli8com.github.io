@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2015-09-11T06:13:22.000Z</updated>
+  <updated>2015-10-28T08:00:13.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -13,6 +13,91 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[项目中用到的工具和技术]]></title>
+    <link href="http://www.zhuli8.com/2015/10/25/%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E5%B7%A5%E5%85%B7%E5%92%8C%E6%8A%80%E6%9C%AF/"/>
+    <id>http://www.zhuli8.com/2015/10/25/项目中用到的工具和技术/</id>
+    <published>2015-10-25T07:58:16.000Z</published>
+    <updated>2015-10-28T08:00:13.000Z</updated>
+    <content type="html"><![CDATA[<p>总结一下项目中用到的工具和技术，以便以后的查看。</p>
+<h1 id="图标">图标</h1><p><a href="http://devhelpers.com/app/icon/resizer/" target="_blank" rel="external">在线通过1024 * 1024图片生成iPhone 1倍、2倍、3倍图片</a></p>
+<h1 id="CocoaPods">CocoaPods</h1><p><a href="http://blog.csdn.net/wzzvictory/article/details/18737437" target="_blank" rel="external">CocoaPods详解之——使用篇</a></p>
+<p><a href="http://blog.csdn.net/wzzvictory/article/details/19178709" target="_blank" rel="external">CocoaPods详解之——进阶篇</a></p>
+<p><a href="http://blog.csdn.net/wzzvictory/article/details/20067595" target="_blank" rel="external">CocoaPods详解之——制作篇</a></p>
+<p><a href="http://www.cocoachina.com/swift/20150630/12305.html" target="_blank" rel="external">怎样在Swift中使用CocoaPods</a></p>
+<p><a href="http://www.cocoachina.com/swift/20150806/12831.html" target="_blank" rel="external">怎样在swift中创建一个CocoaPods</a></p>
+<p><a href="http://blog.wtlucky.com/blog/2015/02/26/create-private-podspec/" target="_blank" rel="external">使用Cocoapods创建私有podspec</a></p>
+<h1 id="线程方案">线程方案</h1><p>在iOS开发中其实有4套多线程方案，他们分别是：</p>
+<p><strong> pthreads </strong></p>
+<blockquote>
+<p>POSIX线程（POSIX threads），简称pthreads，是线程的POSIX标准。该标准定义了创建和操作线程的一整套API。在类Unix操作系统（Unix、Linux、Mac OS X等）中都使用pthreads作为操作系统的线程。</p>
+</blockquote>
+<p><strong> NSThread </strong></p>
+<p><strong> GCD</strong></p>
+<p><strong> NSOperation&amp;NSOperationQueue </strong></p>
+<p><a href="http://blog.leichunfeng.com/blog/2015/07/29/ios-concurrency-programming-operation-queues/" target="_blank" rel="external">iOS 并发编程之 Operation Queues</a></p>
+<p><a href="http://blog.xcodev.com/archives/operation-queue-intro/" target="_blank" rel="external">并发编程之Operation Queue</a></p>
+<p><a href="http://www.jianshu.com/p/0b0d9b1f1f19#" target="_blank" rel="external">关于iOS多线程，你看我就够了</a></p>
+<h1 id="RunLoop">RunLoop</h1><p><a href="http://www.jianshu.com/p/b35793b3749d" target="_blank" rel="external">RunLoop的简单介绍</a></p>
+<h1 id="iOS8适配">iOS8适配</h1><p><a href="http://www.jianshu.com/p/86f933850df8" target="_blank" rel="external">在iOS 8中使用UIAlertController</a></p>
+<p><a href="http://www.cocoachina.com/industry/20140729/9269.html" target="_blank" rel="external">WWDC 2014 Session笔记 - iOS界面开发的大一统</a></p>
+<p><a href="http://www.jianshu.com/p/f1208b5e42d9" target="_blank" rel="external">Alamofire网络库基础教程</a></p>
+<h1 id="iOS9适配">iOS9适配</h1><p><a href="http://www.liuchungui.com/blog/2015/10/11/ios9zhi-gua-pei-ats/" target="_blank" rel="external">iOS9之适配ATS</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150821/13140.html" target="_blank" rel="external">如何使用ATS提高应用的安全性</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150717/12650.html" target="_blank" rel="external">苹果新『应用通信安全』的理解和使用</a></p>
+<p><a href="http://www.cocoachina.com/ios/20150820/13118.html" target="_blank" rel="external">UIStackView如何让你的开发更简单</a></p>
+<p><a href="http://www.cnblogs.com/dsxniubility/p/4821184.html" target="_blank" rel="external">整理iOS9适配中出现的坑（图文）</a></p>
+<h1 id="iOS性能调优">iOS性能调优</h1><h2 id="Analyze静态分析">Analyze静态分析</h2><p>逻辑错误、声明错误、api调用错误基本在编译时都会有警告，Analyze的主要的优势在于静态分析内存泄露及代码逻辑错误。</p>
+<ol>
+<li>逻辑错误：访问空指针或未初始化的变量等。</li>
+<li>内存管理错误：如内存泄露等。</li>
+<li>声明错误：从未使用过的变量。</li>
+<li>api调用错误：未包含使用的库和框架。</li>
+</ol>
+<h2 id="Leaks内存泄露">Leaks内存泄露</h2><p>把Snapshot Interval 间隔时间设置为10秒，勾选Automatic Snapshotting，Leaks会自动进行内存捕捉分析。在你怀疑有内存泄露的操作前和操作后点击Snapshot Now进行手动捕捉。</p>
+<p>Leaked Object的表格中显示了内存泄露的类型、数量及内存空间。</p>
+<p>点击具体的某个内存泄露对象，在右侧Detail窗口中会出现导致泄露可能的位置，其中黑色部分代表了最可能的位置。双击即可进入代码。</p>
+<p><strong>开启了ARC并不是就不会存在内存问题，苹果有句名言：ARC is only for NSObject。</strong></p>
+<h2 id="Allocation内存使用">Allocation内存使用</h2><ol>
+<li>在进入一个视图前或操作前，我们在Allocation面板左侧点击Mark Generation，这时候会产生Generation A节点，显示内存当前的情况。</li>
+<li>在进入视图后再点一次Mark Generation。</li>
+<li>在视图退出后再点一次Mark</li>
+</ol>
+<p>这样三次产生的 Generation分别记录了进入前、进入后、关闭后，在最后一个Generation应该内存被合理释放，否则就代表了在这个视图或操作中有泄漏或不合理的地方。</p>
+<h2 id="Zombies僵尸对象（EXC_BAD_ACCESS）">Zombies僵尸对象（EXC_BAD_ACCESS）</h2><p>用于查找那些被过度释放的僵尸对象（overreleased objects）。</p>
+<ol>
+<li>启动Instruments，选择Zombies。</li>
+<li>对之前产生EXC_BAD_ACCESS的测试用例重新运行，直到程序崩溃，如果发生EXC_BAD_ACCESS错误，会出现对应界面。</li>
+<li>通过滑动箭头来查看错误细节，例如可以看到该对象的内存操作过程，如malloc、autorelease、retain、release等操作。</li>
+<li>查看底部的详细历史，选择相应的行可以定位到相应的代码，找出产生错误的代码</li>
+</ol>
+<h2 id="参考文章">参考文章</h2><p><a href="http://yyny.me/ios/一次TableView性能优化经历/" target="_blank" rel="external">一次TableView性能优化经历</a></p>
+<p><a href="http://www.cnblogs.com/ym123/category/668845.html" target="_blank" rel="external">iOS性能调优系列</a></p>
+<h1 id="自动化部署">自动化部署</h1><p>deliver用于上传应用的二进制代码、应用截屏和原数据到应用商店</p>
+<p>snapshot可以自动化iOS应用在每个设备上的本地化截屏过程</p>
+<p>frameit用于在应用截屏外添加设备框架</p>
+<p>PEM可以自动化地生成和更新应用推送通知描述文件</p>
+<p>sigh可以生成并下载开发者的应用商店配置文件</p>
+<p><a href="http://www.infoq.com/cn/news/2015/01/fastlane-ios-continuous-deploy" target="_blank" rel="external">Fastlane为iOS带来持续部署</a></p>
+<p><a href="http://www.jianshu.com/users/384f80cdc57b/latest_articles" target="_blank" rel="external">马建成系列</a></p>
+<h1 id="stackoverflow">stackoverflow</h1><p>stackoverflow在中国被墙了，不能登陆进行答题和收藏，所以在此记录工作中有所帮助的问题！根据链家基本上就能看出大概的问题了，以此来纪念那些被解决的问题！</p>
+<p><a href="http://stackoverflow.com/questions/26865132/strings-in-switch-statements-string-does-not-conform-to-protocol-intervaltyp#" target="_blank" rel="external">http://stackoverflow.com/questions/26865132/strings-in-switch-statements-string-does-not-conform-to-protocol-intervaltyp#</a></p>
+<p><a href="http://stackoverflow.com/questions/25951195/swift-print-vs-println-vs-nslog#" target="_blank" rel="external">http://stackoverflow.com/questions/25951195/swift-print-vs-println-vs-nslog#</a></p>
+<p><a href="http://stackoverflow.com/questions/28427458/ios-webrtc-library-supporting-both-armv7-arm64" target="_blank" rel="external">http://stackoverflow.com/questions/28427458/ios-webrtc-library-supporting-both-armv7-arm64</a></p>
+<h1 id="其他">其他</h1><p><a href="http://www.jianshu.com/p/802f52c5f13a" target="_blank" rel="external">如何利用搜索框</a></p>
+<p><a href="http://blog.sina.com.cn/s/blog_4caf02490102vr4s.html" target="_blank" rel="external">Xcode各版本官方下载及百度云盘下载, Mac和IOS及Xcode版本历史.</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[项目中用到的工具和技术]]>
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[设计模式总结]]></title>
@@ -2218,68 +2303,6 @@ uniform highp float refractiveIndex;
       <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
     
       <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[git总结]]></title>
-    <link href="http://www.zhuli8.com/2015/04/19/git%E6%80%BB%E7%BB%93/"/>
-    <id>http://www.zhuli8.com/2015/04/19/git总结/</id>
-    <published>2015-04-19T07:55:39.000Z</published>
-    <updated>2015-09-10T04:34:28.000Z</updated>
-    <content type="html"><![CDATA[<p>Git 是一个开源的分布式版本控制系统，用以有效、高速的处理从很小到非常大的项目版本管理。Git 是 Linux Torvalds 为了帮助管理 Linux 内核开发而开发的一个开放源码的版本控制软件。 在分布式版本控制上，使用 Git 会比其他解决方案更可靠。</p>
-<h1 id="前提">前提</h1><p>默认进入到了工程目录，即 cd xxx。</p>
-<p>在安装好git后第一件是是设置你的名字和电子邮箱，因为每次提交都要用到这些信息：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --user<span class="class">.name</span> <span class="string">"Your name"</span></span><br><span class="line">git config --user<span class="class">.email</span> <span class="string">"Your email"</span></span><br></pre></td></tr></table></figure>
-<h1 id="查看其他指令的用途及配置指令">查看其他指令的用途及配置指令</h1><p>1、git help</p>
-<p>2、git config user.name ‘zhuli8’</p>
-<p>3、git config user.email ‘zhuli1228@163.com’</p>
-<p>4、git config —list：查看配置</p>
-<p>5、git log：查看日志</p>
-<h1 id="操作github上的已有项目">操作github上的已有项目</h1><p>注意：</p>
-<pre><code>使用Xcode工具连接github仓库时使用的用户名必须是自己GitHub上的账号名而不是邮箱。
-</code></pre><p>1、clone远程仓库</p>
-<p>git clone <a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">https://github.com/zhuli8com/transition.git</a></p>
-<p>2、添加文件</p>
-<p>git add . 或者git add test.txt</p>
-<p>3、提交到本地</p>
-<p>git commit -m ‘注释’</p>
-<p>4、提交到github主分支</p>
-<p>git push origin master</p>
-<p>5、删除文件test.txt文件</p>
-<p>git delete test.txt，重复3、4步骤</p>
-<p>6、从远程更新本地代码</p>
-<p>git pull origin master</p>
-<h1 id="创建本地仓库并上传github">创建本地仓库并上传github</h1><p>1、初始化一个版本仓库</p>
-<p>git init</p>
-<p>2、添加远程版本库</p>
-<p>git remote add [shortname] [url]</p>
-<p>git remote add origin <a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">https://github.com/zhuli8com/transition.git</a></p>
-<p>3、查看远程仓库</p>
-<p>git remote -v</p>
-<p>4、下拉远程仓库文件到本地，抓取远程仓库master分支更新合并到本地</p>
-<p>git pull origin master （最最关键的步骤）</p>
-<p>5、添加到本地暂存区</p>
-<p>git add .</p>
-<p>6、提交到本地版本库</p>
-<p>git commit -m ‘注释’</p>
-<p>7、提交到github，将本地分支推到远程主分支</p>
-<p>git push origin master</p>
-<h1 id="参考">参考</h1><p><a href="http://justcoding.iteye.com/blog/1830388" target="_blank" rel="external">git常用命令</a></p>
-<p><a href="http://jingyan.baidu.com/article/ab0b5630936ab6c15afa7d1c.html" target="_blank" rel="external">Xcode 6.3 用 GitHub 托管项目</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[工作中使用git的心得体会]]>
-    
-    </summary>
-    
-      <category term="git" scheme="http://www.zhuli8.com/tags/git/"/>
-    
-      <category term="代码管理" scheme="http://www.zhuli8.com/tags/%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/"/>
-    
-      <category term="开发利器" scheme="http://www.zhuli8.com/tags/%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8/"/>
-    
-      <category term="开发利器" scheme="http://www.zhuli8.com/categories/%E5%BC%80%E5%8F%91%E5%88%A9%E5%99%A8/"/>
     
   </entry>
   

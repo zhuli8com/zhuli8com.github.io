@@ -212,6 +212,151 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/09/06/iOS网络相关总结/" title="iOS网络相关总结" itemprop="url">iOS网络相关总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-06T05:49:17.000Z" itemprop="datePublished"> 发表于 2015-09-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="HTTP通信过程">HTTP通信过程</h1><h2 id="请求">请求</h2><p>HTTP协议规定，一个完整的由 <strong>客户端</strong> 发给 <strong>服务器</strong> 的HTTP请求中包含以下内容。</p>
+<h3 id="请求行">请求行</h3><p>包含了 <code>请求方法</code>、<code>请求资源路径</code>、<code>HTTP协议版本</code>，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /ZLServer/resources/images/<span class="number">1.</span>jpg HTTP/<span class="number">1.1</span></span><br></pre></td></tr></table></figure>
+<h3 id="请求头">请求头</h3><p>包含了<code>对客户端的环境描述</code>、<code>客户端请求的主机地址</code>等信息，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">Host:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.105</span>:<span class="number">8080</span> 	<span class="comment">// 客户端想访问的服务器主机地址</span></span><br><span class="line">User-<span class="string">Agent:</span> Mozilla<span class="regexp">/5.0 (Macintosh; Intel Mac OS X 10.9) Firefox/</span><span class="number">30.0</span> </span><br><span class="line">							<span class="comment">// 客户端的类型，客户端的软件环境</span></span><br><span class="line"><span class="string">Accept:</span> text<span class="regexp">/html, */</span>* 		<span class="comment">// 客户端所能接收的数据类型</span></span><br><span class="line">Accept-<span class="string">Language:</span> zh-cn 		<span class="comment">// 客户端的语言环境</span></span><br><span class="line">Accept-<span class="string">Encoding:</span> gzip 		<span class="comment">// 客户端支持的数据压缩格式</span></span><br></pre></td></tr></table></figure>
+<h3 id="请求体">请求体</h3><p>客户端发给服务器的具体数据，比如文件数据。</p>
+<h3 id="创建GET请求">创建GET请求</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *urlStr = [<span class="string">@"http://192.168.1.102:8080/MJServer/login?username=123&amp;pwd=123"</span> stringByAddingPercentEscapesUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>];</span><br><span class="line"><span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:urlStr];</span><br><span class="line"><span class="built_in">NSMutableURLRequest</span> *request = [<span class="built_in">NSMutableURLRequest</span> requestWithURL:url];</span><br></pre></td></tr></table></figure>
+<h3 id="创建POST请求">创建POST请求</h3><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NSString *urlStr = @<span class="string">"http://192.168.1.102:8080/MJServer/login"</span>;</span><br><span class="line">NSURL *url = <span class="string">[NSURL URLWithString:urlStr]</span>;</span><br><span class="line">NSMutableURLRequest *request = <span class="string">[NSMutableURLRequest requestWithURL:url]</span>;</span><br><span class="line">request.HTTPMethod = @<span class="string">"<span class="keyword">POST</span>"</span>;</span><br><span class="line">// 请求体</span><br><span class="line">NSString *bodyStr = @<span class="string">"username=123&amp;pwd=123"</span>;</span><br><span class="line">request.HTTPBody = <span class="string">[bodyStr dataUsingEncoding:NSUTF8StringEncoding]</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="响应">响应</h2><p><strong>客户端</strong> 向 <strong>服务器</strong> 发送请求，<strong>服务器 </strong>应当做出响应，即返回数据给 <strong>客户端</strong>。</p>
+<p>HTTP协议规定，一个完整的HTTP响应中包含以下内容：</p>
+<h3 id="状态行">状态行</h3><p>包含了<code>HTTP协议版本</code>、<code>状态码</code>、<code>状态英文名称</code>，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br></pre></td></tr></table></figure>
+<h3 id="响应头">响应头</h3><p>包含了<code>对服务器的描述</code>、<code>对返回数据的描述</code>，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Server: Apache-Coyote/<span class="number">1.1</span> 		    <span class="comment">// 服务器的类型</span></span><br><span class="line">Content-Type: image/jpeg 		    <span class="comment">// 返回数据的类型</span></span><br><span class="line">Content-Length: <span class="number">56811</span> 		        <span class="comment">// 返回数据的长度</span></span><br><span class="line">Date: Mon, <span class="number">23</span> Jun <span class="number">2014</span> <span class="number">12</span>:<span class="number">54</span>:<span class="number">52</span> GMT	<span class="comment">// 响应的时间</span></span><br></pre></td></tr></table></figure>
+<h3 id="实体内容">实体内容</h3><p><strong>服务器</strong> 返回给 <strong>客户端</strong> 的具体数据，比如文件数据。</p>
+<h1 id="HTTP请求方案">HTTP请求方案</h1><p>在iOS中，常见的发送HTTP请求方案有苹果原生和第三方框架。</p>
+<h2 id="苹果原生（自带）">苹果原生（自带）</h2><h3 id="NSURLConnection">NSURLConnection</h3><p>用法简单，最古老最经典最直接的一种方案。</p>
+<p>负责发送请求，建立客户端和服务器的连接。发送NSURLRequest到数据给服务器，并收集来自服务器的响应数据。</p>
+<h4 id="NSURL">NSURL</h4><p>请求地址。</p>
+<h4 id="NSURLRequest">NSURLRequest</h4><p>一个NSURLRequest对象就代表一个请求，它包含的信息有：</p>
+<pre><code>一个NSURL对象
+请求方法、请求头、请求体
+请求超时
+<span class="attribute">...</span> <span class="attribute">...</span>
+</code></pre><h4 id="NSMutableURLRequest">NSMutableURLRequest</h4><p>NSURLRequest的子类。</p>
+<p><strong>常用方法</strong></p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">设置请求超时等待时间（超过这个时间就算超时，请求失败）</span><br><span class="line">- (<span class="type">void</span>)setTimeoutInterval:(<span class="type">NSTimeInterval</span>)seconds;</span><br><span class="line"></span><br><span class="line">设置请求方法（比如<span class="type">GET</span>和<span class="type">POST</span>）</span><br><span class="line">- (<span class="type">void</span>)setHTTPMethod:(<span class="type">NSString</span> *)<span class="keyword">method</span>;</span><br><span class="line"></span><br><span class="line">设置请求体</span><br><span class="line">- (<span class="type">void</span>)setHTTPBody:(<span class="type">NSData</span> *)data;</span><br><span class="line"></span><br><span class="line">设置请求头</span><br><span class="line">- (<span class="type">void</span>)setValue:(<span class="type">NSString</span> *)value forHTTPHeaderField:(<span class="type">NSString</span> *)field;</span><br></pre></td></tr></table></figure>
+<h4 id="NSURLConnection的使用步骤">NSURLConnection的使用步骤</h4><p>使用NSURLConnection发送请求到步骤很简单，创建一个NSURL对象，设置请求路径；传入NSURL创建一个NSURLRequest对象，设置请求头和请求体；使用NSURLConnection发送NSURLRequest。</p>
+<p>NSURLConnection常见的发送请求方法有以下几种：</p>
+<h5 id="同步请求">同步请求</h5><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (NSData <span class="keyword">*</span>)sendSynchronousRequest:(NSURLRequest <span class="keyword">*</span>)request returningResponse:(NSURLResponse <span class="keyword">*</span><span class="keyword">*</span>)response error:(NSError <span class="keyword">*</span><span class="keyword">*</span>)error;</span><br></pre></td></tr></table></figure>
+<h5 id="异步请求">异步请求</h5><p>根据对服务器返回数据的处理方式掉不同，又可以分为2种：</p>
+<p><strong>block回调</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)sendAsynchronousRequest:(<span class="built_in">NSURLRequest</span>*) request queue:(<span class="built_in">NSOperationQueue</span>*) queue completionHandler:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLResponse</span>* response, <span class="built_in">NSData</span>* data, <span class="built_in">NSError</span>* connectionError)) handler;</span><br></pre></td></tr></table></figure>
+<p><strong>代理</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)initWithRequest:(<span class="built_in">NSURLRequest</span> *)request delegate:(<span class="keyword">id</span>)delegate;</span><br><span class="line">+ (<span class="built_in">NSURLConnection</span>*)connectionWithRequest:(<span class="built_in">NSURLRequest</span> *)request delegate:(<span class="keyword">id</span>)delegate;</span><br><span class="line">- (<span class="keyword">id</span>)initWithRequest:(<span class="built_in">NSURLRequest</span> *)request delegate:(<span class="keyword">id</span>)delegate startImmediately:(<span class="built_in">BOOL</span>)startImmediately;<span class="comment">//在startImmediately = NO的情况下，需要调用start方法开始发送请求</span></span><br><span class="line">- (<span class="keyword">void</span>)start;</span><br></pre></td></tr></table></figure>
+<pre><code>成为<span class="built_in">NSURLConnection</span>的代理，最好遵守<span class="built_in">NSURLConnectionDataDelegate</span>协议
+</code></pre><h5 id="NSURLConnectionDataDelegate协议中的代理方法">NSURLConnectionDataDelegate协议中的代理方法</h5><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">开始接收到服务器的响应时调用</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connection</span>:<span class="value">(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response</span></span>;</span><br><span class="line"></span><br><span class="line">接收到服务器返回的数据时调用（服务器返回的数据比较大时会调用多次）</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connection</span>:<span class="value">(NSURLConnection *)connection didReceiveData:(NSData *)data</span></span>;</span><br><span class="line"></span><br><span class="line">服务器返回的数据完全接收完毕后调用</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connectionDidFinishLoading</span>:<span class="value">(NSURLConnection *)connection</span></span>;</span><br><span class="line"></span><br><span class="line">请求出错时调用（比如请求超时）</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connection</span>:<span class="value">(NSURLConnection *)connection didFailWithError:(NSError *)error</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="NSURLSession">NSURLSession</h3><p>iOS7新出的技术，功能比NSURLConnection更加强大。</p>
+<h3 id="CFNetwork">CFNetwork</h3><p>NSURLConnection和NSURLSession的底层，纯C语言。</p>
+<h2 id="第三方框架">第三方框架</h2><h3 id="ASIHttpRequest">ASIHttpRequest</h3><p>外号“HTTP终结者”，功能极其强大，可惜早已停止更新。</p>
+<h3 id="AFNetworking">AFNetworking</h3><p>简单易用，提供了基本够用的常用功能，维护和使用者多。</p>
+<h3 id="MKNetworkKit">MKNetworkKit</h3><p>简单易用，维护和使用者少。</p>
+<h1 id="JSON">JSON</h1><p>JSON是一种轻量级的数据格式，一般用于数据交互。服务器返回给客户端的数据，一般都是JSON格式或者XML格式（文件下载除外）。</p>
+<h2 id="JSON解析方案">JSON解析方案</h2><p>在iOS中，JSON的常见解析方案有4种</p>
+<p>第三方框架：<code>JSONKit</code>、<code>SBJson</code>、<code>TouchJSON</code>（性能从左到右越差）</p>
+<p>苹果原生（自带）：<code>NSJSONSerialization</code>（性能最好）</p>
+<h3 id="NSJSONSerialization的常见方法">NSJSONSerialization的常见方法</h3><p><strong>JSON数据 —&gt; OC对象</strong></p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (id)<span class="type">JSONObjectWithData</span>:(<span class="type">NSData</span> *)<span class="typedef"><span class="keyword">data</span> options:<span class="container">(<span class="type">NSJSONReadingOptions</span>)</span>opt error:<span class="container">(<span class="type">NSError</span> **)</span>error;</span></span><br></pre></td></tr></table></figure>
+<p><strong>OC对象 —&gt; JSON数据</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSData</span> *)dataWithJSONObject:(<span class="keyword">id</span>)obj options:(<span class="built_in">NSJSONWritingOptions</span>)opt error:(<span class="built_in">NSError</span> **)error;</span><br></pre></td></tr></table></figure>
+<h1 id="XML">XML</h1><p>全称是Extensible Markup Language，译作“可扩展标记语言”，跟JSON一样，也是常用的一种用于交互的数据格式，一般也叫XML文档（XML Document）。</p>
+<h2 id="XML语法">XML语法</h2><p>一个常见的XML文档一般由<code>文档声明</code>、<code>元素（Element）</code>、<code>属性（Attribute）</code>三部分组成。</p>
+<h3 id="文档声明">文档声明</h3><p>在XML文档的最前面，必须编写一个文档声明，用来声明XML文档的类型。</p>
+<p><strong>最简单的声明</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" ?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>用encoding属性说明文档的字符编码</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="元素（Element）">元素（Element）</h3><p>一个元素包括了开始标签和结束标签，规范的XML文档最多只有1个根元素，其他元素都是根元素的子孙元素。</p>
+<p>XML中的所有空格和换行，都会当做具体内容处理。</p>
+<h3 id="属性（Attribute）">属性（Attribute）</h3><p>一个元素可以拥有多个属性，属性值必须用 双引号”” 或者 单引号’’ 括住。</p>
+<p>实际上，属性表示的信息也可以用子元素来表示。</p>
+<h2 id="XML解析">XML解析</h2><p>XML的解析方式有2种：</p>
+<pre><code>DOM：一次性将整个<span class="built_in">XML</span>文档加载进内存，比较适合解析小文件
+SAX：从根元素开始，按顺序一个元素一个元素往下解析，比较适合解析大文件
+</code></pre><p>在iOS中，解析XML的手段有很多种。</p>
+<h3 id="苹果原生">苹果原生</h3><p>NSXMLParse：SAX方式解析，使用简单。</p>
+<p>NSXMLParser采取的是SAX方式解析，特点是事件驱动，下面情况都会通知代理</p>
+<pre><code>当扫描到文档（Document）的开始与结束
+当扫描到元素（<span class="built_in">Element</span>）的开始与结束
+</code></pre><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">使用步骤</span><br><span class="line"><span class="comment">// 传入XML数据，创建解析器</span></span><br><span class="line"><span class="built_in">NSXMLParser</span> *parser = [[<span class="built_in">NSXMLParser</span> alloc] initWithData:data];</span><br><span class="line"><span class="comment">// 设置代理，监听解析过程</span></span><br><span class="line">parser<span class="variable">.delegate</span> = <span class="keyword">self</span>;</span><br><span class="line"><span class="comment">// 开始解析</span></span><br><span class="line">[parser parse];</span><br></pre></td></tr></table></figure>
+<p><strong>NSXMLParserDelegate</strong></p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">当扫描到文档的开始时调用（开始解析）</span><br><span class="line"><span class="pp">- <span class="params">(void)</span>parserDidStartDocument:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser</span><br><span class="line"></span><br><span class="line">当扫描到文档的结束时调用（解析完毕）</span><br><span class="line">- <span class="params">(void)</span>parserDidEndDocument:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser</span><br><span class="line"></span><br><span class="line">当扫描到元素的开始时调用（attributeDict存放着元素的属性）</span><br><span class="line">- <span class="params">(void)</span>parser:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser didStartElement:<span class="params">(<span class="variable">NSString</span> *)</span>elementName namespaceURI:<span class="params">(<span class="variable">NSString</span> *)</span>namespaceURI qualifiedName:<span class="params">(<span class="variable">NSString</span> *)</span>qName attributes:<span class="params">(<span class="variable">NSDictionary</span> *)</span>attributeDict</span><br><span class="line"></span><br><span class="line">当扫描到元素的结束时调用</span><br><span class="line">- <span class="params">(void)</span>parser:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser didEndElement:<span class="params">(<span class="variable">NSString</span> *)</span>elementName namespaceURI:<span class="params">(<span class="variable">NSString</span> *)</span>namespaceURI qualifiedName:<span class="params">(<span class="variable">NSString</span> *)</span>qName</span></span><br></pre></td></tr></table></figure>
+<h3 id="第三方框架-1">第三方框架</h3><p>libxml2：纯C语言，默认包含在iOS SDK中，同时支持DOM和SAX方式解析</p>
+<p>GDataXML：DOM方式解析，由Google开发，基于libxml2</p>
+<p><strong>GDataXML中常用的类</strong></p>
+<pre><code><span class="tag">GDataXMLDocument</span>：代表整个<span class="tag">XML</span>文档
+<span class="tag">GDataXMLElement</span>：代表文档中的每个元素
+使用<span class="rule"><span class="attribute">attributeForName</span>:<span class="value">方法可以获得属性值</span></span>
+</code></pre><p><strong>XML解析方式的选择建议</strong></p>
+<pre><code>大文件：<span class="built_in">NSXMLParser</span>、libxml2
+小文件：GDataXML
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/09/06/iOS网络相关总结/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/06/iOS网络相关总结/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/08/30/设计模式总结/" title="设计模式总结" itemprop="url">设计模式总结</a>
   </h1>
   <p class="article-author">By
@@ -1116,188 +1261,6 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 
 
 
-  
-
- 
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/05/Grand-Central-Dispatch-gcd/" title="Grand Central Dispatch (gcd)" itemprop="url">Grand Central Dispatch (gcd)</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-05T06:50:07.000Z" itemprop="datePublished"> 发表于 2015-07-05</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
-<li>全程是Grand Central Dispatch，可译为“大中央调度”</li>
-<li>纯C语言，提供了非常多强大的函数库</li>
-</ul>
-<h2 id="GCD的优势">GCD的优势</h2><ul>
-<li>GCD是苹果公司为<strong>多核</strong>的<strong>并行</strong>运算提出的解决方案</li>
-<li>GCD会自动利用更多的CPU内核（比如双核、四核）</li>
-<li>GCD会自动管理线程的生命周期（创建线程、调度任务、销毁线程）</li>
-<li>程序员只需要告诉GCD想要执行什么任务，不需要编写任何线程管理代码<h1 id="任务和队列">任务和队列</h1></li>
-<li>GCD中有两个核心概念</li>
-</ul>
-<ol>
-<li><strong>任务</strong>：执行什么操作</li>
-<li><strong>队列</strong>：用来存放任务</li>
-</ol>
-<ul>
-<li>GCD的使用步骤</li>
-</ul>
-<ol>
-<li><strong>定制任务</strong>：确定想做的事情</li>
-<li><strong>将任务添加到队列中</strong>：GCD会自动将<em>队列</em>中的<em>任务</em>取出，放到对应的<em>线程</em>中执行；<em>任务</em>的取出遵循<em>队列</em>的FIFO原则：先进先出，后进后出<h2 id="执行任务">执行任务</h2>GCD中有2个用来执行任务的函数</li>
-</ol>
-<ul>
-<li>用<strong>同步</strong>的方式执行任务<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatch_sync(<span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span>, <span class="keyword">dispatch_block_t</span> block);</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<blockquote>
-<p>queue：队列<br>  block：任务</p>
-</blockquote>
-<ul>
-<li><p>用<strong>异步</strong>的方式执行任务</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(<span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span>, <span class="keyword">dispatch_block_t</span> block); </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>同步和异步的区别</p>
-<blockquote>
-<p>同步：只能在<strong>当前</strong>线程中执行任务，<strong>不具备</strong>开启新线程的能力<br>异步：可以在<strong>新的</strong>线程中执行任务，<strong>具备</strong>开启新线程的能力</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="队列的类型">队列的类型</h2><p>GCD的队列可以分为2大类型</p>
-<ul>
-<li><p><strong>并发</strong>队列（Concurrent Dispatch Queue）</p>
-<blockquote>
-<p>可以让多个任务<strong>并发（同时）</strong>执行（自动开启多个线程同时执行任务）<br><strong>并发</strong>功能只有在<strong>异步（dispatch_async）</strong>函数下才有效</p>
-</blockquote>
-</li>
-<li><p><strong>串行</strong>队列（Serial Dispatch Queue）</p>
-<blockquote>
-<p>让任务一个接着一个地执行（一个任务执行完毕后，再执行下一个任务）</p>
-</blockquote>
-</li>
-<li>容易混淆的术语 <blockquote>
-<p>有4个术语比较容易混淆：同步、异步、并发、串行<br><strong>同步和异步主要影响：能不能开启新的线程</strong><br>同步：在当前线程中执行任务，不具备开启新线程的能力<br>异步：在新的线程中执行任务，具备开启新线程的能力<br><strong>并发和串行主要影响：任务的执行方式</strong><br>并发：多个任务并发（同时）执行<br>串行：一个任务执行完毕后，再执行下一个任务</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="并发队列">并发队列</h3><ul>
-<li>GCD默认已经提供了全局的并发队列，供整个应用使用，不需要手动创建<br><strong>使用dispatch_get_global_queue函数获得全局的并发队列</strong><blockquote>
-<p>dispatch_queue_t dispatch_get_global_queue(<br>dispatch_queue_priority_t priority, // 队列的优先级<br>unsigned long flags); // 此参数暂时无用，用0即可</p>
-</blockquote>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span> = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>); <span class="comment">// 获得全局并发队列</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>全局并发队列的优先级<br><code>#define DISPATCH_QUEUE_PRIORITY_HIGH 2 // 高</code><br><code>#define DISPATCH_QUEUE_PRIORITY_DEFAULT 0 // 默认（中</code>）<br><code>#define DISPATCH_QUEUE_PRIORITY_LOW (-2) // 低</code><br><code>#define DISPATCH_QUEUE_PRIORITY_BACKGROUND INT16_MIN // 后台</code></p>
-</blockquote>
-<h3 id="串行队列 ">串行队列 </h3><ul>
-<li>GCD中获得串行有2种途径</li>
-</ul>
-<p><strong>使用dispatch_queue_create函数创建串行队列</strong></p>
-<blockquote>
-<p>dispatch_queue_t<br>dispatch_queue_create(const char *label, // 队列名称<br>dispatch_queue_attr_t attr); // 队列属性，一般用NULL即可<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span> = dispatch_queue_create(<span class="string">"cn.itcast.queue"</span>, <span class="literal">NULL</span>); <span class="comment">// 创建</span></span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<p><strong>使用主队列（跟主线程相关联的队列）</strong><br>主队列是GCD自带的一种特殊的串行队列<br>放在主队列中的任务，都会放到主线程中执行<br>使用dispatch_get_main_queue()获得主队列<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dispatch_queue_t</span> <span class="built_in">queue</span> = dispatch_get_main_queue();</span><br></pre></td></tr></table></figure></p>
-<pre><code>凡是函数名种带有<span class="operator"><span class="keyword">create</span>\copy\new\retain等字眼, 都应该在不需要使用这个数据的时候进行<span class="keyword">release</span>
-GCD的数据类型在ARC环境下不需要再做<span class="keyword">release</span>
-CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="keyword">release</span></span>
-</code></pre><h3 id="各种队列的执行效果">各种队列的执行效果</h3><p><img src="http://www.zhuli8.com/photos/gcd.png" alt=""></p>
-<blockquote>
-<p><strong>注意</strong><br>使用sync函数往当前串行队列中添加任务，会卡住当前的串行队列</p>
-</blockquote>
-<h1 id="线程间通信示例 ">线程间通信示例 </h1><h2 id="从子线程回到主线程">从子线程回到主线程</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async<span class="list">(<span class="keyword">dispatch_get_global_queue</span><span class="list">(<span class="keyword">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>)</span>, ^&#123;</span><br><span class="line">    // 执行耗时的异步操作...</span><br><span class="line">      dispatch_async<span class="list">(<span class="keyword">dispatch_get_main_queue</span><span class="list">()</span>, ^&#123;</span><br><span class="line">        // 回到主线程，执行UI刷新操作</span><br><span class="line">        &#125;)</span><span class="comment">;</span></span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<h2 id="延时执行">延时执行</h2><p>iOS常见的延时执行有2种方式</p>
-<h3 id="调用NSObject的方法">调用NSObject的方法</h3><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">self</span> <span class="symbol">performSelector:</span><span class="variable">@selector</span>(run) <span class="symbol">withObject:</span><span class="literal">nil</span> <span class="symbol">afterDelay:</span><span class="number">2.0</span>];<span class="regexp">//</span> <span class="number">2</span>秒后再调用<span class="keyword">self</span>的run方法</span><br></pre></td></tr></table></figure>
-<h3 id="使用GCD函数">使用GCD函数</h3><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">dispatch_after</span>(<span class="function">dispatch_time</span>(DISPATCH_TIME_NOW, (int64_t)(<span class="number">2.0</span> * NSEC_PER_SEC)), <span class="tag">dispatch_get_main_queue</span>(), ^&#123;</span><br><span class="line">    <span class="comment">// 2秒后异步执行这里的代码...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="一次性代码">一次性代码</h2><p>使用dispatch_once函数能保证某段代码在程序运行过程中只被执行1次<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</span><br><span class="line"><span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</span><br><span class="line">    <span class="comment">// 只执行1次的代码(这里面默认是线程安全的)</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<h2 id="队列组">队列组</h2><p>有这么1种需求<br>首先：分别异步执行2个耗时的操作<br>其次：等2个异步操作都执行完毕后，再回到主线程执行操作<br>如果想要快速高效地实现上述需求，可以考虑用队列组<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">dispatch_group_t group =  dispatch_group_create<span class="list">()</span><span class="comment">;</span></span><br><span class="line">dispatch_group_async<span class="list">(<span class="keyword">group</span>, dispatch_get_global_queue<span class="list">(<span class="keyword">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>)</span>, ^&#123;</span><br><span class="line">    // 执行<span class="number">1</span>个耗时的异步操作</span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br><span class="line">dispatch_group_async<span class="list">(<span class="keyword">group</span>, dispatch_get_global_queue<span class="list">(<span class="keyword">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <span class="number">0</span>)</span>, ^&#123;</span><br><span class="line">    // 执行<span class="number">1</span>个耗时的异步操作</span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br><span class="line">dispatch_group_notify<span class="list">(<span class="keyword">group</span>, dispatch_get_main_queue<span class="list">()</span>, ^&#123;</span><br><span class="line">    // 等前面的异步操作都执行完毕后，回到主线程...</span><br><span class="line">&#125;)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="单例模式">单例模式</h2><h3 id="单例模式的作用">单例模式的作用</h3><p>可以保证在程序运行过程，一个类只有一个实例，而且该实例易于供外界访问，从而方便地控制了实例个数，并节约系统资源</p>
-<h3 id="单例模式的使用场合">单例模式的使用场合</h3><ul>
-<li>在整个应用程序中，共享一份资源（这份资源只需要创建初始化1次）</li>
-<li>单例模式在ARC\MRC环境下的写法有所不同，需要编写2套不同的代码<br>可以用宏判断是否为ARC环境<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">if</span> __has_feature(objc_arc)</span></span><br><span class="line"><span class="comment">// ARC</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">else</span></span></span><br><span class="line"><span class="comment">// MRC</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="ARC单例模式的实现">ARC单例模式的实现</h4><ul>
-<li><p>在.m中保留一个全局的static的实例</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">id</span> _instance;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重写allocWithZone:方法，在这里创建唯一的实例（注意线程安全）</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">id</span>)allocWithZone:(<span class="keyword">struct</span> _<span class="built_in">NSZone</span> *)zone</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">@synchronized</span>(<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!_instance) &#123;</span><br><span class="line">            _instance = [<span class="keyword">super</span> allocWithZone:zone];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>提供1个类方法让外界访问唯一的实例</p>
-<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ (instancetype)sharedSoundTool</span><br><span class="line">&#123;</span><br><span class="line">    <span class="variable">@synchronized</span>(<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!_instance) &#123;</span><br><span class="line">            _instance = [[<span class="keyword">self</span> alloc] init];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>实现copyWithZone:方法</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)copyWithZone:(<span class="keyword">struct</span> _<span class="built_in">NSZone</span> *)zone</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="MRC">MRC</h4><p>非ARC中（MRC），单例模式的实现（比ARC多了几个步骤）<br><em>实现内存管理方法</em></p>
-<pre><code>-<span class="ruby"> (id)retain { <span class="keyword">return</span> <span class="keyword">self</span>; }
-</span>-<span class="ruby"> (<span class="constant">NSUInteger</span>)retainCount { <span class="keyword">return</span> <span class="number">1</span>; }
-</span>-<span class="ruby"> (oneway void)release {}
-</span>-<span class="ruby"> (id)autorelease { <span class="keyword">return</span> <span class="keyword">self</span>; }</span>
-</code></pre><h1 id="推荐阅读">推荐阅读</h1><p><a href="http://www.jianshu.com/p/50c060bab0ff" target="_blank" rel="external">Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2</a><br><a href="[Ethan Joe：Grand Central Dispatch 基础教程：Part 1/2](http://www.jianshu.com/p/50c060bab0ff">cocoachina：Grand Central Dispatch 基础教程：Part 2/2</a>)<br><a href="http://www.devtang.com/blog/2012/02/22/use-gcd/" target="_blank" rel="external">唐巧：使用GCD</a><br><a href="http://www.cocoachina.com/ios/20140428/8248.html" target="_blank" rel="external">GCD 深入理解（一）</a><br><a href="http://www.cocoachina.com/ios/20140515/8433.html" target="_blank" rel="external">GCD 深入理解（二）</a></p>
-<h1 id="NSOperation&amp;NSOperationQueue">NSOperation&amp;NSOperationQueue</h1><p><a href="http://blog.leichunfeng.com/blog/2015/07/29/ios-concurrency-programming-operation-queues/" target="_blank" rel="external">iOS 并发编程之 Operation Queues</a></p>
-<p><a href="http://blog.xcodev.com/archives/operation-queue-intro/" target="_blank" rel="external">并发编程之Operation Queue</a></p>
-<p><a href="http://www.jianshu.com/p/0b0d9b1f1f19#" target="_blank" rel="external">关于iOS多线程，你看我就够了</a></p>
-<p><a href="http://limboy.me/ios/2015/08/08/advanced-nsoperations.html" target="_blank" rel="external">Advanced NSOperations</a></p>
-<p><a href="http://oncenote.com/2015/03/22/Threading-Run-Loop/" target="_blank" rel="external">iOS并发编程（Concurrency Programming）系列</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/iOS/">iOS</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/GCD/">GCD</a><a href="/tags/iOS/">iOS</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/05/Grand-Central-Dispatch-gcd/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/05/Grand-Central-Dispatch-gcd/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -1320,7 +1283,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>11</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>12</sup></a></li>
 		  
 		
 		  
@@ -1345,7 +1308,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>16</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>17</sup></a></li>
 			
 		
 			

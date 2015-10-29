@@ -100,6 +100,105 @@
   </entry>
   
   <entry>
+    <title><![CDATA[iOS网络相关总结]]></title>
+    <link href="http://www.zhuli8.com/2015/09/06/iOS%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/"/>
+    <id>http://www.zhuli8.com/2015/09/06/iOS网络相关总结/</id>
+    <published>2015-09-06T05:49:17.000Z</published>
+    <updated>2015-10-29T05:51:22.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="HTTP通信过程">HTTP通信过程</h1><h2 id="请求">请求</h2><p>HTTP协议规定，一个完整的由 <strong>客户端</strong> 发给 <strong>服务器</strong> 的HTTP请求中包含以下内容。</p>
+<h3 id="请求行">请求行</h3><p>包含了 <code>请求方法</code>、<code>请求资源路径</code>、<code>HTTP协议版本</code>，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /ZLServer/resources/images/<span class="number">1.</span>jpg HTTP/<span class="number">1.1</span></span><br></pre></td></tr></table></figure>
+<h3 id="请求头">请求头</h3><p>包含了<code>对客户端的环境描述</code>、<code>客户端请求的主机地址</code>等信息，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">Host:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.105</span>:<span class="number">8080</span> 	<span class="comment">// 客户端想访问的服务器主机地址</span></span><br><span class="line">User-<span class="string">Agent:</span> Mozilla<span class="regexp">/5.0 (Macintosh; Intel Mac OS X 10.9) Firefox/</span><span class="number">30.0</span> </span><br><span class="line">							<span class="comment">// 客户端的类型，客户端的软件环境</span></span><br><span class="line"><span class="string">Accept:</span> text<span class="regexp">/html, */</span>* 		<span class="comment">// 客户端所能接收的数据类型</span></span><br><span class="line">Accept-<span class="string">Language:</span> zh-cn 		<span class="comment">// 客户端的语言环境</span></span><br><span class="line">Accept-<span class="string">Encoding:</span> gzip 		<span class="comment">// 客户端支持的数据压缩格式</span></span><br></pre></td></tr></table></figure>
+<h3 id="请求体">请求体</h3><p>客户端发给服务器的具体数据，比如文件数据。</p>
+<h3 id="创建GET请求">创建GET请求</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *urlStr = [<span class="string">@"http://192.168.1.102:8080/MJServer/login?username=123&amp;pwd=123"</span> stringByAddingPercentEscapesUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>];</span><br><span class="line"><span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:urlStr];</span><br><span class="line"><span class="built_in">NSMutableURLRequest</span> *request = [<span class="built_in">NSMutableURLRequest</span> requestWithURL:url];</span><br></pre></td></tr></table></figure>
+<h3 id="创建POST请求">创建POST请求</h3><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NSString *urlStr = @<span class="string">"http://192.168.1.102:8080/MJServer/login"</span>;</span><br><span class="line">NSURL *url = <span class="string">[NSURL URLWithString:urlStr]</span>;</span><br><span class="line">NSMutableURLRequest *request = <span class="string">[NSMutableURLRequest requestWithURL:url]</span>;</span><br><span class="line">request.HTTPMethod = @<span class="string">"<span class="keyword">POST</span>"</span>;</span><br><span class="line">// 请求体</span><br><span class="line">NSString *bodyStr = @<span class="string">"username=123&amp;pwd=123"</span>;</span><br><span class="line">request.HTTPBody = <span class="string">[bodyStr dataUsingEncoding:NSUTF8StringEncoding]</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="响应">响应</h2><p><strong>客户端</strong> 向 <strong>服务器</strong> 发送请求，<strong>服务器 </strong>应当做出响应，即返回数据给 <strong>客户端</strong>。</p>
+<p>HTTP协议规定，一个完整的HTTP响应中包含以下内容：</p>
+<h3 id="状态行">状态行</h3><p>包含了<code>HTTP协议版本</code>、<code>状态码</code>、<code>状态英文名称</code>，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br></pre></td></tr></table></figure>
+<h3 id="响应头">响应头</h3><p>包含了<code>对服务器的描述</code>、<code>对返回数据的描述</code>，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Server: Apache-Coyote/<span class="number">1.1</span> 		    <span class="comment">// 服务器的类型</span></span><br><span class="line">Content-Type: image/jpeg 		    <span class="comment">// 返回数据的类型</span></span><br><span class="line">Content-Length: <span class="number">56811</span> 		        <span class="comment">// 返回数据的长度</span></span><br><span class="line">Date: Mon, <span class="number">23</span> Jun <span class="number">2014</span> <span class="number">12</span>:<span class="number">54</span>:<span class="number">52</span> GMT	<span class="comment">// 响应的时间</span></span><br></pre></td></tr></table></figure>
+<h3 id="实体内容">实体内容</h3><p><strong>服务器</strong> 返回给 <strong>客户端</strong> 的具体数据，比如文件数据。</p>
+<h1 id="HTTP请求方案">HTTP请求方案</h1><p>在iOS中，常见的发送HTTP请求方案有苹果原生和第三方框架。</p>
+<h2 id="苹果原生（自带）">苹果原生（自带）</h2><h3 id="NSURLConnection">NSURLConnection</h3><p>用法简单，最古老最经典最直接的一种方案。</p>
+<p>负责发送请求，建立客户端和服务器的连接。发送NSURLRequest到数据给服务器，并收集来自服务器的响应数据。</p>
+<h4 id="NSURL">NSURL</h4><p>请求地址。</p>
+<h4 id="NSURLRequest">NSURLRequest</h4><p>一个NSURLRequest对象就代表一个请求，它包含的信息有：</p>
+<pre><code>一个NSURL对象
+请求方法、请求头、请求体
+请求超时
+<span class="attribute">...</span> <span class="attribute">...</span>
+</code></pre><h4 id="NSMutableURLRequest">NSMutableURLRequest</h4><p>NSURLRequest的子类。</p>
+<p><strong>常用方法</strong></p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">设置请求超时等待时间（超过这个时间就算超时，请求失败）</span><br><span class="line">- (<span class="type">void</span>)setTimeoutInterval:(<span class="type">NSTimeInterval</span>)seconds;</span><br><span class="line"></span><br><span class="line">设置请求方法（比如<span class="type">GET</span>和<span class="type">POST</span>）</span><br><span class="line">- (<span class="type">void</span>)setHTTPMethod:(<span class="type">NSString</span> *)<span class="keyword">method</span>;</span><br><span class="line"></span><br><span class="line">设置请求体</span><br><span class="line">- (<span class="type">void</span>)setHTTPBody:(<span class="type">NSData</span> *)data;</span><br><span class="line"></span><br><span class="line">设置请求头</span><br><span class="line">- (<span class="type">void</span>)setValue:(<span class="type">NSString</span> *)value forHTTPHeaderField:(<span class="type">NSString</span> *)field;</span><br></pre></td></tr></table></figure>
+<h4 id="NSURLConnection的使用步骤">NSURLConnection的使用步骤</h4><p>使用NSURLConnection发送请求到步骤很简单，创建一个NSURL对象，设置请求路径；传入NSURL创建一个NSURLRequest对象，设置请求头和请求体；使用NSURLConnection发送NSURLRequest。</p>
+<p>NSURLConnection常见的发送请求方法有以下几种：</p>
+<h5 id="同步请求">同步请求</h5><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (NSData <span class="keyword">*</span>)sendSynchronousRequest:(NSURLRequest <span class="keyword">*</span>)request returningResponse:(NSURLResponse <span class="keyword">*</span><span class="keyword">*</span>)response error:(NSError <span class="keyword">*</span><span class="keyword">*</span>)error;</span><br></pre></td></tr></table></figure>
+<h5 id="异步请求">异步请求</h5><p>根据对服务器返回数据的处理方式掉不同，又可以分为2种：</p>
+<p><strong>block回调</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)sendAsynchronousRequest:(<span class="built_in">NSURLRequest</span>*) request queue:(<span class="built_in">NSOperationQueue</span>*) queue completionHandler:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLResponse</span>* response, <span class="built_in">NSData</span>* data, <span class="built_in">NSError</span>* connectionError)) handler;</span><br></pre></td></tr></table></figure>
+<p><strong>代理</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)initWithRequest:(<span class="built_in">NSURLRequest</span> *)request delegate:(<span class="keyword">id</span>)delegate;</span><br><span class="line">+ (<span class="built_in">NSURLConnection</span>*)connectionWithRequest:(<span class="built_in">NSURLRequest</span> *)request delegate:(<span class="keyword">id</span>)delegate;</span><br><span class="line">- (<span class="keyword">id</span>)initWithRequest:(<span class="built_in">NSURLRequest</span> *)request delegate:(<span class="keyword">id</span>)delegate startImmediately:(<span class="built_in">BOOL</span>)startImmediately;<span class="comment">//在startImmediately = NO的情况下，需要调用start方法开始发送请求</span></span><br><span class="line">- (<span class="keyword">void</span>)start;</span><br></pre></td></tr></table></figure>
+<pre><code>成为<span class="built_in">NSURLConnection</span>的代理，最好遵守<span class="built_in">NSURLConnectionDataDelegate</span>协议
+</code></pre><h5 id="NSURLConnectionDataDelegate协议中的代理方法">NSURLConnectionDataDelegate协议中的代理方法</h5><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">开始接收到服务器的响应时调用</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connection</span>:<span class="value">(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response</span></span>;</span><br><span class="line"></span><br><span class="line">接收到服务器返回的数据时调用（服务器返回的数据比较大时会调用多次）</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connection</span>:<span class="value">(NSURLConnection *)connection didReceiveData:(NSData *)data</span></span>;</span><br><span class="line"></span><br><span class="line">服务器返回的数据完全接收完毕后调用</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connectionDidFinishLoading</span>:<span class="value">(NSURLConnection *)connection</span></span>;</span><br><span class="line"></span><br><span class="line">请求出错时调用（比如请求超时）</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connection</span>:<span class="value">(NSURLConnection *)connection didFailWithError:(NSError *)error</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="NSURLSession">NSURLSession</h3><p>iOS7新出的技术，功能比NSURLConnection更加强大。</p>
+<h3 id="CFNetwork">CFNetwork</h3><p>NSURLConnection和NSURLSession的底层，纯C语言。</p>
+<h2 id="第三方框架">第三方框架</h2><h3 id="ASIHttpRequest">ASIHttpRequest</h3><p>外号“HTTP终结者”，功能极其强大，可惜早已停止更新。</p>
+<h3 id="AFNetworking">AFNetworking</h3><p>简单易用，提供了基本够用的常用功能，维护和使用者多。</p>
+<h3 id="MKNetworkKit">MKNetworkKit</h3><p>简单易用，维护和使用者少。</p>
+<h1 id="JSON">JSON</h1><p>JSON是一种轻量级的数据格式，一般用于数据交互。服务器返回给客户端的数据，一般都是JSON格式或者XML格式（文件下载除外）。</p>
+<h2 id="JSON解析方案">JSON解析方案</h2><p>在iOS中，JSON的常见解析方案有4种</p>
+<p>第三方框架：<code>JSONKit</code>、<code>SBJson</code>、<code>TouchJSON</code>（性能从左到右越差）</p>
+<p>苹果原生（自带）：<code>NSJSONSerialization</code>（性能最好）</p>
+<h3 id="NSJSONSerialization的常见方法">NSJSONSerialization的常见方法</h3><p><strong>JSON数据 —&gt; OC对象</strong></p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (id)<span class="type">JSONObjectWithData</span>:(<span class="type">NSData</span> *)<span class="typedef"><span class="keyword">data</span> options:<span class="container">(<span class="type">NSJSONReadingOptions</span>)</span>opt error:<span class="container">(<span class="type">NSError</span> **)</span>error;</span></span><br></pre></td></tr></table></figure>
+<p><strong>OC对象 —&gt; JSON数据</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSData</span> *)dataWithJSONObject:(<span class="keyword">id</span>)obj options:(<span class="built_in">NSJSONWritingOptions</span>)opt error:(<span class="built_in">NSError</span> **)error;</span><br></pre></td></tr></table></figure>
+<h1 id="XML">XML</h1><p>全称是Extensible Markup Language，译作“可扩展标记语言”，跟JSON一样，也是常用的一种用于交互的数据格式，一般也叫XML文档（XML Document）。</p>
+<h2 id="XML语法">XML语法</h2><p>一个常见的XML文档一般由<code>文档声明</code>、<code>元素（Element）</code>、<code>属性（Attribute）</code>三部分组成。</p>
+<h3 id="文档声明">文档声明</h3><p>在XML文档的最前面，必须编写一个文档声明，用来声明XML文档的类型。</p>
+<p><strong>最简单的声明</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" ?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>用encoding属性说明文档的字符编码</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="元素（Element）">元素（Element）</h3><p>一个元素包括了开始标签和结束标签，规范的XML文档最多只有1个根元素，其他元素都是根元素的子孙元素。</p>
+<p>XML中的所有空格和换行，都会当做具体内容处理。</p>
+<h3 id="属性（Attribute）">属性（Attribute）</h3><p>一个元素可以拥有多个属性，属性值必须用 双引号”” 或者 单引号’’ 括住。</p>
+<p>实际上，属性表示的信息也可以用子元素来表示。</p>
+<h2 id="XML解析">XML解析</h2><p>XML的解析方式有2种：</p>
+<pre><code>DOM：一次性将整个<span class="built_in">XML</span>文档加载进内存，比较适合解析小文件
+SAX：从根元素开始，按顺序一个元素一个元素往下解析，比较适合解析大文件
+</code></pre><p>在iOS中，解析XML的手段有很多种。</p>
+<h3 id="苹果原生">苹果原生</h3><p>NSXMLParse：SAX方式解析，使用简单。</p>
+<p>NSXMLParser采取的是SAX方式解析，特点是事件驱动，下面情况都会通知代理</p>
+<pre><code>当扫描到文档（Document）的开始与结束
+当扫描到元素（<span class="built_in">Element</span>）的开始与结束
+</code></pre><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">使用步骤</span><br><span class="line"><span class="comment">// 传入XML数据，创建解析器</span></span><br><span class="line"><span class="built_in">NSXMLParser</span> *parser = [[<span class="built_in">NSXMLParser</span> alloc] initWithData:data];</span><br><span class="line"><span class="comment">// 设置代理，监听解析过程</span></span><br><span class="line">parser<span class="variable">.delegate</span> = <span class="keyword">self</span>;</span><br><span class="line"><span class="comment">// 开始解析</span></span><br><span class="line">[parser parse];</span><br></pre></td></tr></table></figure>
+<p><strong>NSXMLParserDelegate</strong></p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">当扫描到文档的开始时调用（开始解析）</span><br><span class="line"><span class="pp">- <span class="params">(void)</span>parserDidStartDocument:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser</span><br><span class="line"></span><br><span class="line">当扫描到文档的结束时调用（解析完毕）</span><br><span class="line">- <span class="params">(void)</span>parserDidEndDocument:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser</span><br><span class="line"></span><br><span class="line">当扫描到元素的开始时调用（attributeDict存放着元素的属性）</span><br><span class="line">- <span class="params">(void)</span>parser:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser didStartElement:<span class="params">(<span class="variable">NSString</span> *)</span>elementName namespaceURI:<span class="params">(<span class="variable">NSString</span> *)</span>namespaceURI qualifiedName:<span class="params">(<span class="variable">NSString</span> *)</span>qName attributes:<span class="params">(<span class="variable">NSDictionary</span> *)</span>attributeDict</span><br><span class="line"></span><br><span class="line">当扫描到元素的结束时调用</span><br><span class="line">- <span class="params">(void)</span>parser:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser didEndElement:<span class="params">(<span class="variable">NSString</span> *)</span>elementName namespaceURI:<span class="params">(<span class="variable">NSString</span> *)</span>namespaceURI qualifiedName:<span class="params">(<span class="variable">NSString</span> *)</span>qName</span></span><br></pre></td></tr></table></figure>
+<h3 id="第三方框架-1">第三方框架</h3><p>libxml2：纯C语言，默认包含在iOS SDK中，同时支持DOM和SAX方式解析</p>
+<p>GDataXML：DOM方式解析，由Google开发，基于libxml2</p>
+<p><strong>GDataXML中常用的类</strong></p>
+<pre><code><span class="tag">GDataXMLDocument</span>：代表整个<span class="tag">XML</span>文档
+<span class="tag">GDataXMLElement</span>：代表文档中的每个元素
+使用<span class="rule"><span class="attribute">attributeForName</span>:<span class="value">方法可以获得属性值</span></span>
+</code></pre><p><strong>XML解析方式的选择建议</strong></p>
+<pre><code>大文件：<span class="built_in">NSXMLParser</span>、libxml2
+小文件：GDataXML
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[iOS网络相关总结]]>
+    
+    </summary>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
+    
+      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[设计模式总结]]></title>
     <link href="http://www.zhuli8.com/2015/08/30/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/"/>
     <id>http://www.zhuli8.com/2015/08/30/设计模式总结/</id>
@@ -663,9 +762,9 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
     <link href="http://www.zhuli8.com/2015/07/05/Grand-Central-Dispatch-gcd/"/>
     <id>http://www.zhuli8.com/2015/07/05/Grand-Central-Dispatch-gcd/</id>
     <published>2015-07-05T06:50:07.000Z</published>
-    <updated>2015-08-13T01:59:29.000Z</updated>
+    <updated>2015-10-28T08:10:07.000Z</updated>
     <content type="html"><![CDATA[<h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
-<li>全程是Grand Central Dispatch，可译为“大中央调度”</li>
+<li>全称是Grand Central Dispatch，可译为“大中央调度”</li>
 <li>纯C语言，提供了非常多强大的函数库</li>
 </ul>
 <h2 id="GCD的优势">GCD的优势</h2><ul>
@@ -785,7 +884,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
 ]]></content>
     <summary type="html">
     <![CDATA[<h1 id="简介">简介</h1><h2 id="什么是GCD">什么是GCD</h2><ul>
-<li>全程是Grand Central Dispatch，可译为“大中央调度”</li>
+<li>全称是Grand Central Dispatch，可译为“大中央调度”</li>
 <li>纯C语言，提供了非常多强大的函数库</li>
 </ul>
 <h2 id="GC]]>
@@ -2269,40 +2368,6 @@ uniform highp float refractiveIndex;
       <category term="IM" scheme="http://www.zhuli8.com/tags/IM/"/>
     
       <category term="IM" scheme="http://www.zhuli8.com/categories/IM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[iOS自定义转场]]></title>
-    <link href="http://www.zhuli8.com/2015/04/26/iOS%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA/"/>
-    <id>http://www.zhuli8.com/2015/04/26/iOS自定义转场/</id>
-    <published>2015-04-26T01:27:07.000Z</published>
-    <updated>2015-08-11T09:59:23.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="UIViewControllerTransitioning">UIViewControllerTransitioning</h1><h2 id="UIViewControllerAnimatedTransitioning">UIViewControllerAnimatedTransitioning</h2><p>采用UIViewControllerAnimatedTransitioning协议实现自定义转场动画，它提供了两个方法：</p>
-<p>1、transitionDuration:指定转场的过渡时间。</p>
-<p>2、animateTransition:创建转场动画。</p>
-<p>在转场中涉及到的信息通过一个实现了UIViewControllerContextTransitioning的transitionContext上下文对象进行传递，使用这个transitionContext参数能移动或关闭目标控制器以及控制这个过程中持续的时间。</p>
-<p>首先，我们需要自定义一个实现了UIViewControllerAnimatedTransitioning协议的对象。创建一个类CustomPresentAnimation继承自NSObject并遵守UIViewControllerAnimatedTransitioning协议。</p>
-<p><strong>CustomPresentAnimation.h</strong></p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@interface</span> <span class="attribute">CustomPresentAnimation </span>: NSObject &lt;UIViewControllerAnimatedTransitioning&gt;</span><br><span class="line"></span><br><span class="line"><span class="variable">@end</span></span><br></pre></td></tr></table></figure>
-<p><strong>CustomPresentAnimation.m</strong></p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">CustomPresentAnimation</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="built_in">NSTimeInterval</span>)transitionDuration:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1.0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)animateTransition:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//使用transitionContext可以得到参与切换的两个ViewController的信息</span></span><br><span class="line">    <span class="built_in">UIViewController</span> *toVC= [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//将控制器视图初始位置设置到屏幕下边缘，从而从屏幕下方出现</span></span><br><span class="line">    <span class="built_in">CGRect</span> finalRect=[transitionContext finalFrameForViewController:toVC];</span><br><span class="line">    toVC<span class="variable">.view</span><span class="variable">.frame</span>=<span class="built_in">CGRectOffset</span>(finalRect, <span class="number">0</span>, [[<span class="built_in">UIScreen</span> mainScreen] bounds]<span class="variable">.size</span><span class="variable">.height</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//所有的动画视图都必须放在transitionContext的containerView里</span></span><br><span class="line">    [[transitionContext containerView] addSubview:toVC<span class="variable">.view</span>];</span><br><span class="line">    </span><br><span class="line">    [<span class="built_in">UIView</span> animateWithDuration:[<span class="keyword">self</span> transitionDuration:transitionContext] delay:<span class="number">0.0</span> usingSpringWithDamping:<span class="number">0.5</span> initialSpringVelocity:<span class="number">0.5</span> options:<span class="built_in">UIViewAnimationOptionCurveEaseInOut</span> animations:^&#123;</span><br><span class="line">        toVC<span class="variable">.view</span><span class="variable">.frame</span>=finalRect;</span><br><span class="line">    &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</span><br><span class="line">        <span class="comment">//动画完成或者取消之后必须得调用的方法，系统接收到这个消息后将对控制器的状态进行维护</span></span><br><span class="line">        [transitionContext completeTransition:<span class="literal">YES</span>];</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="UIViewControllerTransitioningDelegate">UIViewControllerTransitioningDelegate</h2><p>实现UIViewControllerTransitioningDelegate协议的对象在控制器 <em>presented</em> 或者 <em>dismissed</em> 时返回上面继承自NSObject并遵守UIViewControllerAnimatedTransitioning协议的CustomPresentAnimation对象。这个接口的作用比较单一，在需要控制器切换的时候会向实现了这个接口的对象询问是否需要使用自定义的切换效果。我们可以让需要实现切换的控制器实现这个协议。</p>
-<p><strong>PresentedViewController.m</strong></p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">PresentedViewController</span> () &lt;<span class="title">UIViewControllerTransitioningDelegate</span>&gt;</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) CustomPresentAnimation *presentAnimation;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">PresentedViewController</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span><span class="variable">.transitioningDelegate</span>=<span class="keyword">self</span>;</span><br><span class="line">    <span class="keyword">self</span><span class="variable">.presentAnimation</span>=[[CustomPresentAnimation alloc] init];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">IBAction</span>)clickDismmissButton:(<span class="built_in">UIButton</span> *)sender &#123;</span><br><span class="line">    </span><br><span class="line">    [<span class="keyword">self</span> dismissViewControllerAnimated:<span class="literal">YES</span> completion:^&#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"clickDismmissButton"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animationControllerForPresentedController:(<span class="built_in">UIViewController</span> *)presented presentingController:(<span class="built_in">UIViewController</span> *)presenting sourceController:(<span class="built_in">UIViewController</span> *)source</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span><span class="variable">.presentAnimation</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-<p>UIViewController中自定义转场动画到这就结束了，<a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">点击</a>查看的完整代码。</p>
-<h1 id="让你的app绚起来">让你的app绚起来</h1><p><a href="http://www.cnblogs.com/kenshincui/p/3972100.html" target="_blank" rel="external">iOS开发系列—让你的应用“动”起来</a></p>
-<p><a href="http://kittenyang.com/uiviewcontrollertransitioning/" target="_blank" rel="external">iOS自定义转场详解</a></p>
-<p><a href="http://www.jianshu.com/p/38cd35968864" target="_blank" rel="external">关于自定义转场动画，我都告诉你。</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[iOS自定义转场动画]]>
-    
-    </summary>
-    
-      <category term="iOS" scheme="http://www.zhuli8.com/tags/iOS/"/>
-    
-      <category term="iOS" scheme="http://www.zhuli8.com/categories/iOS/"/>
     
   </entry>
   

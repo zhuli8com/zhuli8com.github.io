@@ -1,0 +1,627 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>iOS网络相关总结 | zhuli8’blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="朱利">
+    
+
+    
+    <meta name="description" content="iOS网络相关总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS网络相关总结">
+<meta property="og:url" content="http://www.zhuli8.com/2015/09/06/iOS网络相关总结/index.html">
+<meta property="og:site_name" content="zhuli8’blog">
+<meta property="og:description" content="iOS网络相关总结">
+<meta property="og:updated_time" content="2015-10-29T05:51:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS网络相关总结">
+<meta name="twitter:description" content="iOS网络相关总结">
+
+    
+    <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="zhuli8’blog" title="zhuli8’blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="zhuli8’blog">zhuli8’blog</a></h1>
+				<h2 class="blog-motto">Talk is cheap, show me the code.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+    <input type="text" id="st-search-input" maxlength="20" placeholder="搜索" />
+    </form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/06/iOS网络相关总结/" title="iOS网络相关总结" itemprop="url">iOS网络相关总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-06T05:49:17.000Z" itemprop="datePublished"> 发表于 2015-09-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP通信过程"><span class="toc-number">1.</span> <span class="toc-text">HTTP通信过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#请求"><span class="toc-number">1.1.</span> <span class="toc-text">请求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#请求行"><span class="toc-number">1.1.1.</span> <span class="toc-text">请求行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求头"><span class="toc-number">1.1.2.</span> <span class="toc-text">请求头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求体"><span class="toc-number">1.1.3.</span> <span class="toc-text">请求体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建GET请求"><span class="toc-number">1.1.4.</span> <span class="toc-text">创建GET请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建POST请求"><span class="toc-number">1.1.5.</span> <span class="toc-text">创建POST请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#响应"><span class="toc-number">1.2.</span> <span class="toc-text">响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#状态行"><span class="toc-number">1.2.1.</span> <span class="toc-text">状态行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#响应头"><span class="toc-number">1.2.2.</span> <span class="toc-text">响应头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实体内容"><span class="toc-number">1.2.3.</span> <span class="toc-text">实体内容</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP请求方案"><span class="toc-number">2.</span> <span class="toc-text">HTTP请求方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#苹果原生（自带）"><span class="toc-number">2.1.</span> <span class="toc-text">苹果原生（自带）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSURLConnection"><span class="toc-number">2.1.1.</span> <span class="toc-text">NSURLConnection</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NSURL"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">NSURL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NSURLRequest"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">NSURLRequest</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NSMutableURLRequest"><span class="toc-number">2.1.1.3.</span> <span class="toc-text">NSMutableURLRequest</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NSURLConnection的使用步骤"><span class="toc-number">2.1.1.4.</span> <span class="toc-text">NSURLConnection的使用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#同步请求"><span class="toc-number">2.1.1.4.1.</span> <span class="toc-text">同步请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#异步请求"><span class="toc-number">2.1.1.4.2.</span> <span class="toc-text">异步请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSURLConnectionDataDelegate协议中的代理方法"><span class="toc-number">2.1.1.4.3.</span> <span class="toc-text">NSURLConnectionDataDelegate协议中的代理方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NSURLSession"><span class="toc-number">2.1.2.</span> <span class="toc-text">NSURLSession</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFNetwork"><span class="toc-number">2.1.3.</span> <span class="toc-text">CFNetwork</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三方框架"><span class="toc-number">2.2.</span> <span class="toc-text">第三方框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ASIHttpRequest"><span class="toc-number">2.2.1.</span> <span class="toc-text">ASIHttpRequest</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AFNetworking"><span class="toc-number">2.2.2.</span> <span class="toc-text">AFNetworking</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MKNetworkKit"><span class="toc-number">2.2.3.</span> <span class="toc-text">MKNetworkKit</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JSON"><span class="toc-number">3.</span> <span class="toc-text">JSON</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON解析方案"><span class="toc-number">3.1.</span> <span class="toc-text">JSON解析方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSJSONSerialization的常见方法"><span class="toc-number">3.1.1.</span> <span class="toc-text">NSJSONSerialization的常见方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#XML"><span class="toc-number">4.</span> <span class="toc-text">XML</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#XML语法"><span class="toc-number">4.1.</span> <span class="toc-text">XML语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#文档声明"><span class="toc-number">4.1.1.</span> <span class="toc-text">文档声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元素（Element）"><span class="toc-number">4.1.2.</span> <span class="toc-text">元素（Element）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性（Attribute）"><span class="toc-number">4.1.3.</span> <span class="toc-text">属性（Attribute）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XML解析"><span class="toc-number">4.2.</span> <span class="toc-text">XML解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#苹果原生"><span class="toc-number">4.2.1.</span> <span class="toc-text">苹果原生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三方框架-1"><span class="toc-number">4.2.2.</span> <span class="toc-text">第三方框架</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="HTTP通信过程">HTTP通信过程</h1><h2 id="请求">请求</h2><p>HTTP协议规定，一个完整的由 <strong>客户端</strong> 发给 <strong>服务器</strong> 的HTTP请求中包含以下内容。</p>
+<h3 id="请求行">请求行</h3><p>包含了 <code>请求方法</code>、<code>请求资源路径</code>、<code>HTTP协议版本</code>，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /ZLServer/resources/images/<span class="number">1.</span>jpg HTTP/<span class="number">1.1</span></span><br></pre></td></tr></table></figure>
+<h3 id="请求头">请求头</h3><p>包含了<code>对客户端的环境描述</code>、<code>客户端请求的主机地址</code>等信息，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">Host:</span> <span class="number">192.168</span><span class="number">.1</span><span class="number">.105</span>:<span class="number">8080</span> 	<span class="comment">// 客户端想访问的服务器主机地址</span></span><br><span class="line">User-<span class="string">Agent:</span> Mozilla<span class="regexp">/5.0 (Macintosh; Intel Mac OS X 10.9) Firefox/</span><span class="number">30.0</span> </span><br><span class="line">							<span class="comment">// 客户端的类型，客户端的软件环境</span></span><br><span class="line"><span class="string">Accept:</span> text<span class="regexp">/html, */</span>* 		<span class="comment">// 客户端所能接收的数据类型</span></span><br><span class="line">Accept-<span class="string">Language:</span> zh-cn 		<span class="comment">// 客户端的语言环境</span></span><br><span class="line">Accept-<span class="string">Encoding:</span> gzip 		<span class="comment">// 客户端支持的数据压缩格式</span></span><br></pre></td></tr></table></figure>
+<h3 id="请求体">请求体</h3><p>客户端发给服务器的具体数据，比如文件数据。</p>
+<h3 id="创建GET请求">创建GET请求</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *urlStr = [<span class="string">@"http://192.168.1.102:8080/MJServer/login?username=123&amp;pwd=123"</span> stringByAddingPercentEscapesUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>];</span><br><span class="line"><span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:urlStr];</span><br><span class="line"><span class="built_in">NSMutableURLRequest</span> *request = [<span class="built_in">NSMutableURLRequest</span> requestWithURL:url];</span><br></pre></td></tr></table></figure>
+<h3 id="创建POST请求">创建POST请求</h3><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NSString *urlStr = @<span class="string">"http://192.168.1.102:8080/MJServer/login"</span>;</span><br><span class="line">NSURL *url = <span class="string">[NSURL URLWithString:urlStr]</span>;</span><br><span class="line">NSMutableURLRequest *request = <span class="string">[NSMutableURLRequest requestWithURL:url]</span>;</span><br><span class="line">request.HTTPMethod = @<span class="string">"<span class="keyword">POST</span>"</span>;</span><br><span class="line">// 请求体</span><br><span class="line">NSString *bodyStr = @<span class="string">"username=123&amp;pwd=123"</span>;</span><br><span class="line">request.HTTPBody = <span class="string">[bodyStr dataUsingEncoding:NSUTF8StringEncoding]</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="响应">响应</h2><p><strong>客户端</strong> 向 <strong>服务器</strong> 发送请求，<strong>服务器 </strong>应当做出响应，即返回数据给 <strong>客户端</strong>。</p>
+<p>HTTP协议规定，一个完整的HTTP响应中包含以下内容：</p>
+<h3 id="状态行">状态行</h3><p>包含了<code>HTTP协议版本</code>、<code>状态码</code>、<code>状态英文名称</code>，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</span><br></pre></td></tr></table></figure>
+<h3 id="响应头">响应头</h3><p>包含了<code>对服务器的描述</code>、<code>对返回数据的描述</code>，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Server: Apache-Coyote/<span class="number">1.1</span> 		    <span class="comment">// 服务器的类型</span></span><br><span class="line">Content-Type: image/jpeg 		    <span class="comment">// 返回数据的类型</span></span><br><span class="line">Content-Length: <span class="number">56811</span> 		        <span class="comment">// 返回数据的长度</span></span><br><span class="line">Date: Mon, <span class="number">23</span> Jun <span class="number">2014</span> <span class="number">12</span>:<span class="number">54</span>:<span class="number">52</span> GMT	<span class="comment">// 响应的时间</span></span><br></pre></td></tr></table></figure>
+<h3 id="实体内容">实体内容</h3><p><strong>服务器</strong> 返回给 <strong>客户端</strong> 的具体数据，比如文件数据。</p>
+<h1 id="HTTP请求方案">HTTP请求方案</h1><p>在iOS中，常见的发送HTTP请求方案有苹果原生和第三方框架。</p>
+<h2 id="苹果原生（自带）">苹果原生（自带）</h2><h3 id="NSURLConnection">NSURLConnection</h3><p>用法简单，最古老最经典最直接的一种方案。</p>
+<p>负责发送请求，建立客户端和服务器的连接。发送NSURLRequest到数据给服务器，并收集来自服务器的响应数据。</p>
+<h4 id="NSURL">NSURL</h4><p>请求地址。</p>
+<h4 id="NSURLRequest">NSURLRequest</h4><p>一个NSURLRequest对象就代表一个请求，它包含的信息有：</p>
+<pre><code>一个NSURL对象
+请求方法、请求头、请求体
+请求超时
+<span class="attribute">...</span> <span class="attribute">...</span>
+</code></pre><h4 id="NSMutableURLRequest">NSMutableURLRequest</h4><p>NSURLRequest的子类。</p>
+<p><strong>常用方法</strong></p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">设置请求超时等待时间（超过这个时间就算超时，请求失败）</span><br><span class="line">- (<span class="type">void</span>)setTimeoutInterval:(<span class="type">NSTimeInterval</span>)seconds;</span><br><span class="line"></span><br><span class="line">设置请求方法（比如<span class="type">GET</span>和<span class="type">POST</span>）</span><br><span class="line">- (<span class="type">void</span>)setHTTPMethod:(<span class="type">NSString</span> *)<span class="keyword">method</span>;</span><br><span class="line"></span><br><span class="line">设置请求体</span><br><span class="line">- (<span class="type">void</span>)setHTTPBody:(<span class="type">NSData</span> *)data;</span><br><span class="line"></span><br><span class="line">设置请求头</span><br><span class="line">- (<span class="type">void</span>)setValue:(<span class="type">NSString</span> *)value forHTTPHeaderField:(<span class="type">NSString</span> *)field;</span><br></pre></td></tr></table></figure>
+<h4 id="NSURLConnection的使用步骤">NSURLConnection的使用步骤</h4><p>使用NSURLConnection发送请求到步骤很简单，创建一个NSURL对象，设置请求路径；传入NSURL创建一个NSURLRequest对象，设置请求头和请求体；使用NSURLConnection发送NSURLRequest。</p>
+<p>NSURLConnection常见的发送请求方法有以下几种：</p>
+<h5 id="同步请求">同步请求</h5><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (NSData <span class="keyword">*</span>)sendSynchronousRequest:(NSURLRequest <span class="keyword">*</span>)request returningResponse:(NSURLResponse <span class="keyword">*</span><span class="keyword">*</span>)response error:(NSError <span class="keyword">*</span><span class="keyword">*</span>)error;</span><br></pre></td></tr></table></figure>
+<h5 id="异步请求">异步请求</h5><p>根据对服务器返回数据的处理方式掉不同，又可以分为2种：</p>
+<p><strong>block回调</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)sendAsynchronousRequest:(<span class="built_in">NSURLRequest</span>*) request queue:(<span class="built_in">NSOperationQueue</span>*) queue completionHandler:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLResponse</span>* response, <span class="built_in">NSData</span>* data, <span class="built_in">NSError</span>* connectionError)) handler;</span><br></pre></td></tr></table></figure>
+<p><strong>代理</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)initWithRequest:(<span class="built_in">NSURLRequest</span> *)request delegate:(<span class="keyword">id</span>)delegate;</span><br><span class="line">+ (<span class="built_in">NSURLConnection</span>*)connectionWithRequest:(<span class="built_in">NSURLRequest</span> *)request delegate:(<span class="keyword">id</span>)delegate;</span><br><span class="line">- (<span class="keyword">id</span>)initWithRequest:(<span class="built_in">NSURLRequest</span> *)request delegate:(<span class="keyword">id</span>)delegate startImmediately:(<span class="built_in">BOOL</span>)startImmediately;<span class="comment">//在startImmediately = NO的情况下，需要调用start方法开始发送请求</span></span><br><span class="line">- (<span class="keyword">void</span>)start;</span><br></pre></td></tr></table></figure>
+<pre><code>成为<span class="built_in">NSURLConnection</span>的代理，最好遵守<span class="built_in">NSURLConnectionDataDelegate</span>协议
+</code></pre><h5 id="NSURLConnectionDataDelegate协议中的代理方法">NSURLConnectionDataDelegate协议中的代理方法</h5><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">开始接收到服务器的响应时调用</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connection</span>:<span class="value">(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response</span></span>;</span><br><span class="line"></span><br><span class="line">接收到服务器返回的数据时调用（服务器返回的数据比较大时会调用多次）</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connection</span>:<span class="value">(NSURLConnection *)connection didReceiveData:(NSData *)data</span></span>;</span><br><span class="line"></span><br><span class="line">服务器返回的数据完全接收完毕后调用</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connectionDidFinishLoading</span>:<span class="value">(NSURLConnection *)connection</span></span>;</span><br><span class="line"></span><br><span class="line">请求出错时调用（比如请求超时）</span><br><span class="line"><span class="tag">-</span> (<span class="tag">void</span>)<span class="rule"><span class="attribute">connection</span>:<span class="value">(NSURLConnection *)connection didFailWithError:(NSError *)error</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="NSURLSession">NSURLSession</h3><p>iOS7新出的技术，功能比NSURLConnection更加强大。</p>
+<h3 id="CFNetwork">CFNetwork</h3><p>NSURLConnection和NSURLSession的底层，纯C语言。</p>
+<h2 id="第三方框架">第三方框架</h2><h3 id="ASIHttpRequest">ASIHttpRequest</h3><p>外号“HTTP终结者”，功能极其强大，可惜早已停止更新。</p>
+<h3 id="AFNetworking">AFNetworking</h3><p>简单易用，提供了基本够用的常用功能，维护和使用者多。</p>
+<h3 id="MKNetworkKit">MKNetworkKit</h3><p>简单易用，维护和使用者少。</p>
+<h1 id="JSON">JSON</h1><p>JSON是一种轻量级的数据格式，一般用于数据交互。服务器返回给客户端的数据，一般都是JSON格式或者XML格式（文件下载除外）。</p>
+<h2 id="JSON解析方案">JSON解析方案</h2><p>在iOS中，JSON的常见解析方案有4种</p>
+<p>第三方框架：<code>JSONKit</code>、<code>SBJson</code>、<code>TouchJSON</code>（性能从左到右越差）</p>
+<p>苹果原生（自带）：<code>NSJSONSerialization</code>（性能最好）</p>
+<h3 id="NSJSONSerialization的常见方法">NSJSONSerialization的常见方法</h3><p><strong>JSON数据 —&gt; OC对象</strong></p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (id)<span class="type">JSONObjectWithData</span>:(<span class="type">NSData</span> *)<span class="typedef"><span class="keyword">data</span> options:<span class="container">(<span class="type">NSJSONReadingOptions</span>)</span>opt error:<span class="container">(<span class="type">NSError</span> **)</span>error;</span></span><br></pre></td></tr></table></figure>
+<p><strong>OC对象 —&gt; JSON数据</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSData</span> *)dataWithJSONObject:(<span class="keyword">id</span>)obj options:(<span class="built_in">NSJSONWritingOptions</span>)opt error:(<span class="built_in">NSError</span> **)error;</span><br></pre></td></tr></table></figure>
+<h1 id="XML">XML</h1><p>全称是Extensible Markup Language，译作“可扩展标记语言”，跟JSON一样，也是常用的一种用于交互的数据格式，一般也叫XML文档（XML Document）。</p>
+<h2 id="XML语法">XML语法</h2><p>一个常见的XML文档一般由<code>文档声明</code>、<code>元素（Element）</code>、<code>属性（Attribute）</code>三部分组成。</p>
+<h3 id="文档声明">文档声明</h3><p>在XML文档的最前面，必须编写一个文档声明，用来声明XML文档的类型。</p>
+<p><strong>最简单的声明</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" ?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>用encoding属性说明文档的字符编码</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="元素（Element）">元素（Element）</h3><p>一个元素包括了开始标签和结束标签，规范的XML文档最多只有1个根元素，其他元素都是根元素的子孙元素。</p>
+<p>XML中的所有空格和换行，都会当做具体内容处理。</p>
+<h3 id="属性（Attribute）">属性（Attribute）</h3><p>一个元素可以拥有多个属性，属性值必须用 双引号”” 或者 单引号’’ 括住。</p>
+<p>实际上，属性表示的信息也可以用子元素来表示。</p>
+<h2 id="XML解析">XML解析</h2><p>XML的解析方式有2种：</p>
+<pre><code>DOM：一次性将整个<span class="built_in">XML</span>文档加载进内存，比较适合解析小文件
+SAX：从根元素开始，按顺序一个元素一个元素往下解析，比较适合解析大文件
+</code></pre><p>在iOS中，解析XML的手段有很多种。</p>
+<h3 id="苹果原生">苹果原生</h3><p>NSXMLParse：SAX方式解析，使用简单。</p>
+<p>NSXMLParser采取的是SAX方式解析，特点是事件驱动，下面情况都会通知代理</p>
+<pre><code>当扫描到文档（Document）的开始与结束
+当扫描到元素（<span class="built_in">Element</span>）的开始与结束
+</code></pre><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">使用步骤</span><br><span class="line"><span class="comment">// 传入XML数据，创建解析器</span></span><br><span class="line"><span class="built_in">NSXMLParser</span> *parser = [[<span class="built_in">NSXMLParser</span> alloc] initWithData:data];</span><br><span class="line"><span class="comment">// 设置代理，监听解析过程</span></span><br><span class="line">parser<span class="variable">.delegate</span> = <span class="keyword">self</span>;</span><br><span class="line"><span class="comment">// 开始解析</span></span><br><span class="line">[parser parse];</span><br></pre></td></tr></table></figure>
+<p><strong>NSXMLParserDelegate</strong></p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">当扫描到文档的开始时调用（开始解析）</span><br><span class="line"><span class="pp">- <span class="params">(void)</span>parserDidStartDocument:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser</span><br><span class="line"></span><br><span class="line">当扫描到文档的结束时调用（解析完毕）</span><br><span class="line">- <span class="params">(void)</span>parserDidEndDocument:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser</span><br><span class="line"></span><br><span class="line">当扫描到元素的开始时调用（attributeDict存放着元素的属性）</span><br><span class="line">- <span class="params">(void)</span>parser:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser didStartElement:<span class="params">(<span class="variable">NSString</span> *)</span>elementName namespaceURI:<span class="params">(<span class="variable">NSString</span> *)</span>namespaceURI qualifiedName:<span class="params">(<span class="variable">NSString</span> *)</span>qName attributes:<span class="params">(<span class="variable">NSDictionary</span> *)</span>attributeDict</span><br><span class="line"></span><br><span class="line">当扫描到元素的结束时调用</span><br><span class="line">- <span class="params">(void)</span>parser:<span class="params">(<span class="variable">NSXMLParser</span> *)</span>parser didEndElement:<span class="params">(<span class="variable">NSString</span> *)</span>elementName namespaceURI:<span class="params">(<span class="variable">NSString</span> *)</span>namespaceURI qualifiedName:<span class="params">(<span class="variable">NSString</span> *)</span>qName</span></span><br></pre></td></tr></table></figure>
+<h3 id="第三方框架-1">第三方框架</h3><p>libxml2：纯C语言，默认包含在iOS SDK中，同时支持DOM和SAX方式解析</p>
+<p>GDataXML：DOM方式解析，由Google开发，基于libxml2</p>
+<p><strong>GDataXML中常用的类</strong></p>
+<pre><code><span class="tag">GDataXMLDocument</span>：代表整个<span class="tag">XML</span>文档
+<span class="tag">GDataXMLElement</span>：代表文档中的每个元素
+使用<span class="rule"><span class="attribute">attributeForName</span>:<span class="value">方法可以获得属性值</span></span>
+</code></pre><p><strong>XML解析方式的选择建议</strong></p>
+<pre><code>大文件：<span class="built_in">NSXMLParser</span>、libxml2
+小文件：GDataXML
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://www.zhuli8.com/2015/09/06/iOS网络相关总结/" data-title="iOS网络相关总结 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/10/25/项目中用到的工具和技术/" title="项目中用到的工具和技术">
+  <strong>上一篇：</strong><br/>
+  <span>
+  项目中用到的工具和技术</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/08/30/设计模式总结/"  title="设计模式总结">
+ <strong>下一篇：</strong><br/> 
+ <span>设计模式总结
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/09/06/iOS网络相关总结/" data-title="iOS网络相关总结" data-url="http://www.zhuli8.com/2015/09/06/iOS网络相关总结/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP通信过程"><span class="toc-number">1.</span> <span class="toc-text">HTTP通信过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#请求"><span class="toc-number">1.1.</span> <span class="toc-text">请求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#请求行"><span class="toc-number">1.1.1.</span> <span class="toc-text">请求行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求头"><span class="toc-number">1.1.2.</span> <span class="toc-text">请求头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求体"><span class="toc-number">1.1.3.</span> <span class="toc-text">请求体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建GET请求"><span class="toc-number">1.1.4.</span> <span class="toc-text">创建GET请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建POST请求"><span class="toc-number">1.1.5.</span> <span class="toc-text">创建POST请求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#响应"><span class="toc-number">1.2.</span> <span class="toc-text">响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#状态行"><span class="toc-number">1.2.1.</span> <span class="toc-text">状态行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#响应头"><span class="toc-number">1.2.2.</span> <span class="toc-text">响应头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实体内容"><span class="toc-number">1.2.3.</span> <span class="toc-text">实体内容</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP请求方案"><span class="toc-number">2.</span> <span class="toc-text">HTTP请求方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#苹果原生（自带）"><span class="toc-number">2.1.</span> <span class="toc-text">苹果原生（自带）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSURLConnection"><span class="toc-number">2.1.1.</span> <span class="toc-text">NSURLConnection</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NSURL"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">NSURL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NSURLRequest"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">NSURLRequest</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NSMutableURLRequest"><span class="toc-number">2.1.1.3.</span> <span class="toc-text">NSMutableURLRequest</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NSURLConnection的使用步骤"><span class="toc-number">2.1.1.4.</span> <span class="toc-text">NSURLConnection的使用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#同步请求"><span class="toc-number">2.1.1.4.1.</span> <span class="toc-text">同步请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#异步请求"><span class="toc-number">2.1.1.4.2.</span> <span class="toc-text">异步请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSURLConnectionDataDelegate协议中的代理方法"><span class="toc-number">2.1.1.4.3.</span> <span class="toc-text">NSURLConnectionDataDelegate协议中的代理方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NSURLSession"><span class="toc-number">2.1.2.</span> <span class="toc-text">NSURLSession</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CFNetwork"><span class="toc-number">2.1.3.</span> <span class="toc-text">CFNetwork</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三方框架"><span class="toc-number">2.2.</span> <span class="toc-text">第三方框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ASIHttpRequest"><span class="toc-number">2.2.1.</span> <span class="toc-text">ASIHttpRequest</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AFNetworking"><span class="toc-number">2.2.2.</span> <span class="toc-text">AFNetworking</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MKNetworkKit"><span class="toc-number">2.2.3.</span> <span class="toc-text">MKNetworkKit</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JSON"><span class="toc-number">3.</span> <span class="toc-text">JSON</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON解析方案"><span class="toc-number">3.1.</span> <span class="toc-text">JSON解析方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NSJSONSerialization的常见方法"><span class="toc-number">3.1.1.</span> <span class="toc-text">NSJSONSerialization的常见方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#XML"><span class="toc-number">4.</span> <span class="toc-text">XML</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#XML语法"><span class="toc-number">4.1.</span> <span class="toc-text">XML语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#文档声明"><span class="toc-number">4.1.1.</span> <span class="toc-text">文档声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元素（Element）"><span class="toc-number">4.1.2.</span> <span class="toc-text">元素（Element）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性（Attribute）"><span class="toc-number">4.1.3.</span> <span class="toc-text">属性（Attribute）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XML解析"><span class="toc-number">4.2.</span> <span class="toc-text">XML解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#苹果原生"><span class="toc-number">4.2.1.</span> <span class="toc-text">苹果原生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三方框架-1"><span class="toc-number">4.2.2.</span> <span class="toc-text">第三方框架</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IM/" title="IM">IM<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/swift/" title="swift">swift<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/开发利器/" title="开发利器">开发利器<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>17</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IM/" title="IM">IM<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/swift/" title="swift">swift<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/webRTC/" title="webRTC">webRTC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据存储/" title="数据存储">数据存储<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/代码管理/" title="代码管理">代码管理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ice/" title="ice">ice<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/GCD/" title="GCD">GCD<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://casatwy.com" target="_blank" title="App架构相关文章">田伟宇</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="hexo相关学习">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://tool.lu/favicon" target="_blank" title="icon制作在线工具">Icon制作</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://yulingtianxia.com" target="_blank" title="杨萧玉目前在支付宝实习，负责移动开发">玉令天下的博客</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://blog.callmewhy.com" target="_blank" title="汪海，全名汪海洋">Why’s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> “Hello ,I&#39;m ZhuLi in Chinasofti.” <br/>
+			“This is my blog,believe it or not.”</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/zhuli8" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/zhuli8com" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="https://www.zhihu.com/people/zhu-li-68-76" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+		<a href="mailto:zhuli1228@163.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="朱利">朱利</a>
+		
+		
+		</p>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','TqhyGfTT5KJKMHcgZnBF','2.0.0');
+</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhuli8"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_3725936'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D3725936' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

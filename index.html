@@ -81,6 +81,112 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/11/27/C语言中的static-详细分析/" title="C语言中的static 详细分析" itemprop="url">C语言中的static 详细分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-27T03:20:46.000Z" itemprop="datePublished"> 发表于 2015-11-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>C语言代码是以文件为单位来组织的，在一个源程序的所有源文件中，一个外部变量（注意不是局部变量）或者函数只能在一个源程序中定义一次，如果有重复定义的话编译器就会报错。伴随着不同源文件变量和函数之间的相互饮用以及相互独立的关系，产生了extern和static关键字。</p>
+<p>下面，详细分析一下static关键字在编写程序时有的三大类用法：</p>
+<h1 id="static全局变量">static全局变量</h1><p>我们知道，一个进程在内存中的布局如图1所示：</p>
+<p><img src="http://hi.csdn.net/attachment/201108/22/0_13139841062Z8o.gif" alt=""></p>
+<p>其中.text段保存进程所执行的程序二进制文件，.data段保存进程所有的已初始化的全局变量，.bss段保存进程未初始化的全局变量（其他段中还有很多乱七八糟的段，暂且不表）。在进程的整个生命周期中，.data段和.bss段内的数据时跟整个进程同生共死的，也就是在进程结束之后这些数据才会寿终就寝。</p>
+<p>当一个进程的全局变量被声明为static之后，它的中文名叫<strong>静态全局变量</strong>。静态全局变量和其他的全局变量的存储点并没有区别，都是在.data段（已初始化）或者.bss段（未初始化）内，但是<code>它只在定义它的源文件内有效，其他源文件无法访问它</code>。所以，普通全局变量穿上statci外衣后，它就变成来新娘，已心有所属，只能被定义它的源文件（新郎）中的变量或函数访问。</p>
+<p><strong>file1.h</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printStr</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>file1.c</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">char</span>* hello = <span class="string">"hello cobing!"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printStr</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, hello);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>flie2.c</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	printStr();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, hello);<span class="comment">//有错</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="static局部变量">static局部变量</h1><p>普通的局部变量在栈空间上分配，这个局部变量所在的函数被多次调用时，每次调用这个局部变量在栈上的位置都不一定相同。局部变量也可以在堆上动态分配，但是记得使用完这个堆空间后要释放之。</p>
+<p>static局部变量中文名叫<strong>静态局部变量</strong>。它与普通的局部变量比起来有如下几个区别：</p>
+<pre><code><span class="number">1</span>）位置：静态局部变量被编译器放在全局存储区<span class="preprocessor">.data</span>（注意：不在.<span class="keyword">bss段内，原因见3）），所以它虽然是局部的，但是在程序的整个生命周期中存在。
+</span>
+<span class="number">2</span>）访问权限：静态局部变量只能被其作用域内的变量或函数访问。也就是说虽然它会在程序的整个生命周期中存在，由于它是static的，它不能被其他的函数和源文件访问。
+
+<span class="number">3</span>）值：静态局部变量如果没有被用户初始化，则会被编译器自动赋值为<span class="number">0</span>，以后每次调用静态局部变量的时候都用上次调用后的值。这个比较好理解，每次函数调用静态局部变量的时候都修改它然后离开，下次读的时候从全局存储区读出的静态局部变量就是上次修改后的值。
+</code></pre><p>file1.h的内容和上例中的相同，file1.c的内容如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printStr</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> normal = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> stat = <span class="number">0</span>;	<span class="comment">//this is a static local var</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"normal = %d ---- stat = %d\n"</span>,normal, stat);</span><br><span class="line">	normal++;</span><br><span class="line">	stat++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>flie2.c</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line"> printStr();</span><br><span class="line"> printStr();</span><br><span class="line"> printStr();</span><br><span class="line"> printStr();</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">"call stat in main: %d\n"</span>,stat);<span class="comment">//有错</span></span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>输出结果</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">normal = <span class="number">0</span> ---- stat = <span class="number">0</span></span><br><span class="line">normal = <span class="number">0</span> ---- stat = <span class="number">1</span></span><br><span class="line">normal = <span class="number">0</span> ---- stat = <span class="number">2</span></span><br><span class="line">normal = <span class="number">0</span> ---- stat = <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>可以看出，函数每次被调用，普通局部变量都是重新分配，而静态局部变量保持上次调用的值不变。</p>
+<blockquote>
+<p>需要注意的是由于static局部变量的这种特性，使得含静态局部变量的函数变得不可重入，即每次调用可能会产生不同的结果。这在多线程编程时可能会成为一种隐患。需要多加注意。</p>
+</blockquote>
+<h1 id="static函数">static函数</h1><p>相信大家还记得C++面向对象编程中的private函数，私有函数只有该类的成员变量或成员函数可以访问。在C语言中，也有“private函数”，它就是接下来要说的static函数，完成面向对象编程中private函数的功能。</p>
+<p>当你的程序中有很多个源文件的时候，你肯定会让某个源文件只提供一些外界需要的接口，其他的函数可能是为了实现这些接口而编写，这些其他的函数你可能并不希望被外界（非本源文件）所看到，这时候就可以用static修饰这些“其他的函数”。</p>
+<blockquote>
+<p>所以static函数的作用域是本源文件，把它想象为面向对象中的private函数就可以了。</p>
+</blockquote>
+<p><strong>file1.h</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">called</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printStr</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>file1.c</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">called</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printStr</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> returnVal;</span><br><span class="line">	returnVal = called();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"returnVal=%d\n"</span>,returnVal);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>file2.c</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> val;</span><br><span class="line">	val = called();<span class="comment">//报错</span></span><br><span class="line">	printStr();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>static函数可以很好地解决不同原文件中函数同名的问题，因为一个源文件对于其他源文件中的static函数是不可见的。</strong></p>
+<p><a href="http://blog.csdn.net/keyeagle/article/details/6708077" target="_blank" rel="external">原文链接</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Objective-C/">Objective-C</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Objective-C/">Objective-C</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/11/27/C语言中的static-详细分析/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/27/C语言中的static-详细分析/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/10/25/项目中用到的工具和技术/" title="项目中用到的工具和技术" itemprop="url">项目中用到的工具和技术</a>
   </h1>
   <p class="article-author">By
@@ -1183,86 +1289,6 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 
 
 
-  
-
- 
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/12/The-Internet-Communications-Ice-简介/" title="The Internet Communications (ice)" itemprop="url">The Internet Communications (ice)</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-12T09:26:50.000Z" itemprop="datePublished"> 发表于 2015-07-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="简介">简介</h1><p>The Internet Communications Engine (ice) is a modern object-oriented toolkit that enables you to build distributed applications with minimal effort. Ice allows you to focus your efforts on your application logic, and it takes care of all interactions with low-level network programming interfaces. With Ice, there is no need to worry about details such as opening network connections, serializing and deserializing data for network transmission, or retrying failed connection attempts (to name but a few of dozens of such low-level details).</p>
-<h1 id="开发环境搭建">开发环境搭建</h1><p>ICE安装文件：<a href="https://zeroc.com/icetouch/download.html" target="_blank" rel="external">https://zeroc.com/icetouch/download.html</a><br>ICE编译插件：<a href="https://github.com/zeroc-ice/ice-builder-xcode" target="_blank" rel="external">https://github.com/zeroc-ice/ice-builder-xcode</a></p>
-<h1 id="相关文档">相关文档</h1><p>ICE官网：<a href="http://www.zeroc.com/ice.html" target="_blank" rel="external">http://www.zeroc.com/ice.html</a><br>官网文档：<a href="http://doc.zeroc.com/display/Doc/Home" target="_blank" rel="external">http://doc.zeroc.com/display/Doc/Home</a><br>性能评测：<a href="http://zeroc.com/articles/IcePerformanceWhitePaper.pdf" target="_blank" rel="external">http://zeroc.com/articles/IcePerformanceWhitePaper.pdf</a></p>
-<h1 id="ICE通讯框架基本原理">ICE通讯框架基本原理</h1><p>ICE的思路是，用一个中间语言，建立数据结构规范和接口规范，然后再用一个IDE编译插件，将中间语言数据结构规范和接口规范编译为当前的语言，譬如OC的.h/.m文件，接下来，你在客户端和服务端实现中间语言定义号的接口，再做一些其它处理，就可以实现一个分布式程序了。这个思路确实很Nice，值得我们借鉴。</p>
-<h1 id="通讯方式选择">通讯方式选择</h1><p>P2P（设备直连）</p>
-<p>通过服务器中转</p>
-<h1 id="网络连接方式">网络连接方式</h1><p>基于TCP的长连接</p>
-<p>基于HTTP短连接PULL的方式</p>
-<h1 id="协议选择">协议选择</h1><p>XMPP</p>
-<p>SIP</p>
-<p>MQTT</p>
-<p>私有协议（二进制协议）</p>
-<h1 id="其他">其他</h1><p>p2p视频聊天的过程：音视频数据采集—&gt;编码—&gt;发送—&gt;接收—&gt;解码—&gt;播放</p>
-<p><a href="http://www.cnblogs.com/HouZhiHouJueBlogs/p/3864677.html" target="_blank" rel="external">The Internet Communications Engine (Ice) 跨平台异构通讯方案 第一弹-ICE简介</a></p>
-<p><a href="http://www.cnblogs.com/HouZhiHouJueBlogs/p/3864737.html" target="_blank" rel="external">The Internet Communications Engine (Ice) 跨平台异构通讯方案 第二弹-Hello world！</a></p>
-<p><a href="http://www.cnblogs.com/lingyunhu/category/626157.html" target="_blank" rel="external">webrtc</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/IM/">IM</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/IM/">IM</a><a href="/tags/ice/">ice</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/12/The-Internet-Communications-Ice-简介/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/12/The-Internet-Communications-Ice-简介/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -1282,6 +1308,10 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 		
 		  
 			<li><a href="/categories/IM/" title="IM">IM<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
 		  
 		
 		  
@@ -1314,10 +1344,6 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 			
 		
 			
-				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/IM/" title="IM">IM<sup>4</sup></a></li>
 			
 		
@@ -1326,11 +1352,11 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 			
 		
 			
-				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
+				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/webRTC/" title="webRTC">webRTC<sup>1</sup></a></li>
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>3</sup></a></li>
 			
 		
 			
@@ -1338,7 +1364,11 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 			
 		
 			
-				<li><a href="/tags/数据存储/" title="数据存储">数据存储<sup>1</sup></a></li>
+				<li><a href="/tags/webRTC/" title="webRTC">webRTC<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Objective-C/" title="Objective-C">Objective-C<sup>1</sup></a></li>
 			
 		
 			
@@ -1359,6 +1389,10 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 		
 			
 				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据存储/" title="数据存储">数据存储<sup>1</sup></a></li>
 			
 		
 		</ul>

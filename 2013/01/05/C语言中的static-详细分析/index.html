@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="zhuli8’blog">
 <meta property="og:description" content="C语言中的static 详细分析">
 <meta property="og:image" content="http://hi.csdn.net/attachment/201108/22/0_13139841062Z8o.gif">
-<meta property="og:updated_time" content="2015-11-27T03:22:57.000Z">
+<meta property="og:updated_time" content="2015-11-27T03:37:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C语言中的static 详细分析">
 <meta name="twitter:description" content="C语言中的static 详细分析">
@@ -95,7 +95,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#static全局变量"><span class="toc-number">1.</span> <span class="toc-text">static全局变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static局部变量"><span class="toc-number">2.</span> <span class="toc-text">static局部变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static函数"><span class="toc-number">3.</span> <span class="toc-text">static函数</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#static全局变量"><span class="toc-number">1.</span> <span class="toc-text">static全局变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static局部变量"><span class="toc-number">2.</span> <span class="toc-text">static局部变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static函数"><span class="toc-number">3.</span> <span class="toc-text">static函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#我的小结"><span class="toc-number">4.</span> <span class="toc-text">我的小结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#static的作用？"><span class="toc-number">4.1.</span> <span class="toc-text">static的作用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数:外部和内部"><span class="toc-number">4.2.</span> <span class="toc-text">函数:外部和内部</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量:全局和局部"><span class="toc-number">4.3.</span> <span class="toc-text">变量:全局和局部</span></a></li></ol></li></ol>
 		
 		</div>
 		
@@ -140,6 +140,13 @@
 <p><strong>file2.c</strong></p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> val;</span><br><span class="line">	val = called();<span class="comment">//报错</span></span><br><span class="line">	printStr();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>static函数可以很好地解决不同原文件中函数同名的问题，因为一个源文件对于其他源文件中的static函数是不可见的。</strong></p>
+<h1 id="我的小结">我的小结</h1><h2 id="static的作用？">static的作用？</h2><p>static修饰的函数是一个内部函数，只能在本文件中调用，其他文件不能调用；</p>
+<p>static修饰的全部变量都是一个内部变量，只能在本文件中使用，其他文件中不能使用；</p>
+<p>static修饰的局部变量只会初始化一次，只能被其作用域内的变量或函数访问，并且在程序退出时才会回收内存。</p>
+<h2 id="函数:外部和内部">函数:外部和内部</h2><p>extern定义和声明外部函数，默认值。</p>
+<p>static定义和声明内部函数。</p>
+<h2 id="变量:全局和局部">变量:全局和局部</h2><p>extern声明全局变量，用在const常量优化，头文件用。</p>
+<p>static定义局部变量，延长生命周期。</p>
 <p><a href="http://blog.csdn.net/keyeagle/article/details/6708077" target="_blank" rel="external">原文链接</a></p>
   
 	</div>
@@ -199,7 +206,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#static全局变量"><span class="toc-number">1.</span> <span class="toc-text">static全局变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static局部变量"><span class="toc-number">2.</span> <span class="toc-text">static局部变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static函数"><span class="toc-number">3.</span> <span class="toc-text">static函数</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#static全局变量"><span class="toc-number">1.</span> <span class="toc-text">static全局变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static局部变量"><span class="toc-number">2.</span> <span class="toc-text">static局部变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static函数"><span class="toc-number">3.</span> <span class="toc-text">static函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#我的小结"><span class="toc-number">4.</span> <span class="toc-text">我的小结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#static的作用？"><span class="toc-number">4.1.</span> <span class="toc-text">static的作用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数:外部和内部"><span class="toc-number">4.2.</span> <span class="toc-text">函数:外部和内部</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量:全局和局部"><span class="toc-number">4.3.</span> <span class="toc-text">变量:全局和局部</span></a></li></ol></li></ol>
  
   </div>
 
@@ -221,7 +228,7 @@
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>12</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>13</sup></a></li>
 		  
 		
 		  
@@ -246,7 +253,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>17</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>18</sup></a></li>
 			
 		
 			

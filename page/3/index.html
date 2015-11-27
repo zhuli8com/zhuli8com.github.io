@@ -81,83 +81,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/03/sip-xmpp/" title="sip&amp;xmpp" itemprop="url">sip&amp;xmpp</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-03T07:22:21.000Z" itemprop="datePublished"> 发表于 2015-05-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>XMPP和SIP都是应用层协议,主要用于互联网上发送语音和即时通讯。 SIP在RFC 3621中定义,XMPP在RFC 3920中定义。XMPP是从即时通讯中演变而来,SIP是从VOIP中演变而来,XMPP为了会话协商添加了一个扩展叫做Jingle,SIP为了即时通讯业务添加了一个扩展叫做SIMPLE。</p>
-<h1 id="SIP_(Session_Initiation_Protocol)">SIP (Session Initiation Protocol)</h1><p>SIP是一个应用层协议,是用在类似VOIP这样的场合,用来建立、修改、中止会话,同时在多人会议中他也能在已有会话中加入新的会话。基本上SIP是VOIP中的信令协议,它处理呼叫建立,呼叫转移和产生CDR(Call Detail Record,供通话计费用)。</p>
-<h1 id="XMPP_(Extensible_Messaging_Presence_Protocol)">XMPP (Extensible Messaging Presence Protocol)</h1><p>XMPP是一个为即时通讯和请求响应业务服务的XML协议，最早由Jabber开源社区在1999年开发,2002年XMPP工作组为了更适合即时通讯对Jabber进行了扩展。</p>
-<h1 id="SIP和XMPP的异同">SIP和XMPP的异同</h1><p>其实我们不能简单地拿SIP和XMPP做比对,就像我们不能直接比较苹果和橘子,前者主要是为了会话协商,后者主要是为了结构化数据交换,只不过随着各自对Simple和Jingle的引入,他们有了一些相似。</p>
-<p>1、SIP提供连接的建立、修改和终止，而XMPP在客户端内部提供流管道、交换结构化数据。</p>
-<p>也就是说：SIP的重点是终端之间连接的建立和维护，连接以后的数据和信息传送他不关注；而XMPP重点是考虑终端内部的数据交换，连接建立是基本的功能，而不是重点。所以，XMPP对应用的支持和扩展性的考虑很充分,比SIP天生要好。</p>
-<p>2、SIP的信令和消息传送是基于文本的，不太好解析,或者说解析起来缺少规律性,在新增数据消息体的时候缺少继承性,需要开发新的代码来封装和解析,原有代码的继承性比较差。而XMPP采用XML，是一种结构化的消息结构，能够方便地表达层次化的内容，以及内容之间的内在逻辑。这种XML结构对应用的扩展和内容的解析带来极大的方便，大量软件代码可以复用。</p>
-<p>3、SIP信令由header和body两部分组成，也就是说，SIP报文格式的header已经包含了部分内容,类似于HTTP,与具体的上层应用直接关联，而不是通用的报文格式；而XMPP所有信息都是采用XML在流管道之间透明传送。</p>
-<p>SIP的连接建立通道与数据传送通道是各自独立的，连接建立在SIP client与Server之间，而数据传送通道是在Client—Client之间直接进行的。这个对视频、语音和文件传送业务很合适，但是不适合其他形式的应用。</p>
-<p>XMPP的控制和数据通道是一体的，Clent只与Server建立连接，而Client与Client之间是没有之间连接的。Client之间传送的通道是：Client1—-〉Server1—-〉Server2—-〉Client2。这种方式看起来扩展性差，server压力很大，但是能够实现很好的业务功能，比如留言、广播、群聊、状态更新、Blog、微博、数据共享等等。</p>
-<p>这种C-S模型，很多业务的控制在Server上完成，新功能的增加在server上实现，在server上定义新的XML对象和逻辑，客户端只要负责XML数据流的解析和呈现就可以了, 所以，终端实现简单。</p>
-<p>4、SIP可以使用UDP,TCP,TLS进行传送,而XMPP仅仅使用TCP和TLS进行发送.</p>
-<p>5、SIP是双向对称，客户端和服务器都可以主动发起连接请求并响应，这种对称连接的方式在穿越NAT和Firewall的时候很麻烦，无法保证穿越NAT。而XMPP是单向的连接，只有Client可以向Server发起连接请求，Server不会向Client发起连接。这样便于NAT和Firewall的穿越。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/IM/">IM</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/IM/">IM</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/03/sip-xmpp/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/03/sip-xmpp/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-  
-
- 
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2015/04/26/iOS自定义转场/" title="iOS自定义转场" itemprop="url">iOS自定义转场</a>
   </h1>
   <p class="article-author">By
@@ -424,6 +347,99 @@
 	
 	  	<span></span>
 		<a href="/2015/04/12/C语言预处理指令/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/12/C语言预处理指令/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2013/02/03/iOS易混淆语法小结/" title="iOS易混淆语法小结" itemprop="url">iOS易混淆语法小结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2013-02-03T06:27:54.000Z" itemprop="datePublished"> 发表于 2013-02-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="respondsToSelector&amp;instancesRespondToSelector">respondsToSelector&amp;instancesRespondToSelector</h1><p>respondsToSelector既可以检查类（是否响应指定类方法），也可以检查实例（是否响应制定实例）。</p>
+<p>instancesRespondToSelector只能响应类方法。</p>
+<h1 id="isKindOfClass&amp;isMemberOfClass">isKindOfClass&amp;isMemberOfClass</h1><p>isKindOfClass判断是否是这个类或者这个类的子类的实例。</p>
+<p>isMemberOfClass判断是否是这个类的实例。</p>
+<h1 id="static&amp;extern">static&amp;extern</h1><p>extern定义和声明外部函数，是默认值；static定义和声明内部函数。</p>
+<p>extern声明外部全局变量，用在const常量优化，头文件用；static定义局部变量，延长生命周期。</p>
+<h1 id="const">const</h1><h2 id="用const修饰一般变量">用const修饰一般变量</h2><p>在C语言中，用const修饰的变量必须在声明时进行初始化(用来修饰函数的形参除外)。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> n;  这种声明方式是错误的</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> n=<span class="number">5</span>; 正确</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> n)</span></span>; 正确</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> a; 错误</span><br><span class="line"><span class="keyword">char</span> * <span class="keyword">const</span> p;  错误</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *p;正确(注意这种为什么是正确的),因为这里<span class="keyword">const</span>是修饰p指向的变量,而不是指针变量p本身</span><br></pre></td></tr></table></figure>
+<h2 id="const与指针搭配使用">const与指针搭配使用</h2><p>因为指针本身也是一个变量，只不过指针存放的是地址而已，而一旦指针变成了常量，即指针本身的值是不可变的，此时指针只能指向固定的存储单元;指针一般会指向一个变量，如果该变量成为一个常量，那么该变量的值就不能被修改，即常量指针，指针指向的是一个不可变的变量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">3</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *p=&amp;a;</span><br><span class="line"><span class="keyword">int</span> <span class="keyword">const</span> *p1=&amp;a;</span><br><span class="line">*p=<span class="number">4</span>;</span><br><span class="line">a=<span class="number">4</span>;</span><br></pre></td></tr></table></figure>
+<p>第2行和第3行是等价的；第4行错误，因为用const限定p指向的变量的值是不可以修改的，即不可以通过指针p去修改变量a的值；第5行是正确的，因为a本身没用const进行修饰，即a本事的值事可以修改的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> b=<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span>*p;</span><br><span class="line"><span class="keyword">int</span> <span class="keyword">const</span>*p1;</span><br><span class="line"><span class="keyword">int</span>* <span class="keyword">const</span> p2;</span><br><span class="line"><span class="keyword">int</span>* <span class="keyword">const</span> p3=&amp;b</span><br><span class="line">p=&amp;a;</span><br><span class="line">p1=&amp;a;</span><br><span class="line">p2=&amp;b;</span><br><span class="line">p3=&amp;a;</span><br></pre></td></tr></table></figure>
+<p>第3、4、6、7、8行是正确的；第5、10行是错误的，因为const在*后面表示是来修饰指针变量本身，因此在声明时必须进行初始化，并且在后面不能再指向其他的变量。</p>
+<h2 id="C++中的const">C++中的const</h2><p> C语言和C++中的const有很大区别。在C语言中用const修饰的变量仍然是一个变量;而在C++中用const修饰过后，就变成常量了。</p>
+<h2 id="总结:">总结:</h2><blockquote>
+<p>(1)在C语言中用const去修饰一个变量，表示这个变量是只读的，不可通过显式的调用a去修改a的值，并且此时a仍然是一个变 量，不能等同于常量;</p>
+<p>(2)要注意const在声明变量时所处的位置，位置不同，在意义上可能会有很大的不同。(前固值，后固址。)</p>
+<p>如果const在’*’左边，则表示指针指向的变量的值不可变;</p>
+<p>如果const在’*’右边，则表示指针的值是不可变的;</p>
+</blockquote>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function_or_atom">const</span> <span class="function_or_atom">int</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">const</span> <span class="function_or_atom">int</span> *<span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> *<span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> * <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> * <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="prompt">1&gt; </span>前两个的作用是一样：<span class="function_or_atom">a</span> 是一个常整型数</span><br><span class="line"><span class="prompt">2&gt; </span>第三、四个意味着 <span class="function_or_atom">a</span> 是一个指向常整型数的指针(整型数是不可修改的，但指针可以)</span><br><span class="line"><span class="prompt">3&gt; </span>第五个的意思：<span class="function_or_atom">a</span> 是一个指向整型数的常指针(指针指向的整型数是可以修改的，但指针是不可修改的)</span><br><span class="line"><span class="prompt">4&gt; </span>最后一个意味着：<span class="function_or_atom">a</span> 是一个指向常整型数的常指针(指针指向的整型数是不可修改的，同时指针也是不可修改的)</span><br></pre></td></tr></table></figure>
+<h1 id="NSTimer">NSTimer</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti target:(<span class="keyword">id</span>)aTarget selector:(SEL)aSelector userInfo:(nullable <span class="keyword">id</span>)userInfo repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti invocation:(<span class="built_in">NSInvocation</span> *)invocation repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br></pre></td></tr></table></figure>
+<p>schedule…方法默认加入到default运行循环（默认运行循环监听普通的点击等事件，滑动等事件需要common模式）。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)timerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti target:(<span class="keyword">id</span>)aTarget selector:(SEL)aSelector userInfo:(nullable <span class="keyword">id</span>)userInfo repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)timerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti invocation:(<span class="built_in">NSInvocation</span> *)invocation repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br></pre></td></tr></table></figure>
+<p>timer…默认没有加到任何runloop。</p>
+<p>NSTimer不精确，适用于周期较长不精确的计时，否则使用CADisplayLink。</p>
+<h1 id="delegate命名">delegate命名</h1><p>should表示一个动作发生前，通常带有返回值，可以在动作发生之前改变对象状态。</p>
+<p>will在动作发生前，委托可以对动作做出响应，但不带有返回值。</p>
+<p>did在动作发生后做出的响应。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2013/02/03/iOS易混淆语法小结/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/02/03/iOS易混淆语法小结/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 

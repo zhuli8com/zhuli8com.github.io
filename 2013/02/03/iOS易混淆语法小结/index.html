@@ -17,7 +17,7 @@
 <meta property="og:url" content="http://www.zhuli8.com/2013/02/03/iOS易混淆语法小结/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
 <meta property="og:description" content="iOS易混淆语法">
-<meta property="og:updated_time" content="2015-11-27T06:31:08.000Z">
+<meta property="og:updated_time" content="2015-12-01T02:18:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS易混淆语法小结">
 <meta name="twitter:description" content="iOS易混淆语法">
@@ -94,7 +94,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#respondsToSelector&instancesRespondToSelector"><span class="toc-number">1.</span> <span class="toc-text">respondsToSelector&instancesRespondToSelector</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#isKindOfClass&isMemberOfClass"><span class="toc-number">2.</span> <span class="toc-text">isKindOfClass&isMemberOfClass</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static&extern"><span class="toc-number">3.</span> <span class="toc-text">static&extern</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#const"><span class="toc-number">4.</span> <span class="toc-text">const</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用const修饰一般变量"><span class="toc-number">4.1.</span> <span class="toc-text">用const修饰一般变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#const与指针搭配使用"><span class="toc-number">4.2.</span> <span class="toc-text">const与指针搭配使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C++中的const"><span class="toc-number">4.3.</span> <span class="toc-text">C++中的const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结:"><span class="toc-number">4.4.</span> <span class="toc-text">总结:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NSTimer"><span class="toc-number">5.</span> <span class="toc-text">NSTimer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#delegate命名"><span class="toc-number">6.</span> <span class="toc-text">delegate命名</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#respondsToSelector&instancesRespondToSelector"><span class="toc-number">1.</span> <span class="toc-text">respondsToSelector&instancesRespondToSelector</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#isKindOfClass&isMemberOfClass"><span class="toc-number">2.</span> <span class="toc-text">isKindOfClass&isMemberOfClass</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static&extern"><span class="toc-number">3.</span> <span class="toc-text">static&extern</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#const"><span class="toc-number">4.</span> <span class="toc-text">const</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用const修饰一般变量"><span class="toc-number">4.1.</span> <span class="toc-text">用const修饰一般变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#const与指针搭配使用"><span class="toc-number">4.2.</span> <span class="toc-text">const与指针搭配使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C++中的const"><span class="toc-number">4.3.</span> <span class="toc-text">C++中的const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结:"><span class="toc-number">4.4.</span> <span class="toc-text">总结:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NSTimer"><span class="toc-number">5.</span> <span class="toc-text">NSTimer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#delegate命名"><span class="toc-number">6.</span> <span class="toc-text">delegate命名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#load&initialize"><span class="toc-number">7.</span> <span class="toc-text">load&initialize</span></a></li></ol>
 		
 		</div>
 		
@@ -119,6 +119,7 @@
 <p>如果const在’*’右边，则表示指针的值是不可变的;</p>
 </blockquote>
 <figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function_or_atom">const</span> <span class="function_or_atom">int</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">const</span> <span class="function_or_atom">int</span> *<span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> *<span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> * <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> * <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="prompt">1&gt; </span>前两个的作用是一样：<span class="function_or_atom">a</span> 是一个常整型数</span><br><span class="line"><span class="prompt">2&gt; </span>第三、四个意味着 <span class="function_or_atom">a</span> 是一个指向常整型数的指针(整型数是不可修改的，但指针可以)</span><br><span class="line"><span class="prompt">3&gt; </span>第五个的意思：<span class="function_or_atom">a</span> 是一个指向整型数的常指针(指针指向的整型数是可以修改的，但指针是不可修改的)</span><br><span class="line"><span class="prompt">4&gt; </span>最后一个意味着：<span class="function_or_atom">a</span> 是一个指向常整型数的常指针(指针指向的整型数是不可修改的，同时指针也是不可修改的)</span><br></pre></td></tr></table></figure>
+<p><strong>注：a是指针变量，*a是取指针对应的地址中的数据；一般修改变量其地址不变，修改指针即为修改指针变量的地址其内容不变</strong></p>
 <h1 id="NSTimer">NSTimer</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti target:(<span class="keyword">id</span>)aTarget selector:(SEL)aSelector userInfo:(nullable <span class="keyword">id</span>)userInfo repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti invocation:(<span class="built_in">NSInvocation</span> *)invocation repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br></pre></td></tr></table></figure>
 <p>schedule…方法默认加入到default运行循环（默认运行循环监听普通的点击等事件，滑动等事件需要common模式）。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)timerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti target:(<span class="keyword">id</span>)aTarget selector:(SEL)aSelector userInfo:(nullable <span class="keyword">id</span>)userInfo repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)timerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti invocation:(<span class="built_in">NSInvocation</span> *)invocation repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br></pre></td></tr></table></figure>
@@ -127,6 +128,11 @@
 <h1 id="delegate命名">delegate命名</h1><p>should表示一个动作发生前，通常带有返回值，可以在动作发生之前改变对象状态。</p>
 <p>will在动作发生前，委托可以对动作做出响应，但不带有返回值。</p>
 <p>did在动作发生后做出的响应。</p>
+<h1 id="load&amp;initialize">load&amp;initialize</h1><p>+load 方法是当类或分类被添加到 Objective-C runtime 时被调用的，实现这个方法可以让我们在类加载的时候执行一些类相关的行为。子类的 +load 方法会在它的所有父类的 +load 方法之后执行，而分类的 +load 方法会在它的主类的 +load 方法之后执行。但是不同的类之间的 +load 方法的调用顺序是不确定的。</p>
+<p>子类、父类和分类中的 +load 方法的实现是被区别对待的。也就是说如果子类没有实现 +load 方法，那么当它被加载时 runtime 是不会去调用父类的 +load 方法的。同理，当一个类和它的分类都实现了 +load 方法时，两个方法都会被调用。因此，我们常常可以利用这个特性做一些“邪恶”的事情，比如说方法混淆（Method Swizzling）。</p>
+<p>+initialize 方法是在类或它的子类收到第一条消息之前被调用的，这里所指的消息包括实例方法和类方法的调用。也就是说 +initialize 方法是以懒加载的方式被调用的，如果程序一直没有给某个类或它的子类发送消息，那么这个类的 +initialize 方法是永远不会被调用的。那这样设计有什么好处呢？好处是显而易见的，那就是节省系统资源，避免浪费。</p>
+<p>如果一个子类没有实现 +initialize 方法，那么父类的实现是会被执行多次的。有时候，这可能是你想要的；但如果我们想确保自己的 +initialize 方法只执行一次，避免多次执行可能带来的副作用时，我们可以使用下面的代码来实现：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)initialize &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">self</span> == [ClassName <span class="keyword">self</span>]) &#123;</span><br><span class="line">    <span class="comment">// ... do the initialization ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -163,10 +169,10 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/04/12/C语言预处理指令/" title="C语言预处理指令">
+ <a href="/2013/03/03/vim-学习笔记/" title="vim 学习笔记">
   <strong>上一篇：</strong><br/>
   <span>
-  C语言预处理指令</span>
+  vim 学习笔记</span>
 </a>
 </div>
 
@@ -193,7 +199,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#respondsToSelector&instancesRespondToSelector"><span class="toc-number">1.</span> <span class="toc-text">respondsToSelector&instancesRespondToSelector</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#isKindOfClass&isMemberOfClass"><span class="toc-number">2.</span> <span class="toc-text">isKindOfClass&isMemberOfClass</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static&extern"><span class="toc-number">3.</span> <span class="toc-text">static&extern</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#const"><span class="toc-number">4.</span> <span class="toc-text">const</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用const修饰一般变量"><span class="toc-number">4.1.</span> <span class="toc-text">用const修饰一般变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#const与指针搭配使用"><span class="toc-number">4.2.</span> <span class="toc-text">const与指针搭配使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C++中的const"><span class="toc-number">4.3.</span> <span class="toc-text">C++中的const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结:"><span class="toc-number">4.4.</span> <span class="toc-text">总结:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NSTimer"><span class="toc-number">5.</span> <span class="toc-text">NSTimer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#delegate命名"><span class="toc-number">6.</span> <span class="toc-text">delegate命名</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#respondsToSelector&instancesRespondToSelector"><span class="toc-number">1.</span> <span class="toc-text">respondsToSelector&instancesRespondToSelector</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#isKindOfClass&isMemberOfClass"><span class="toc-number">2.</span> <span class="toc-text">isKindOfClass&isMemberOfClass</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static&extern"><span class="toc-number">3.</span> <span class="toc-text">static&extern</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#const"><span class="toc-number">4.</span> <span class="toc-text">const</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用const修饰一般变量"><span class="toc-number">4.1.</span> <span class="toc-text">用const修饰一般变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#const与指针搭配使用"><span class="toc-number">4.2.</span> <span class="toc-text">const与指针搭配使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C++中的const"><span class="toc-number">4.3.</span> <span class="toc-text">C++中的const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结:"><span class="toc-number">4.4.</span> <span class="toc-text">总结:</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NSTimer"><span class="toc-number">5.</span> <span class="toc-text">NSTimer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#delegate命名"><span class="toc-number">6.</span> <span class="toc-text">delegate命名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#load&initialize"><span class="toc-number">7.</span> <span class="toc-text">load&initialize</span></a></li></ol>
  
   </div>
 
@@ -223,7 +229,11 @@
 		  
 		
 		  
-			<li><a href="/categories/开发利器/" title="开发利器">开发利器<sup>2</sup></a></li>
+			<li><a href="/categories/开发利器/vim/" title="vim">vim<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/开发利器/" title="开发利器">开发利器<sup>3</sup></a></li>
 		  
 		
 		  
@@ -244,15 +254,15 @@
 			
 		
 			
+				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/IM/" title="IM">IM<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/swift/" title="swift">swift<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>4</sup></a></li>
 			
 		
 			

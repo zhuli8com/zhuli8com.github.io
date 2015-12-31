@@ -2,8 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.zhuli8.com/2013/03/03/vim-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2015-12-31T06:05:25.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.zhuli8.com/2015/04/26/iOS%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA/</loc>
+    <lastmod>2015-12-03T01:52:17.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.zhuli8.com/2013/02/03/iOS%E6%98%93%E6%B7%B7%E6%B7%86%E8%AF%AD%E6%B3%95%E5%B0%8F%E7%BB%93/</loc>
-    <lastmod>2015-11-27T06:31:08.000Z</lastmod>
+    <lastmod>2015-12-01T02:18:15.000Z</lastmod>
   </url>
   
   <url>
@@ -74,11 +84,6 @@
   <url>
     <loc>http://www.zhuli8.com/2015/07/19/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/</loc>
     <lastmod>2015-08-19T10:12:18.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.zhuli8.com/2015/04/26/iOS%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BD%AC%E5%9C%BA/</loc>
-    <lastmod>2015-08-11T09:59:23.000Z</lastmod>
   </url>
   
   <url>

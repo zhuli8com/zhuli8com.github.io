@@ -110,6 +110,7 @@
 <h1 id="让你的app绚起来">让你的app绚起来</h1><p><a href="http://www.cnblogs.com/kenshincui/p/3972100.html" target="_blank" rel="external">iOS开发系列—让你的应用“动”起来</a></p>
 <p><a href="http://kittenyang.com/uiviewcontrollertransitioning/" target="_blank" rel="external">iOS自定义转场详解</a></p>
 <p><a href="http://www.jianshu.com/p/38cd35968864" target="_blank" rel="external">关于自定义转场动画，我都告诉你。</a></p>
+<p><a href="http://www.cocoachina.com/ios/20151119/14303.html" target="_blank" rel="external">iOS自定义转场</a></p>
 
         
         
@@ -368,6 +369,82 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2013/03/03/vim-学习笔记/" title="vim 学习笔记" itemprop="url">vim 学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2013-03-03T05:49:06.000Z" itemprop="datePublished"> 发表于 2013-03-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p><a href="http://coolshell.cn/articles/3125.html" target="_blank" rel="external">vim的学习曲线</a>相当的大，下面推荐一个靠谱的<a href="http://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/" target="_blank" rel="external">文章</a>。</p>
+<h1 id="存活">存活</h1><p>mac系统自带vim，当在终端输入“vim/vi 文件名”时会启动vim，默认在<code>normal</code>模式，按下键 <strong>i</strong> 进入<code>insert</code>模式（此时可以输入文本，就像用记事本一样），如果你想返回normal模式按 <strong>esc</strong> 键。</p>
+<pre><code>i → Insert 模式，按 ESC 回到 Normal 模式.
+x → 删当前光标所在的一个字符。
+<span class="attribute">:wq → 存盘 + 退出 (:w</span> 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）
+dd → 删除当前行，并把删除的行存到剪贴板里
+p → 粘贴剪贴板
+u → 撤销上一步的操作
+Ctrl+r → 恢复上一步被撤销的操作
+</code></pre><p>推荐:</p>
+<pre><code>hjkl (强例推荐使用其移动光标，但不必需) →你也可以使用光标键 (←↓↑→). 注: j 就像下箭头。
+<span class="attribute">:help &lt;command&gt; → 显示相关命令的帮助。你也可以就输入 :help</span> 而不跟命令。（退出帮助需要输入:q）
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/开发利器/">开发利器</a>►<a class="article-category-link" href="/categories/开发利器/vim/">vim</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发利器/">开发利器</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2013/03/03/vim-学习笔记/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/03/03/vim-学习笔记/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2013/02/03/iOS易混淆语法小结/" title="iOS易混淆语法小结" itemprop="url">iOS易混淆语法小结</a>
   </h1>
   <p class="article-author">By
@@ -402,6 +479,7 @@
 <p>如果const在’*’右边，则表示指针的值是不可变的;</p>
 </blockquote>
 <figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function_or_atom">const</span> <span class="function_or_atom">int</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">const</span> <span class="function_or_atom">int</span> *<span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> *<span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> * <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> * <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="prompt">1&gt; </span>前两个的作用是一样：<span class="function_or_atom">a</span> 是一个常整型数</span><br><span class="line"><span class="prompt">2&gt; </span>第三、四个意味着 <span class="function_or_atom">a</span> 是一个指向常整型数的指针(整型数是不可修改的，但指针可以)</span><br><span class="line"><span class="prompt">3&gt; </span>第五个的意思：<span class="function_or_atom">a</span> 是一个指向整型数的常指针(指针指向的整型数是可以修改的，但指针是不可修改的)</span><br><span class="line"><span class="prompt">4&gt; </span>最后一个意味着：<span class="function_or_atom">a</span> 是一个指向常整型数的常指针(指针指向的整型数是不可修改的，同时指针也是不可修改的)</span><br></pre></td></tr></table></figure>
+<p><strong>注：a是指针变量，*a是取指针对应的地址中的数据；一般修改变量其地址不变，修改指针即为修改指针变量的地址其内容不变</strong></p>
 <h1 id="NSTimer">NSTimer</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti target:(<span class="keyword">id</span>)aTarget selector:(SEL)aSelector userInfo:(nullable <span class="keyword">id</span>)userInfo repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti invocation:(<span class="built_in">NSInvocation</span> *)invocation repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br></pre></td></tr></table></figure>
 <p>schedule…方法默认加入到default运行循环（默认运行循环监听普通的点击等事件，滑动等事件需要common模式）。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)timerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti target:(<span class="keyword">id</span>)aTarget selector:(SEL)aSelector userInfo:(nullable <span class="keyword">id</span>)userInfo repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)timerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti invocation:(<span class="built_in">NSInvocation</span> *)invocation repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br></pre></td></tr></table></figure>
@@ -410,6 +488,11 @@
 <h1 id="delegate命名">delegate命名</h1><p>should表示一个动作发生前，通常带有返回值，可以在动作发生之前改变对象状态。</p>
 <p>will在动作发生前，委托可以对动作做出响应，但不带有返回值。</p>
 <p>did在动作发生后做出的响应。</p>
+<h1 id="load&amp;initialize">load&amp;initialize</h1><p>+load 方法是当类或分类被添加到 Objective-C runtime 时被调用的，实现这个方法可以让我们在类加载的时候执行一些类相关的行为。子类的 +load 方法会在它的所有父类的 +load 方法之后执行，而分类的 +load 方法会在它的主类的 +load 方法之后执行。但是不同的类之间的 +load 方法的调用顺序是不确定的。</p>
+<p>子类、父类和分类中的 +load 方法的实现是被区别对待的。也就是说如果子类没有实现 +load 方法，那么当它被加载时 runtime 是不会去调用父类的 +load 方法的。同理，当一个类和它的分类都实现了 +load 方法时，两个方法都会被调用。因此，我们常常可以利用这个特性做一些“邪恶”的事情，比如说方法混淆（Method Swizzling）。</p>
+<p>+initialize 方法是在类或它的子类收到第一条消息之前被调用的，这里所指的消息包括实例方法和类方法的调用。也就是说 +initialize 方法是以懒加载的方式被调用的，如果程序一直没有给某个类或它的子类发送消息，那么这个类的 +initialize 方法是永远不会被调用的。那这样设计有什么好处呢？好处是显而易见的，那就是节省系统资源，避免浪费。</p>
+<p>如果一个子类没有实现 +initialize 方法，那么父类的实现是会被执行多次的。有时候，这可能是你想要的；但如果我们想确保自己的 +initialize 方法只执行一次，避免多次执行可能带来的副作用时，我们可以使用下面的代码来实现：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)initialize &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">self</span> == [ClassName <span class="keyword">self</span>]) &#123;</span><br><span class="line">    <span class="comment">// ... do the initialization ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
         
         
@@ -600,7 +683,11 @@
 		  
 		
 		  
-			<li><a href="/categories/开发利器/" title="开发利器">开发利器<sup>2</sup></a></li>
+			<li><a href="/categories/开发利器/vim/" title="vim">vim<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/开发利器/" title="开发利器">开发利器<sup>3</sup></a></li>
 		  
 		
 		  
@@ -621,15 +708,15 @@
 			
 		
 			
+				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/IM/" title="IM">IM<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/swift/" title="swift">swift<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/开发利器/" title="开发利器">开发利器<sup>4</sup></a></li>
 			
 		
 			

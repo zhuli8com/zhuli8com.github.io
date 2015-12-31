@@ -4,23 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>sip&amp;xmpp | zhuli8’blog</title>
+    <title>vim 学习笔记 | zhuli8’blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="朱利">
     
 
     
-    <meta name="description" content="介绍XMPP与SIP">
+    <meta name="description" content="vim学习">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sip&xmpp">
-<meta property="og:url" content="http://www.zhuli8.com/2015/05/03/sip-xmpp/index.html">
+<meta property="og:title" content="vim 学习笔记">
+<meta property="og:url" content="http://www.zhuli8.com/2013/03/03/vim-学习笔记/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
-<meta property="og:description" content="介绍XMPP与SIP">
-<meta property="og:updated_time" content="2015-07-22T07:29:58.000Z">
+<meta property="og:description" content="vim学习">
+<meta property="og:updated_time" content="2015-12-31T06:05:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sip&xmpp">
-<meta name="twitter:description" content="介绍XMPP与SIP">
+<meta name="twitter:title" content="vim 学习笔记">
+<meta name="twitter:description" content="vim学习">
 
     
     <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
@@ -78,14 +78,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/03/sip-xmpp/" title="sip&amp;xmpp" itemprop="url">sip&amp;xmpp</a>
+      <a href="/2013/03/03/vim-学习笔记/" title="vim 学习笔记" itemprop="url">vim 学习笔记</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-03T07:22:21.000Z" itemprop="datePublished"> 发表于 2015-05-03</time>
+    <time datetime="2013-03-03T05:49:06.000Z" itemprop="datePublished"> 发表于 2013-03-03</time>
     
   </p>
 </header>
@@ -94,37 +94,36 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SIP_(Session_Initiation_Protocol)"><span class="toc-number">1.</span> <span class="toc-text">SIP (Session Initiation Protocol)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#XMPP_(Extensible_Messaging_Presence_Protocol)"><span class="toc-number">2.</span> <span class="toc-text">XMPP (Extensible Messaging Presence Protocol)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SIP和XMPP的异同"><span class="toc-number">3.</span> <span class="toc-text">SIP和XMPP的异同</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#存活"><span class="toc-number">1.</span> <span class="toc-text">存活</span></a></li></ol>
 		
 		</div>
 		
-		<p>XMPP和SIP都是应用层协议,主要用于互联网上发送语音和即时通讯。 SIP在RFC 3621中定义,XMPP在RFC 3920中定义。XMPP是从即时通讯中演变而来,SIP是从VOIP中演变而来,XMPP为了会话协商添加了一个扩展叫做Jingle,SIP为了即时通讯业务添加了一个扩展叫做SIMPLE。</p>
-<h1 id="SIP_(Session_Initiation_Protocol)">SIP (Session Initiation Protocol)</h1><p>SIP是一个应用层协议,是用在类似VOIP这样的场合,用来建立、修改、中止会话,同时在多人会议中他也能在已有会话中加入新的会话。基本上SIP是VOIP中的信令协议,它处理呼叫建立,呼叫转移和产生CDR(Call Detail Record,供通话计费用)。</p>
-<h1 id="XMPP_(Extensible_Messaging_Presence_Protocol)">XMPP (Extensible Messaging Presence Protocol)</h1><p>XMPP是一个为即时通讯和请求响应业务服务的XML协议，最早由Jabber开源社区在1999年开发,2002年XMPP工作组为了更适合即时通讯对Jabber进行了扩展。</p>
-<h1 id="SIP和XMPP的异同">SIP和XMPP的异同</h1><p>其实我们不能简单地拿SIP和XMPP做比对,就像我们不能直接比较苹果和橘子,前者主要是为了会话协商,后者主要是为了结构化数据交换,只不过随着各自对Simple和Jingle的引入,他们有了一些相似。</p>
-<p>1、SIP提供连接的建立、修改和终止，而XMPP在客户端内部提供流管道、交换结构化数据。</p>
-<p>也就是说：SIP的重点是终端之间连接的建立和维护，连接以后的数据和信息传送他不关注；而XMPP重点是考虑终端内部的数据交换，连接建立是基本的功能，而不是重点。所以，XMPP对应用的支持和扩展性的考虑很充分,比SIP天生要好。</p>
-<p>2、SIP的信令和消息传送是基于文本的，不太好解析,或者说解析起来缺少规律性,在新增数据消息体的时候缺少继承性,需要开发新的代码来封装和解析,原有代码的继承性比较差。而XMPP采用XML，是一种结构化的消息结构，能够方便地表达层次化的内容，以及内容之间的内在逻辑。这种XML结构对应用的扩展和内容的解析带来极大的方便，大量软件代码可以复用。</p>
-<p>3、SIP信令由header和body两部分组成，也就是说，SIP报文格式的header已经包含了部分内容,类似于HTTP,与具体的上层应用直接关联，而不是通用的报文格式；而XMPP所有信息都是采用XML在流管道之间透明传送。</p>
-<p>SIP的连接建立通道与数据传送通道是各自独立的，连接建立在SIP client与Server之间，而数据传送通道是在Client—Client之间直接进行的。这个对视频、语音和文件传送业务很合适，但是不适合其他形式的应用。</p>
-<p>XMPP的控制和数据通道是一体的，Clent只与Server建立连接，而Client与Client之间是没有之间连接的。Client之间传送的通道是：Client1—-〉Server1—-〉Server2—-〉Client2。这种方式看起来扩展性差，server压力很大，但是能够实现很好的业务功能，比如留言、广播、群聊、状态更新、Blog、微博、数据共享等等。</p>
-<p>这种C-S模型，很多业务的控制在Server上完成，新功能的增加在server上实现，在server上定义新的XML对象和逻辑，客户端只要负责XML数据流的解析和呈现就可以了, 所以，终端实现简单。</p>
-<p>4、SIP可以使用UDP,TCP,TLS进行传送,而XMPP仅仅使用TCP和TLS进行发送.</p>
-<p>5、SIP是双向对称，客户端和服务器都可以主动发起连接请求并响应，这种对称连接的方式在穿越NAT和Firewall的时候很麻烦，无法保证穿越NAT。而XMPP是单向的连接，只有Client可以向Server发起连接请求，Server不会向Client发起连接。这样便于NAT和Firewall的穿越。</p>
-  
+		<p><a href="http://coolshell.cn/articles/3125.html" target="_blank" rel="external">vim的学习曲线</a>相当的大，下面推荐一个靠谱的<a href="http://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/" target="_blank" rel="external">文章</a>。</p>
+<h1 id="存活">存活</h1><p>mac系统自带vim，当在终端输入“vim/vi 文件名”时会启动vim，默认在<code>normal</code>模式，按下键 <strong>i</strong> 进入<code>insert</code>模式（此时可以输入文本，就像用记事本一样），如果你想返回normal模式按 <strong>esc</strong> 键。</p>
+<pre><code>i → Insert 模式，按 ESC 回到 Normal 模式.
+x → 删当前光标所在的一个字符。
+<span class="attribute">:wq → 存盘 + 退出 (:w</span> 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）
+dd → 删除当前行，并把删除的行存到剪贴板里
+p → 粘贴剪贴板
+u → 撤销上一步的操作
+Ctrl+r → 恢复上一步被撤销的操作
+</code></pre><p>推荐:</p>
+<pre><code>hjkl (强例推荐使用其移动光标，但不必需) →你也可以使用光标键 (←↓↑→). 注: j 就像下箭头。
+<span class="attribute">:help &lt;command&gt; → 显示相关命令的帮助。你也可以就输入 :help</span> 而不跟命令。（退出帮助需要输入:q）
+</code></pre>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/IM/">IM</a>
+  <a class="article-category-link" href="/categories/开发利器/">开发利器</a>►<a class="article-category-link" href="/categories/开发利器/vim/">vim</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/IM/">IM</a>
+  <span></span> <a href="/tags/开发利器/">开发利器</a>
   </div>
 
 </div>
@@ -133,7 +132,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/05/03/sip-xmpp/" data-title="sip&amp;xmpp | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2013/03/03/vim-学习笔记/" data-title="vim 学习笔记 | zhuli8’blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -147,18 +146,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/05/10/GPU-加速下的图像处理/" title="GPU 加速下的图像处理">
+ <a href="/2015/04/12/C语言预处理指令/" title="C语言预处理指令">
   <strong>上一篇：</strong><br/>
   <span>
-  GPU 加速下的图像处理</span>
+  C语言预处理指令</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/04/26/iOS自定义转场/"  title="iOS自定义转场">
+<a href="/2013/02/03/iOS易混淆语法小结/"  title="iOS易混淆语法小结">
  <strong>下一篇：</strong><br/> 
- <span>iOS自定义转场
+ <span>iOS易混淆语法小结
 </span>
 </a>
 </div>
@@ -167,7 +166,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/05/03/sip-xmpp/" data-title="sip&xmpp" data-url="http://www.zhuli8.com/2015/05/03/sip-xmpp/"></div>
+	<div class="ds-thread" data-thread-key="2013/03/03/vim-学习笔记/" data-title="vim 学习笔记" data-url="http://www.zhuli8.com/2013/03/03/vim-学习笔记/"></div>
 </section>
 
 
@@ -177,7 +176,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SIP_(Session_Initiation_Protocol)"><span class="toc-number">1.</span> <span class="toc-text">SIP (Session Initiation Protocol)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#XMPP_(Extensible_Messaging_Presence_Protocol)"><span class="toc-number">2.</span> <span class="toc-text">XMPP (Extensible Messaging Presence Protocol)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SIP和XMPP的异同"><span class="toc-number">3.</span> <span class="toc-text">SIP和XMPP的异同</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#存活"><span class="toc-number">1.</span> <span class="toc-text">存活</span></a></li></ol>
  
   </div>
 

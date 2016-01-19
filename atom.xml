@@ -1042,7 +1042,7 @@ CF(Core Foundation)的数据类型在ARC环境下还是需要再做<span class="
     <link href="http://www.zhuli8.com/2015/05/31/%E4%B8%8E%E8%B0%83%E8%AF%95%E5%99%A8%E5%85%B1%E8%88%9E%20-%20LLDB%20%E7%9A%84%E5%8D%8E%E5%B0%94%E5%85%B9/"/>
     <id>http://www.zhuli8.com/2015/05/31/与调试器共舞 - LLDB 的华尔兹/</id>
     <published>2015-05-31T12:40:39.000Z</published>
-    <updated>2015-11-13T02:22:37.000Z</updated>
+    <updated>2016-01-19T08:14:27.000Z</updated>
     <content type="html"><![CDATA[<p>你是否曾经苦恼于理解你的代码，而去尝试打印一个变量的值？</p>
 
 <pre><code>NSLog(@"%@", whatIsInsideThisThing);
@@ -1669,8 +1669,11 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <h2 id="异常断点的作用">异常断点的作用</h2><p>数组越界访问时程序运行崩溃，但是崩溃停在了main函数里面，就算看了栈信息也不能马上定位到到底是那个数组越界访问了。为什么崩溃不能停在数组越界哪里？这是因为数组越界访问不一定会导致程序崩溃的，数组越界访问会导致异常抛出，而抛出的异常没有得到处理才会导致程序崩溃。因此最后会导致崩溃停在CoreFoundation框架里面。这个时候就需要设置Exception Breakpoint产生断点来定位错误了。</p>
 <h2 id="打印View_Controller_Hierarchy">打印View Controller Hierarchy</h2><p>_printHierarchy是 UIViewController 的一个私有方法，你可以用它将view controller 层次打印到控制台。</p>
 <figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">po <span class="comment">[<span class="comment">[<span class="comment">[<span class="comment">[UIApplication sharedApplication]</span> keyWindow]</span> rootViewController]</span> _printHierarchy]</span></span><br></pre></td></tr></table></figure>
-<h2 id="精彩博文">精彩博文</h2><p><a href="http://blog.cnbluebox.com/blog/2015/03/05/chisel/" target="_blank" rel="external">Chisel-LLDB命令插件，让调试更Easy</a></p>
+<h2 id="常用快捷键">常用快捷键</h2><pre><code>光标切换到控制台：<span class="built_in">cmd</span>+<span class="keyword">shift</span>+c
+控制台显示/隐藏：<span class="built_in">cmd</span>+<span class="keyword">shift</span>+y
+</code></pre><h2 id="精彩博文">精彩博文</h2><p><a href="http://blog.cnbluebox.com/blog/2015/03/05/chisel/" target="_blank" rel="external">Chisel-LLDB命令插件，让调试更Easy</a></p>
 <p><a href="http://www.jianshu.com/p/b2371dd4443b" target="_blank" rel="external">LLdb篇2教你使用faceBook的chisel来提高调试效率</a></p>
+<p><a href="http://www.jianshu.com/p/e89af3e9a8d7#" target="_blank" rel="external">小笨狼与LLDB的故事</a></p>
 <h1 id="来源:objcio-cn">来源:<a href="http://objccn.io/issue-19-2/" target="_blank" rel="external">objcio.cn</a></h1>]]></content>
     <summary type="html">
     <![CDATA[与调试器共舞 - LLDB 的华尔兹]]>

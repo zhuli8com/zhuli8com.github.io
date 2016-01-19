@@ -394,6 +394,15 @@ Ctrl+r → 恢复上一步被撤销的操作
 </code></pre><p>推荐:</p>
 <pre><code>hjkl (强例推荐使用其移动光标，但不必需) →你也可以使用光标键 (←↓↑→). 注: j 就像下箭头。
 <span class="attribute">:help &lt;command&gt; → 显示相关命令的帮助。你也可以就输入 :help</span> 而不跟命令。（退出帮助需要输入:q）
+</code></pre><h1 id="感觉良好">感觉良好</h1><p>所有的命令都需要在Normal模式下使用，如果你不知道现在在什么样的模式，你就狂按几次ESC键。</p>
+<h2 id="插入">插入</h2><pre><code>o → 在当前行后插入一个新行
+<span class="keyword">O</span> → 在当前行前插入一个新行
+</code></pre><h2 id="移动光标">移动光标</h2><pre><code>^ → 到本行第一个不是<span class="keyword">blank</span>字符的位置（所谓<span class="keyword">blank</span>字符就是空格，tab，换行，回车等）
+$ → 到本行行尾
+/pattern → 搜索 pattern 的字符串（如果搜索出多个匹配，可按n键到下一个）
+</code></pre><h2 id="拷贝/粘贴">拷贝/粘贴</h2><p>p/P都可以，p是表示在当前位置之后，P表示在当前位置之前。</p>
+<pre><code><span class="title">yy</span> → 拷贝当前行当行于 ddP
+P → 粘贴
 </code></pre>
         
         
@@ -847,7 +856,7 @@ Ctrl+r → 恢复上一步被撤销的操作
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
 		
 		<a href="/about" target="_blank" title="朱利">朱利</a>
 		

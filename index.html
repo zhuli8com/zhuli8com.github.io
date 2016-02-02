@@ -81,6 +81,100 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/01/02/3D-Touch-实践/" title="3D Touch 实践" itemprop="url">3D Touch 实践</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2016-01-02T10:05:45.000Z" itemprop="datePublished"> 发表于 2016-01-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>iphone6s的一个显著卖点应该是3D Touch，其原理是增加了一个压力感触，通过区分轻按和重按来进行不同的用户交互。</p>
+<p>我们可以通过3D手势，在主屏幕上的应用Icon处，直接进入应用的响应功能模块。用户可以通过3D Touch手势在view上来预览一些预加载信息，这样的设计可以使app更加简洁大方，交互性也更强，也是对app的一个优化。</p>
+<h1 id="Home_Screen_Quick_Actions">Home Screen Quick Actions</h1><p>通过主屏幕的应用Icon，我们可以用3D Touch呼出一个菜单，进行快速定位应用功能模块相关功能的开发。</p>
+<h2 id="静态标签">静态标签</h2><p>静态标签是我们在项目的配置plist文件中配置的标签，在用户安装程序后就可以使用，并且排序会在动态标签的前面。</p>
+<p>在Info.plist文件中添加UIApplicationShortcutItems数组，在改数组下建立一个包括UIApplicationShortcutItemTitle、UIApplicationShortcutSubtitle、UIApplicationShortcutItemIconFile、UIApplicationShortcutType键值对的字典即可,系统并没有提示，只能手打上去。</p>
+<h2 id="动态标签">动态标签</h2><p>动态标签是我们在程序中，通过代码添加的，与之相关的类，主要有三个：UIApplicationShortcutItem、UIMutableApplicationShortcutItem、UIApplicationShortcutIcon。</p>
+<p>在appDelegate的-application:didFinishLaunchingWithOptions:方法中添加如下代码：</p>
+<p>1.图标<br>UIApplicationShortcutIcon *icon1=[UIApplicationShortcutIcon iconWithTemplateImageName:@”iCon1”];</p>
+<p>系统自带图标:[UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeSearch]</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">NS_ENUM</span>(<span class="built_in">NSInteger</span>, <span class="built_in">UIApplicationShortcutIconType</span>) &#123;</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeCompose</span>,</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypePlay</span>,</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypePause</span>,</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeAdd</span>,</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeLocation</span>,</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeSearch</span>,</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeShare</span>,</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeProhibit</span>       <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeContact</span>        <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeHome</span>           <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeMarkLocation</span>   <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeFavorite</span>       <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeLove</span>           <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeCloud</span>          <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeInvitation</span>     <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeConfirmation</span>   <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeMail</span>           <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeMessage</span>        <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeDate</span>           <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeTime</span>           <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeCapturePhoto</span>   <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeCaptureVideo</span>   <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeTask</span>           <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeTaskCompleted</span>  <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeAlarm</span>          <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeBookmark</span>       <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeShuffle</span>        <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeAudio</span>          <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1),</span><br><span class="line">    <span class="built_in">UIApplicationShortcutIconTypeUpdate</span>         <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_1)</span><br><span class="line">&#125; <span class="built_in">NS_ENUM_AVAILABLE_IOS</span>(<span class="number">9</span>_0) __TVOS_PROHIBITED;</span><br></pre></td></tr></table></figure>
+<p>2.创建shortcut item<br>UIMutableApplicationShortcutItem *item1=[[UIMutableApplicationShortcutItem alloc] initWithType:@”com.zhuli8.dynamic” localizedTitle:@”Dynamic Shortcut” localizedSubtitle:@”available after first lauch” icon:icon1 userInfo:nil];</p>
+<p>3.获取已经存在的shortcut item，例如静态的shortcut item<br>NSArray *existingItems=[UIApplication sharedApplication].shortcutItems;</p>
+<p>4.当前所有的shortcut item赋值给当前应用程序<br>NSArray *updateItems=[existingItems arrayByAddingObjectsFromArray:@[item1]];<br>[UIApplication sharedApplication].shortcutItems=updateItems;</p>
+<p>到此动态创建3d touch已经基本完成。如果要响应标签的行为，需要实现appDelegate中的一个方法-application:willFinishLaunchingWithOptions: </p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)application performActionForShortcutItem:(<span class="built_in">UIApplicationShortcutItem</span> *)shortcutItem completionHandler:(<span class="keyword">void</span> (^)(<span class="built_in">BOOL</span>))completionHandler&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> ([shortcutItem<span class="variable">.type</span> isEqualToString:<span class="string">@"com.zhuli8.deep1"</span>]) &#123;</span><br><span class="line">        ZLSecondeViewController *secondVC=[[ZLSecondeViewController alloc] init];</span><br><span class="line">        <span class="keyword">self</span><span class="variable">.window</span><span class="variable">.rootViewController</span>=secondVC;</span><br><span class="line">        [<span class="keyword">self</span><span class="variable">.window</span> makeKeyAndVisible];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="peep/pop">peep/pop</h1><p>这个功能是一套全新的用户交互机制，在使用3D Touch时，ViewController中会有如下三个交互阶段：</p>
+<ol>
+<li>提示用户这里有3D Touch的交互，会使交互控件周围模糊</li>
+<li>继续深按，会出现预览视图</li>
+<li>通过视图上的交互控件进行进一步交互</li>
+</ol>
+<p>在控制器的-viewWillAppear:方法中判断设备是否有3d touch特性，根据返回值决定是否设置代理。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.traitCollection</span><span class="variable">.forceTouchCapability</span>==<span class="built_in">UIForceTouchCapabilityAvailable</span>) &#123;</span><br><span class="line">    [<span class="keyword">self</span> registerForPreviewingWithDelegate:<span class="keyword">self</span> sourceView:<span class="keyword">self</span><span class="variable">.view</span>];</span><br><span class="line">    <span class="keyword">self</span><span class="variable">.longPress</span><span class="variable">.enabled</span>=<span class="literal">YES</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">self</span><span class="variable">.longPress</span><span class="variable">.enabled</span>=<span class="literal">NO</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现UIViewControllerPreviewingDelegate的两个代理方法。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (nullable <span class="built_in">UIViewController</span> *)previewingContext:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext viewControllerForLocation:(<span class="built_in">CGPoint</span>)location <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">9</span>_0);</span><br><span class="line">- (<span class="keyword">void</span>)previewingContext:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext commitViewController:(<span class="built_in">UIViewController</span> *)viewControllerToCommit <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">9</span>_0);</span><br></pre></td></tr></table></figure>
+<p>具体实例代码如下</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">UIViewController</span> *)previewingContext:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext viewControllerForLocation:(<span class="built_in">CGPoint</span>)location&#123;</span><br><span class="line">    <span class="comment">//check if we're not already displaying a preview controller</span></span><br><span class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span><span class="variable">.presentedViewController</span> isKindOfClass:[ZLPreviewViewController class]]) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ZLPreviewViewController *previewVC=[[ZLPreviewViewController alloc] init];</span><br><span class="line">    <span class="keyword">return</span> previewVC;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)previewingContext:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext commitViewController:(<span class="built_in">UIViewController</span> *)viewControllerToCommit&#123;</span><br><span class="line">    <span class="comment">//deep press:bring up the commit view controller(pop)</span></span><br><span class="line">    ZLCommitViewController *commitVC=[[ZLCommitViewController alloc] init];</span><br><span class="line">    [<span class="keyword">self</span> showViewController:commitVC sender:<span class="keyword">self</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重写父类的previewActionItems方法配置preview菜单</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSArray</span>&lt;<span class="keyword">id</span>&lt;<span class="built_in">UIPreviewActionItem</span>&gt;&gt; *)previewActionItems&#123;</span><br><span class="line">    <span class="built_in">UIPreviewAction</span> *action1=[<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@"action 1"</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</span><br><span class="line">        ZLLogDebug(<span class="string">@"UIPreviewActionStyleDefault trggered"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIPreviewAction</span> *action2=[<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@"destructive action"</span> style:<span class="built_in">UIPreviewActionStyleDestructive</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</span><br><span class="line">        ZLLogDebug(<span class="string">@"UIPreviewActionStyleDestructive trggered"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIPreviewAction</span> *action3=[<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@"selected action"</span> style:<span class="built_in">UIPreviewActionStyleSelected</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</span><br><span class="line">        ZLLogDebug(<span class="string">@"UIPreviewActionStyleSelected trggered"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIPreviewActionGroup</span> *group1=[<span class="built_in">UIPreviewActionGroup</span> actionGroupWithTitle:<span class="string">@"action group"</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> actions:@[action1,action2,action3]];<span class="comment">//可以返回组</span></span><br><span class="line">    <span class="keyword">return</span> @[action1,action2,action3];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Force_Properties">Force Properties</h1><p>iOS9为我们提供了一个新的交互参数:力度。我们可以检测某一交互的力度值，来做相应的交互处理。例如，我们可以通过力度来控制快进的快慢，音量增加的快慢等。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/01/02/3D-Touch-实践/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/01/02/3D-Touch-实践/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/10/25/项目中用到的工具和技术/" title="项目中用到的工具和技术" itemprop="url">项目中用到的工具和技术</a>
   </h1>
   <p class="article-author">By
@@ -1183,86 +1277,6 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 
 
 
-  
-
- 
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/12/The-Internet-Communications-Ice-简介/" title="The Internet Communications (ice)" itemprop="url">The Internet Communications (ice)</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-12T09:26:50.000Z" itemprop="datePublished"> 发表于 2015-07-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="简介">简介</h1><p>The Internet Communications Engine (ice) is a modern object-oriented toolkit that enables you to build distributed applications with minimal effort. Ice allows you to focus your efforts on your application logic, and it takes care of all interactions with low-level network programming interfaces. With Ice, there is no need to worry about details such as opening network connections, serializing and deserializing data for network transmission, or retrying failed connection attempts (to name but a few of dozens of such low-level details).</p>
-<h1 id="开发环境搭建">开发环境搭建</h1><p>ICE安装文件：<a href="https://zeroc.com/icetouch/download.html" target="_blank" rel="external">https://zeroc.com/icetouch/download.html</a><br>ICE编译插件：<a href="https://github.com/zeroc-ice/ice-builder-xcode" target="_blank" rel="external">https://github.com/zeroc-ice/ice-builder-xcode</a></p>
-<h1 id="相关文档">相关文档</h1><p>ICE官网：<a href="http://www.zeroc.com/ice.html" target="_blank" rel="external">http://www.zeroc.com/ice.html</a><br>官网文档：<a href="http://doc.zeroc.com/display/Doc/Home" target="_blank" rel="external">http://doc.zeroc.com/display/Doc/Home</a><br>性能评测：<a href="http://zeroc.com/articles/IcePerformanceWhitePaper.pdf" target="_blank" rel="external">http://zeroc.com/articles/IcePerformanceWhitePaper.pdf</a></p>
-<h1 id="ICE通讯框架基本原理">ICE通讯框架基本原理</h1><p>ICE的思路是，用一个中间语言，建立数据结构规范和接口规范，然后再用一个IDE编译插件，将中间语言数据结构规范和接口规范编译为当前的语言，譬如OC的.h/.m文件，接下来，你在客户端和服务端实现中间语言定义号的接口，再做一些其它处理，就可以实现一个分布式程序了。这个思路确实很Nice，值得我们借鉴。</p>
-<h1 id="通讯方式选择">通讯方式选择</h1><p>P2P（设备直连）</p>
-<p>通过服务器中转</p>
-<h1 id="网络连接方式">网络连接方式</h1><p>基于TCP的长连接</p>
-<p>基于HTTP短连接PULL的方式</p>
-<h1 id="协议选择">协议选择</h1><p>XMPP</p>
-<p>SIP</p>
-<p>MQTT</p>
-<p>私有协议（二进制协议）</p>
-<h1 id="其他">其他</h1><p>p2p视频聊天的过程：音视频数据采集—&gt;编码—&gt;发送—&gt;接收—&gt;解码—&gt;播放</p>
-<p><a href="http://www.cnblogs.com/HouZhiHouJueBlogs/p/3864677.html" target="_blank" rel="external">The Internet Communications Engine (Ice) 跨平台异构通讯方案 第一弹-ICE简介</a></p>
-<p><a href="http://www.cnblogs.com/HouZhiHouJueBlogs/p/3864737.html" target="_blank" rel="external">The Internet Communications Engine (Ice) 跨平台异构通讯方案 第二弹-Hello world！</a></p>
-<p><a href="http://www.cnblogs.com/lingyunhu/category/626157.html" target="_blank" rel="external">webrtc</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/IM/">IM</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/IM/">IM</a><a href="/tags/ice/">ice</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/12/The-Internet-Communications-Ice-简介/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/12/The-Internet-Communications-Ice-简介/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -1289,7 +1303,7 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>13</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>14</sup></a></li>
 		  
 		
 		  
@@ -1318,7 +1332,7 @@ Mac中：<span class="regexp">/Users/</span>你的用户名/Desktop
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>18</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>19</sup></a></li>
 			
 		
 			

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Talk is cheap, show me the code.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.zhuli8.com/"/>
-  <updated>2016-02-02T10:07:10.000Z</updated>
+  <updated>2016-02-02T10:11:25.000Z</updated>
   <id>http://www.zhuli8.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://www.zhuli8.com/2016/01/02/3D-Touch-%E5%AE%9E%E8%B7%B5/"/>
     <id>http://www.zhuli8.com/2016/01/02/3D-Touch-实践/</id>
     <published>2016-01-02T10:05:45.000Z</published>
-    <updated>2016-02-02T10:07:10.000Z</updated>
+    <updated>2016-02-02T10:11:25.000Z</updated>
     <content type="html"><![CDATA[<p>iphone6s的一个显著卖点应该是3D Touch，其原理是增加了一个压力感触，通过区分轻按和重按来进行不同的用户交互。</p>
 <p>我们可以通过3D手势，在主屏幕上的应用Icon处，直接进入应用的响应功能模块。用户可以通过3D Touch手势在view上来预览一些预加载信息，这样的设计可以使app更加简洁大方，交互性也更强，也是对app的一个优化。</p>
 <h1 id="Home_Screen_Quick_Actions">Home Screen Quick Actions</h1><p>通过主屏幕的应用Icon，我们可以用3D Touch呼出一个菜单，进行快速定位应用功能模块相关功能的开发。</p>
@@ -42,7 +42,7 @@
 <li>通过视图上的交互控件进行进一步交互</li>
 </ol>
 <p>在控制器的-viewWillAppear:方法中判断设备是否有3d touch特性，根据返回值决定是否设置代理。</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.traitCollection</span><span class="variable">.forceTouchCapability</span>==<span class="built_in">UIForceTouchCapabilityAvailable</span>) &#123;</span><br><span class="line">    [<span class="keyword">self</span> registerForPreviewingWithDelegate:<span class="keyword">self</span> sourceView:<span class="keyword">self</span><span class="variable">.view</span>];</span><br><span class="line">    <span class="keyword">self</span><span class="variable">.longPress</span><span class="variable">.enabled</span>=<span class="literal">YES</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">self</span><span class="variable">.longPress</span><span class="variable">.enabled</span>=<span class="literal">NO</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.traitCollection</span><span class="variable">.forceTouchCapability</span>==<span class="built_in">UIForceTouchCapabilityAvailable</span>) &#123;</span><br><span class="line">    [<span class="keyword">self</span> registerForPreviewingWithDelegate:<span class="keyword">self</span> sourceView:<span class="keyword">self</span><span class="variable">.view</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>实现UIViewControllerPreviewingDelegate的两个代理方法。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (nullable <span class="built_in">UIViewController</span> *)previewingContext:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext viewControllerForLocation:(<span class="built_in">CGPoint</span>)location <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">9</span>_0);</span><br><span class="line">- (<span class="keyword">void</span>)previewingContext:(<span class="keyword">id</span> &lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext commitViewController:(<span class="built_in">UIViewController</span> *)viewControllerToCommit <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">9</span>_0);</span><br></pre></td></tr></table></figure>
 <p>具体实例代码如下</p>

@@ -227,6 +227,11 @@
 <p>Leaked Object的表格中显示了内存泄露的类型、数量及内存空间。</p>
 <p>点击具体的某个内存泄露对象，在右侧Detail窗口中会出现导致泄露可能的位置，其中黑色部分代表了最可能的位置。双击即可进入代码。</p>
 <p><strong>开启了ARC并不是就不会存在内存问题，苹果有句名言：ARC is only for NSObject。</strong></p>
+<h3 id="补充">补充</h3><p>1、正常编译没问题，在Profile 中就编译通不过。</p>
+<p>选择Profile，将Build Configuration设置为Debug,这样在.pch文件中，#ifdef DEBUG 编译条件下定义的宏才生效。</p>
+<p>2、Symbol Name 列的友好显示。</p>
+<p>BuildOpthions—&gt;DebugInfomationFormat=DWARF with dSYM File</p>
+<p>Xcode编译项目后，我们会看到一个同名的 dSYM 文件，dSYM 是保存 16 进制函数地址映射信息的中转文件，我们调试的 symbols 都会包含在这个文件中，并且每次编译项目的时候都会生成一个新的 dSYM 文件。</p>
 <h2 id="Allocation内存使用">Allocation内存使用</h2><ol>
 <li>在进入一个视图前或操作前，我们在Allocation面板左侧点击Mark Generation，这时候会产生Generation A节点，显示内存当前的情况。</li>
 <li>在进入视图后再点一次Mark Generation。</li>

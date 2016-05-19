@@ -67,7 +67,7 @@
     <link href="http://www.zhuli8.com/2015/10/25/%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E5%B7%A5%E5%85%B7%E5%92%8C%E6%8A%80%E6%9C%AF/"/>
     <id>http://www.zhuli8.com/2015/10/25/项目中用到的工具和技术/</id>
     <published>2015-10-25T07:58:16.000Z</published>
-    <updated>2015-10-28T08:00:13.000Z</updated>
+    <updated>2016-02-18T06:29:23.000Z</updated>
     <content type="html"><![CDATA[<p>总结一下项目中用到的工具和技术，以便以后的查看。</p>
 <h1 id="图标">图标</h1><p><a href="http://devhelpers.com/app/icon/resizer/" target="_blank" rel="external">在线通过1024 * 1024图片生成iPhone 1倍、2倍、3倍图片</a></p>
 <h1 id="CocoaPods">CocoaPods</h1><p><a href="http://blog.csdn.net/wzzvictory/article/details/18737437" target="_blank" rel="external">CocoaPods详解之——使用篇</a></p>
@@ -107,6 +107,11 @@
 <p>Leaked Object的表格中显示了内存泄露的类型、数量及内存空间。</p>
 <p>点击具体的某个内存泄露对象，在右侧Detail窗口中会出现导致泄露可能的位置，其中黑色部分代表了最可能的位置。双击即可进入代码。</p>
 <p><strong>开启了ARC并不是就不会存在内存问题，苹果有句名言：ARC is only for NSObject。</strong></p>
+<h3 id="补充">补充</h3><p>1、正常编译没问题，在Profile 中就编译通不过。</p>
+<p>选择Profile，将Build Configuration设置为Debug,这样在.pch文件中，#ifdef DEBUG 编译条件下定义的宏才生效。</p>
+<p>2、Symbol Name 列的友好显示。</p>
+<p>BuildOpthions—&gt;DebugInfomationFormat=DWARF with dSYM File</p>
+<p>Xcode编译项目后，我们会看到一个同名的 dSYM 文件，dSYM 是保存 16 进制函数地址映射信息的中转文件，我们调试的 symbols 都会包含在这个文件中，并且每次编译项目的时候都会生成一个新的 dSYM 文件。</p>
 <h2 id="Allocation内存使用">Allocation内存使用</h2><ol>
 <li>在进入一个视图前或操作前，我们在Allocation面板左侧点击Mark Generation，这时候会产生Generation A节点，显示内存当前的情况。</li>
 <li>在进入视图后再点一次Mark Generation。</li>
@@ -1741,7 +1746,7 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
     <link href="http://www.zhuli8.com/2015/05/24/iOS%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%9A%84%E5%B8%B8%E7%94%A8%E6%96%B9%E5%BC%8F/"/>
     <id>http://www.zhuli8.com/2015/05/24/iOS应用数据存储的常用方式/</id>
     <published>2015-05-24T04:40:39.000Z</published>
-    <updated>2015-07-20T02:19:23.000Z</updated>
+    <updated>2016-02-24T06:25:50.000Z</updated>
     <content type="html"><![CDATA[<h1 id="应用沙盒">应用沙盒</h1><pre><code>iOS应用数据一般存储于应用沙盒，每个iOS应用都有自己的应用沙盒（应用沙盒就是文件系统目录），与其他文件系统隔离。应用必须待在自己的沙盒里，其他应用不能访问该沙盒。
 </code></pre><p>应用沙盒的文件系统目录如下图所示：</p>
 <p><img src="http://www.zhuli8.com/photos/沙盒目录结构.png" alt=""></p>
@@ -1828,7 +1833,8 @@ Breakpoint 1: where = UIKit`-[UIViewController viewDidAppear:], address = 0x0000
 <li>第5个参数是一个可选的函数回调，一般用于在语句执行后完成内存清理工作<br>sqlite_step()：执行SQL语句，返回SQLITE_DONE代表成功执行完毕。<br>sqlite_finalize()：销毁sqlite3_stmt *对象。</li>
 </ul>
 <h2 id="查询数据">查询数据</h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *sql = <span class="string">"select id,name,age from t_person;"</span>;</span><br><span class="line">sqlite3_stmt *stmt;</span><br><span class="line"><span class="keyword">if</span> (sqlite3_prepare_v2(db, sql, -<span class="number">1</span>, &amp;stmt, <span class="literal">NULL</span>) == SQLITE_OK) &#123;</span><br><span class="line">    <span class="keyword">while</span> (sqlite3_step(stmt) == SQLITE_ROW) &#123;</span><br><span class="line">        <span class="keyword">int</span> _<span class="keyword">id</span> = sqlite3_column_int(stmt, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">char</span> *_name = (<span class="keyword">char</span> *)sqlite3_column_text(stmt, <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">NSString</span> *name = [<span class="built_in">NSString</span> stringWithUTF8String:_name];</span><br><span class="line">        <span class="keyword">int</span> _age = sqlite3_column_int(stmt, <span class="number">2</span>);</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"id=%i, name=%@, age=%i"</span>, _<span class="keyword">id</span>, name, _age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">sqlite3_finalize(stmt);</span><br></pre></td></tr></table></figure>
-<p>sqlite3<em>step()：返回SQLITE_ROW代表遍历到一条新记录。<br>sqlite3_column</em>*()用于获取每个字段对应的值，第2个参数是字段的索引，从0开始</p>
+<p>sqlite3<em>step()：返回SQLITE_ROW代表遍历到一条新记录。<br>sqlite3_column</em>*()用于获取每个字段对应的值，第2个参数是字段的索引，从0开始。</p>
+<h2 id="补充">补充</h2><h3 id="控制台操作">控制台操作</h3><p>进入数据库目录后使用 <strong>sqlite3 msg.sqlite</strong><br>.tables 查看表<br>select * from 上面查到的表;（注意一定要加分号才符合sql语句）</p>
 <h1 id="Core_Data">Core Data</h1><p>Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象转化成数据，保存在SQLite3数据库文件中，也能够将保存在数据库中的数据还原成OC对象。在此数据操作期间，不需要编写任何SQL语句。</p>
 <h2 id="推荐文章阅读">推荐文章阅读</h2><p><a href="http://yulingtianxia.com/blog/2014/05/01/chu-shi-core-data-1/" target="_blank" rel="external">初识Core Data(1)</a></p>
 <p><a href="http://yulingtianxia.com/blog/2014/05/02/chu-shi-core-data-2/" target="_blank" rel="external">初识Core Data(2)</a></p>

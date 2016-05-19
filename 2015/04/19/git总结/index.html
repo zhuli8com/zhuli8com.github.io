@@ -17,7 +17,7 @@
 <meta property="og:url" content="http://www.zhuli8.com/2015/04/19/git总结/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
 <meta property="og:description" content="工作中使用git的心得体会">
-<meta property="og:updated_time" content="2015-11-18T06:15:21.000Z">
+<meta property="og:updated_time" content="2016-05-19T02:52:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git总结">
 <meta name="twitter:description" content="工作中使用git的心得体会">
@@ -94,7 +94,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前提"><span class="toc-number">1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看其他指令的用途及配置指令"><span class="toc-number">2.</span> <span class="toc-text">查看其他指令的用途及配置指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#操作github上的已有项目"><span class="toc-number">3.</span> <span class="toc-text">操作github上的已有项目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建本地仓库并上传github"><span class="toc-number">4.</span> <span class="toc-text">创建本地仓库并上传github</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前提"><span class="toc-number">1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看其他指令的用途及配置指令"><span class="toc-number">2.</span> <span class="toc-text">查看其他指令的用途及配置指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#操作github上的已有项目"><span class="toc-number">3.</span> <span class="toc-text">操作github上的已有项目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建本地仓库并上传github"><span class="toc-number">4.</span> <span class="toc-text">创建本地仓库并上传github</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tag"><span class="toc-number">5.</span> <span class="toc-text">tag</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
@@ -136,7 +136,19 @@
 <p>git commit -m ‘注释’</p>
 <p>7、提交到github，将本地分支推到远程主分支</p>
 <p>git push origin master</p>
-<h1 id="参考">参考</h1><p><a href="http://justcoding.iteye.com/blog/1830388" target="_blank" rel="external">git常用命令</a></p>
+<h1 id="tag">tag</h1><p>用git tag打标签只是在本地仓库打标签而已，为了能把标签同步到远程服务器，我们可以这样做：</p>
+<p>默认情况下，git push并不会把tag标签传送到远端服务器上，只有通过显式命令才能分享标签到远端仓库。</p>
+<ol>
+<li>push单个tag，命令格式为：git push origin [tagname]</li>
+</ol>
+<p>例如：<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">git</span> <span class="keyword">push </span>origin <span class="literal">v1</span>.<span class="number">0</span> #将本地<span class="literal">v1</span>.<span class="number">0</span>的tag推送到远端服务器</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>push所有tag，命令格式为：git push [origin] —tags</li>
+</ol>
+<p>例如：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git push <span class="comment">--tags</span></span><br><span class="line">或</span><br><span class="line">git push origin <span class="comment">--tags</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="参考">参考</h1><p><a href="http://roclinux.cn/?p=2129" target="_blank" rel="external">GIT分支管理是一门艺术</a></p>
+<p><a href="http://www.cnblogs.com/tugenhua0707/p/4050072.html#!comments" target="_blank" rel="external">Git使用教程</a></p>
+<p><a href="http://justcoding.iteye.com/blog/1830388" target="_blank" rel="external">git常用命令</a></p>
 <p><a href="http://jingyan.baidu.com/article/ab0b5630936ab6c15afa7d1c.html" target="_blank" rel="external">Xcode 6.3 用 GitHub 托管项目</a></p>
   
 	</div>
@@ -204,7 +216,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前提"><span class="toc-number">1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看其他指令的用途及配置指令"><span class="toc-number">2.</span> <span class="toc-text">查看其他指令的用途及配置指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#操作github上的已有项目"><span class="toc-number">3.</span> <span class="toc-text">操作github上的已有项目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建本地仓库并上传github"><span class="toc-number">4.</span> <span class="toc-text">创建本地仓库并上传github</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前提"><span class="toc-number">1.</span> <span class="toc-text">前提</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#查看其他指令的用途及配置指令"><span class="toc-number">2.</span> <span class="toc-text">查看其他指令的用途及配置指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#操作github上的已有项目"><span class="toc-number">3.</span> <span class="toc-text">操作github上的已有项目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#创建本地仓库并上传github"><span class="toc-number">4.</span> <span class="toc-text">创建本地仓库并上传github</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tag"><span class="toc-number">5.</span> <span class="toc-text">tag</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 

@@ -11,26 +11,26 @@
     
 
     
-    <meta name="description" content="代理模式比喻跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。
-代理模式意图代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。
-代理模式类图
-代理模式实现定义RealSubject和Proxy的共用接口，这样">
+    <meta name="description" content="#代理模式比喻跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。
+#代理模式意图代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。
+#代理模式类图
+#代理模式实现定义RealSubject和Proxy的共用接">
 <meta property="og:type" content="article">
 <meta property="og:title" content="swift版设计模式之代理模式-Proxy程序替你聊天">
 <meta property="og:url" content="http://www.zhuli8.com/2015/06/21/代理模式-Proxy程序替你聊天/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
-<meta property="og:description" content="代理模式比喻跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。
-代理模式意图代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。
-代理模式类图
-代理模式实现定义RealSubject和Proxy的共用接口，这样">
+<meta property="og:description" content="#代理模式比喻跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。
+#代理模式意图代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。
+#代理模式类图
+#代理模式实现定义RealSubject和Proxy的共用接">
 <meta property="og:image" content="http://www.zhuli8.com/photos/designpattern/proxy.gif">
 <meta property="og:updated_time" content="2015-07-20T02:17:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="swift版设计模式之代理模式-Proxy程序替你聊天">
-<meta name="twitter:description" content="代理模式比喻跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。
-代理模式意图代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。
-代理模式类图
-代理模式实现定义RealSubject和Proxy的共用接口，这样">
+<meta name="twitter:description" content="#代理模式比喻跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。
+#代理模式意图代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。
+#代理模式类图
+#代理模式实现定义RealSubject和Proxy的共用接">
 
     
     <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
@@ -104,14 +104,14 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式比喻"><span class="toc-number">1.</span> <span class="toc-text">代理模式比喻</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式意图"><span class="toc-number">2.</span> <span class="toc-text">代理模式意图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式类图"><span class="toc-number">3.</span> <span class="toc-text">代理模式类图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式实现"><span class="toc-number">4.</span> <span class="toc-text">代理模式实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式总结"><span class="toc-number">5.</span> <span class="toc-text">代理模式总结</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h1 id="代理模式比喻">代理模式比喻</h1><p>跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。</p>
-<h1 id="代理模式意图">代理模式意图</h1><p>代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。</p>
-<h1 id="代理模式类图">代理模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/proxy.gif" alt=""></p>
-<h1 id="代理模式实现">代理模式实现</h1><p>定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+		<p>#代理模式比喻<br>跟MM在网上聊天，她们一开头总是“hi,你好”,“你从哪儿来呀？”“你多大了？”“身高多少呀？”这些话，真烦人，写个程序做为我的Proxy吧，凡是接收到这些话都设置好了自动的回答，接收到其他的话时再通知我回答，怎么样，酷吧。</p>
+<p>#代理模式意图<br>代理模式(Proxy)为其他对象提供一种代理以控制对这个对象的访问。</p>
+<p>#代理模式类图<br><img src="http://www.zhuli8.com/photos/designpattern/proxy.gif" alt=""></p>
+<p>#代理模式实现<br>定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Subject</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>Proxy所代表的真实实体</p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span>: <span class="title">Subject</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> mm:<span class="type">Girl</span></span><br><span class="line">    <span class="keyword">init</span>(mm:<span class="type">Girl</span>)&#123;</span><br><span class="line">        <span class="keyword">self</span>.mm=mm</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">operation</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> mm.word!&#123;<span class="comment">//记得强制解包哦</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">"hi,你好"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"hi,你好"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你从哪里来呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"火星"</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"你多大了？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="number">18</span>)</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"身高多少呀？"</span>:</span><br><span class="line">            <span class="built_in">println</span>(<span class="string">"2.5m"</span>)</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            say()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">say</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"我出场了……"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>保存一个RealSubject引用，使得代理可以访问实体并提供一个与Subject相同的接口来代替实体</p>
@@ -120,7 +120,7 @@
 <figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> word:<span class="built_in">String</span>?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>代理模式客户端应用</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> mm=<span class="function"><span class="title">Girl</span><span class="params">()</span></span></span><br><span class="line">mm.word=<span class="string">"hi,你好"</span></span><br><span class="line"></span><br><span class="line"><span class="tag">var</span> proxy=<span class="function"><span class="title">Proxy</span><span class="params">(mm: mm)</span></span></span><br><span class="line">proxy.<span class="function"><span class="title">operation</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="代理模式总结">代理模式总结</h1><p>吼吼，这是不是就是传说中的机器人聊天原理啊！代理模式给某一个对象提供一个代理对象，由代理对象控制对源对象的引用。代理就是一个人或一个结构代表另一个人或者一个机构采取行动。我们身边到处都是代理模式，如远程代理、虚拟代理、安全代理、智能指引等。</p>
+<p>#代理模式总结<br>吼吼，这是不是就是传说中的机器人聊天原理啊！代理模式给某一个对象提供一个代理对象，由代理对象控制对源对象的引用。代理就是一个人或一个结构代表另一个人或者一个机构采取行动。我们身边到处都是代理模式，如远程代理、虚拟代理、安全代理、智能指引等。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -143,7 +143,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/06/21/代理模式-Proxy程序替你聊天/" data-title="swift版设计模式之代理模式-Proxy程序替你聊天 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2015/06/21/代理模式-Proxy程序替你聊天/" data-title="swift版设计模式之代理模式-Proxy程序替你聊天 | zhuli8’blog" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -187,7 +187,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式比喻"><span class="toc-number">1.</span> <span class="toc-text">代理模式比喻</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式意图"><span class="toc-number">2.</span> <span class="toc-text">代理模式意图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式类图"><span class="toc-number">3.</span> <span class="toc-text">代理模式类图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式实现"><span class="toc-number">4.</span> <span class="toc-text">代理模式实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代理模式总结"><span class="toc-number">5.</span> <span class="toc-text">代理模式总结</span></a></li></ol>
+ 
  
   </div>
 
@@ -209,7 +209,7 @@
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>15</sup></a></li>
 		  
 		
 		  
@@ -238,7 +238,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>19</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>20</sup></a></li>
 			
 		
 			

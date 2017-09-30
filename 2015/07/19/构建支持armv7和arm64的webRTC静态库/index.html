@@ -94,11 +94,11 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">3.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#XCode中与指令集相关的选项（Build_Settings_面板下_Architectures）："><span class="toc-number">3.1.</span> <span class="toc-text">XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WebRTC-framework的依赖"><span class="toc-number">3.2.</span> <span class="toc-text">WebRTC.framework的依赖</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="概述">概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
+		<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
 <p><strong>目前为止Apple移动设备默认指令集</strong></p>
 <hr>
 <p>armv6 设备： iPhone, iPhone2, iPhone3G, 第一代、第二代 iPod Touch</p>
@@ -107,15 +107,16 @@
 <p>arm64 设备： iPhone5S, iPad Air, iPad mini2(iPad mini with Retina Display)</p>
 <hr>
 <p>现在苹果默认要求支持armv7&amp;arm64，知道了这些信息我们进入下一话题！</p>
-<h1 id="构建支持armv7和arm64的webRTC静态库">构建支持armv7和arm64的webRTC静态库</h1><p>总体思路就是将webRTC中的armv7静态库合并优化成一个单一的静态库，arm64中的所有静态库合并优化成一个单一的静态库，最后利用lipo指令合并这两个静态库为一个最终的静态库。</p>
-<h2 id="armv7">armv7</h2><p>合并所有的*.a构建armv7为libWebRTC-armv7.a并优化静态库</p>
+<p>#构建支持armv7和arm64的webRTC静态库<br>总体思路就是将webRTC中的armv7静态库合并优化成一个单一的静态库，arm64中的所有静态库合并优化成一个单一的静态库，最后利用lipo指令合并这两个静态库为一个最终的静态库。</p>
+<p>##armv7<br>合并所有的*.a构建armv7为libWebRTC-armv7.a并优化静态库</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/armv7/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>armv7<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/armv7/</span>Release-iphoneos<span class="regexp">/libWebRTC-armv7.a -r src/</span>armv7<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
-<h2 id="arm64">arm64</h2><p>合并所有的*.a构建arm64为libWebRTC-arm64.a</p>
+<p>##arm64<br>合并所有的*.a构建arm64为libWebRTC-arm64.a</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libtool -<span class="keyword">static</span> -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-temp.a src/</span>arm64<span class="regexp">/Release-iphoneos/</span>*.a</span><br><span class="line"></span><br><span class="line">strip -S -x -o src<span class="regexp">/arm64/</span>Release-iphoneos<span class="regexp">/libWebRTC-arm64.a -r src/</span>arm64<span class="regexp">/Release-iphoneos/</span>libWebRTC-temp.a</span><br></pre></td></tr></table></figure>
 <p><strong>2015年7月27日更新</strong></p>
 <p><strong>之前的指令用在音频没有问题，但是用在视频只有声音没有图像。最后检查发现没有使用strip优化之前的包可以使用，而且不能包括iOS生成的静态库。
 </strong></p>
-<h2 id="创建支持armv7&amp;arm64的libWebRTC">创建支持armv7&amp;arm64的libWebRTC</h2><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
+<p>##创建支持armv7&amp;arm64的libWebRTC</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo -<span class="built_in">create</span> src/armv7/Release-iphoneos/libWebRTC-armv7.<span class="operator">a</span> src/arm64/Release-iphoneos/libWebRTC-arm64.<span class="operator">a</span> -output libWebRTC.<span class="operator">a</span></span><br></pre></td></tr></table></figure>
 <p><strong>lipo -info libWebRTC.a，可以查看支持的架构信息</strong></p>
 <p><strong>2015年8月19日更新</strong><br><strong>当测试armv7指令集通过后，在原来的工程中删掉armv7添加arm64对应的库时编译通不过，因为同一个文件下包含了两种架构信息所导致。解决方案：</strong></p>
 <ol>
@@ -138,8 +139,9 @@
 <li>在弹出的窗口中输入上面提到的标签 -fobjc-arc / -fno-objc-arc4</li>
 <li>按Enter键保存</li>
 </ol>
-<h1 id="其他">其他</h1><p>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。</p>
-<h2 id="XCode中与指令集相关的选项（Build_Settings_面板下_Architectures）：">XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</h2><p>1.Architectures：      </p>
+<p>#其他<br>libtool和lipo的相关指令选项参数可用通过man帮助进行查看，里面写的还是比较详细的。</p>
+<p>##XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</p>
+<p>1.Architectures：      </p>
 <p>指明选定Target要求被编译生成的二进制包所支持的指令集是通过编译生成对应的二进制数据包实现的，如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而会造成最终编译生成的包很大。</p>
 <p>2.Valid Architectures：</p>
 <p>指明可能支持的指令集并非Architectures列表中指明的指令集都会被支持，Valid Architectures限制可能被支持的指令集的范围，即Valid Architectures和Architectures列表的交集，才是XCode最终生成二进制包所支持的指令集。比如，将Architectures支持arm指令集设置为：armv7,armv7s，对应的Valid Architectures的支持的指令集设置为：armv7s,arm64，那么此时，XCode生成二进制包所支持的指令集只有armv7s 。</p>
@@ -150,7 +152,7 @@
 <li>XCode成功连接调试设备</li>
 </ul>
 <p>当Build Active Architecture Only起作用时,连接的手机指令集匹配是由高到低（arm64 &gt; armv7s &gt; armv7）依次匹配的。<br>建议：通常Debug模式设置值为Yes，Release模式设置为No。</p>
-<h2 id="WebRTC-framework的依赖"><a href="http://www.it165.net/pro/html/201503/35541.html" target="_blank" rel="external">WebRTC.framework的依赖</a></h2><p>如果项目使用了该框架,那么编译的时候需要在项目的Build Phases中添加如下库和框架:</p>
+<p>##<a href="http://www.it165.net/pro/html/201503/35541.html" target="_blank" rel="external">WebRTC.framework的依赖</a><br>如果项目使用了该框架,那么编译的时候需要在项目的Build Phases中添加如下库和框架:</p>
 <blockquote>
 <ul>
 <li>libstdc++.6.dylib</li>
@@ -198,7 +200,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/07/19/构建支持armv7和arm64的webRTC静态库/" data-title="构建支持armv7和arm64的webRTC静态库 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2015/07/19/构建支持armv7和arm64的webRTC静态库/" data-title="构建支持armv7和arm64的webRTC静态库 | zhuli8’blog" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -242,7 +244,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#构建支持armv7和arm64的webRTC静态库"><span class="toc-number">2.</span> <span class="toc-text">构建支持armv7和arm64的webRTC静态库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#armv7"><span class="toc-number">2.1.</span> <span class="toc-text">armv7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arm64"><span class="toc-number">2.2.</span> <span class="toc-text">arm64</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建支持armv7&arm64的libWebRTC"><span class="toc-number">2.3.</span> <span class="toc-text">创建支持armv7&arm64的libWebRTC</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">3.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#XCode中与指令集相关的选项（Build_Settings_面板下_Architectures）："><span class="toc-number">3.1.</span> <span class="toc-text">XCode中与指令集相关的选项（Build Settings 面板下 Architectures）：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WebRTC-framework的依赖"><span class="toc-number">3.2.</span> <span class="toc-text">WebRTC.framework的依赖</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li></ol>
  
   </div>
 
@@ -264,7 +266,7 @@
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>15</sup></a></li>
 		  
 		
 		  
@@ -293,7 +295,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>19</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>20</sup></a></li>
 			
 		
 			

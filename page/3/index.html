@@ -81,6 +81,509 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/10/GPU-加速下的图像处理/" title="GPU 加速下的图像处理" itemprop="url">GPU 加速下的图像处理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="朱利" target="_blank" itemprop="author">朱利</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-10T02:35:27.000Z" itemprop="datePublished"> 发表于 2015-05-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+         <p>Instagram，Snapchat，Photoshop。</p>
+
+<p>所有这些应用都是用来做图像处理的。图像处理可以简单到把一张照片转换为灰度图，也可以复杂到是分析一个视频，并在人群中找到某个特定的人。尽管这些应用非常的不同，但这些例子遵从同样的流程，都是从创造到渲染。</p>
+
+<p>在电脑或者手机上做图像处理有很多方式，但是目前为止最高效的方法是有效地使用图形处理单元，或者叫 GPU。你的手机包含两个不同的处理单元，CPU 和 GPU。CPU 是个多面手，并且不得不处理所有的事情，而 GPU 则可以集中来处理好一件事情，就是并行地做浮点运算。事实上，图像处理和渲染就是在将要渲染到窗口上的像素上做许许多多的浮点运算。</p>
+
+<p>通过有效的利用 GPU，可以成百倍甚至上千倍地提高手机上的图像渲染能力。如果不是基于 GPU 的处理，手机上实时高清视频滤镜是不现实，甚至不可能的。</p>
+
+<p>着色器 (shader) 是我们利用这种能力的工具。着色器是用着色语言写的小的，基于 C 语言的程序。现在有很许多种着色语言，但你如果做 OS X 或者 iOS 开发的话，你应该专注于 OpenGL 着色语言，或者叫 GLSL。你可以将 GLSL 的理念应用到其他的更专用的语言 (比如 Metal) 上去。这里我们即将介绍的概念与和 Core Image 中的自定义核矩阵有着很好的对应，尽管它们在语法上有一些不同。</p>
+
+<p>这个过程可能会很让人恐惧，尤其是对新手。这篇文章的目的是让你接触一些写图像处理着色器的必要的基础信息，并将你带上书写你自己的图像处理着色器的道路。</p>
+
+<h2 id="">什么是着色器</h2>
+
+<p>我们将乘坐时光机回顾一下过去，来了解什么是着色器，以及它是怎样被集成到我们的工作流当中的。</p>
+
+<p>如果你在 iOS 5 或者之前就开始做 iOS 开发，你或许会知道在 iPhone 上 OpenGL 编程有一个转变，从 OpenGL ES 1.1 变成了 OpenGL ES 2.0。</p>
+
+<p>OpenGL ES 1.1 没有使用着色器。作为替代，OpenGL ES 1.1 使用被称为固定功能管线 (fixed-function pipeline) 的方式。有一系列固定的函数用来在屏幕上渲染对象，而不是创建一个单独的程序来指导 GPU 的行为。这样有很大的局限性，你不能做出任何特殊的效果。如果你想知道着色器在工程中可以造成怎样的不同，<a href="http://www.sunsetlakesoftware.com/2011/05/08/enhancing-molecules-using-opengl-es-20" target="_blank" rel="external">看看这篇 Brad Larson 写的他用着色器替代固定函数重构 Molecules 应用的博客</a></p>
+
+<p>OpenGL ES 2.0 引入了可编程管线。可编程管线允许你创建自己的着色器，给了你更强大的能力和灵活性。</p>
+
+<p>在 OpenGL ES 中你必须创建两种着色器：顶点着色器 (vertex shaders) 和片段着色器 (fragment shaders)。这两种着色器是一个完整程序的两半，你不能仅仅创建其中任何一个；想创建一个完整的着色程序，两个都是必须存在。</p>
+
+<p>顶点着色器定义了在 2D 或者 3D 场景中几何图形是如何处理的。一个顶点指的是 2D 或者 3D 空间中的一个点。在图像处理中，有 4 个顶点：每一个顶点代表图像的一个角。顶点着色器设置顶点的位置，并且把位置和纹理坐标这样的参数发送到片段着色器。</p>
+
+<p>然后 GPU 使用片段着色器在对象或者图片的每一个像素上进行计算，最终计算出每个像素的最终颜色。图片，归根结底，实际上仅仅是数据的集合。图片的文档包含每一个像素的各个颜色分量和像素透明度的值。因为对每一个像素，算式是相同的，GPU 可以流水线作业这个过程，从而更加有效的进行处理。使用正确优化过的着色器，在 GPU 上进行处理，将使你获得百倍于在 CPU 上用同样的过程进行图像处理的效率。</p>
+
+<p>把东西渲染到屏幕上从一开始就是一个困扰 OpenGL 开发者的问题。仅仅让屏幕呈现出非黑色就要写很多样板代码和设置。开发者必须跳过很多坑 ，而这些坑所带来的沮丧感以及着色器测试方法的匮乏，让很多人放弃了哪怕是尝试着写着色器。</p>
+
+<p>幸运的是，过去几年，一些工具和框架减少了开发者在尝试着色器方面的焦虑。</p>
+
+<ul><br><li><a href="https://github.com/BradLarson/GPUImage" target="_blank" rel="external">GPUImage</a></li><br><li><a href="https://www.shadertoy.com/" target="_blank" rel="external">ShaderToy</a></li><br><li><a href="http://www.shaderific.com/" target="_blank" rel="external">Shaderific</a></li><br><li>Quartz Composer</li><br></ul>
+
+<p>下面我将要写的每一个着色器的例子都是从开源框架 GPUImage 中来的。如果你对 OpenGL/OpenGL ES 场景如何配置，从而使其可以使用着色器渲染感到好奇的话，可以 clone 这个仓储。我们不会深入到怎样设置 OpenGL/OpenGL ES 来使用着色器渲染，这超出了这篇文章的范围。</p>
+
+<h2 id="">我们的第一个着色器的例子</h2>
+
+<h3 id="">顶点着色器</h3>
+
+<p>好吧，关于着色器我们说的足够多了。我们来看一个实践中真实的着色器程序。这里是一个 GPUImage 中一个基础的顶点着色器：</p>
+
+<pre><code class="glsl">attribute vec4 position;  
+attribute vec4 inputTextureCoordinate；
+
+varying vec2 textureCoordinate;
+
+void main()  
+{
+    gl_position = position;
+    textureCoordinate = inputTextureCoordinate.xy;
+}
+</code></pre>
+
+<p>我们一句一句的来看:</p>
+
+<pre><code class="glsl">attribute vec4 position;  
+</code></pre>
+
+<p>像所有的语言一样，着色器语言的设计者也为常用的类型创造了特殊的数据类型，例如 2D 和 3D 坐标。这些类型是向量，稍后我们会深入更多。回到我们的应用程序的代码，我们创建了一系列顶点，我们为每个顶点提供的参数里的其中一个是顶点在画布中的位置。然后我们必须告诉我们的顶点着色器它需要接收这个参数，我们稍后会将它用在某些事情上。因为这是一个 C 程序，我们需要记住要在每一行代码的结束使用一个分号，所以如果你正使用 Swift 的话，你需要把在末尾加分号的习惯捡回来。</p>
+
+<pre><code class="glsl">attribute vec4 inputTextureCoordinate;  
+</code></pre>
+
+<p>现在你或许很奇怪，为什么我们需要一个纹理坐标。我们不是刚刚得到了我们的顶点位置了吗？难道它们不是同样的东西吗？</p>
+
+<p>其实它们并非一定是同样的东西。纹理坐标是纹理映射的一部分。这意味着你想要对你的纹理进行某种滤镜操作的时候会用到它。左上角坐标是 (0,0)。右上角的坐标是 (1,0)。如果我们需要在图片内部而不是边缘选择一个纹理坐标，我们需要在我们的应用中设定的纹理坐标就会与此不同，像是 (.25, .25) 是在图片左上角向右向下各图片高宽 1/4 的位置。在我们当前的图像处理应用里，我们希望纹理坐标和顶点位置一致，因为我们想覆盖到图片的整个长度和宽度。有时候你或许会希望这些坐标是不同的，所以需要记住它们未必是相同的坐标。在这个例子中，顶点坐标空间从 -1.0 延展到 1.0，而纹理坐标是从 0.0 到 1.0。</p>
+
+<pre><code class="glsl">varying vec2 textureCoordinate;  
+</code></pre>
+
+<p>因为顶点着色器负责和片段着色器交流，所以我们需要创建一个变量和它共享相关的信息。在图像处理中，片段着色器需要的唯一相关信息就是顶点着色器现在正在处理哪个像素。</p>
+
+<pre><code class="glsl">gl_Position = position;  
+</code></pre>
+
+<p><code>gl_Position</code> 是一个内建的变量。GLSL 有一些内建的变量，在片段着色器的例子中我们将看到其中的一个。这些特殊的变量是可编程管道的一部分，API 会去寻找它们，并且知道如何和它们关联上。在这个例子中，我们指定了顶点的位置，并且把它从我们的程序中反馈给渲染管线。</p>
+
+<pre><code class="glsl">textureCoordinate = inputTextureCoordinate.xy;  
+</code></pre>
+
+<p>最后，我们取出这个顶点中纹理坐标的 X 和 Y 的位置。我们只关心 <code>inputTextureCoordinate</code> 中的前两个参数，X 和 Y。这个坐标最开始是通过 4 个属性存在顶点着色器里的，但我们只需要其中的两个。我们拿出需要的属性，然后赋值给一个将要和片段着色器通信的变量，而不是把更多的属性反馈给片段着色器。</p>
+
+<p>在大多数图像处理程序中，顶点着色器都差不多，所以，这篇文章接下来的部分，我们将集中讨论片段着色器。</p>
+
+<h3 id="">片段着色器</h3>
+
+<p>看过了我们简单的顶点着色器后，我们再来看一个可以实现的最简单的片段着色器：一个直通滤镜：</p>
+
+<pre><code class="glsl">varying highp vec2 textureCoordinate;
+
+uniform sampler2D inputImageTexture;
+
+void main()  
+{
+    gl_FragColor = texture2D(inputImageTexture, textureCoordinate);
+}
+</code></pre>
+
+<p>这个着色器实际上不会改变图像中的任何东西。它是一个直通着色器，意味着我们输入每一个像素，然后输出完全相同的像素。我们来一句句的看：</p>
+
+<pre><code class="glsl">varying highp vec2 textureCoordinate;  
+</code></pre>
+
+<p>因为片段着色器作用在每一个像素上，我们需要一个方法来确定我们当前在分析哪一个像素/片段。它需要存储像素的 X 和 Y 坐标。我们接收到的是当前在顶点着色器被设置好的纹理坐标。</p>
+
+<pre><code class="glsl">uniform sampler2D inputImageTexture;  
+</code></pre>
+
+<p>为了处理图像，我们从应用中接收一个图片的引用，我们把它当做一个 2D 的纹理。这个数据类型被叫做 <code>sampler2D</code> ，这是因为我们要从这个 2D 纹理中采样出一个点来进行处理。</p>
+
+<pre><code class="glsl">gl_FragColor = texture2D(inputImageTexture, textureCoordinate);  
+</code></pre>
+
+<p>这是我们碰到的第一个 GLSL 特有的方法：<code>texture2D</code>，顾名思义，创建一个 2D 的纹理。它采用我们之前声明过的属性作为参数来决定被处理的像素的颜色。这个颜色然后被设置给另外一个内建变量，<code>gl_FragColor</code>。因为片段着色器的唯一目的就是确定一个像素的颜色，<code>gl_FragColor</code> 本质上就是我们片段着色器的返回语句。一旦这个片段的颜色被设置，接下来片段着色器就不需要再做其他任何事情了，所以你在这之后写任何的语句，都不会被执行。</p>
+
+<p>就像你看到的那样，写着色器很大一部分就是了解着色语言。即使着色语言是基于 C 语言的，依然有很多怪异和细微的差别让它和普通的 C 语言有不同。</p>
+
+<h2 id="glsl">GLSL 数据类型和运算</h2>
+
+<p>各式着色器都是用 OpenGL 着色语言 (GLSL) 写的。GLSL 是一种从 C 语言导出的简单语言。它缺少 C 语言的高级功能，比如动态内存管理。但是，它也包含一些在着色过程中常用的数学运算函数。</p>
+
+<p>在负责 OpenGL 和 OpenGL ES 实现的 Khronos 小组的网站上有一些有用的参考资料。在你开始之前，一件你可以做的最有价值的事情就是获取 OpenGL 和 OpenGL ES 的快速入门指导：</p>
+
+<ul><br><li><a href="https://www.khronos.org/opengles/sdk/docs/reference_cards/OpenGL-ES-2_0-Reference-card.pdf" target="_blank" rel="external">OpenGL ES</a></li><br><li><a href="https://www.khronos.org/files/opengl-quick-reference-card.pdf" target="_blank" rel="external">OpenGL</a></li><br></ul>
+
+<p>通过查看这些参考卡片，你可以快速简单地了解在写 OpenGL 应用时需要的着色语言函数和数据类型。</p>
+
+<p>尽早用，经常用。</p>
+
+<p>即使在这么简单的着色器的例子里，也有一些地方看起来很怪异，不是吗？看过了基础的着色器之后，是时候开始解释其中一些内容，以及它们为什么存在于 GLSL 中。</p>
+
+<h2 id="precisionqualifiers">输入，输出，以及精度修饰 (Precision Qualifiers)</h2>
+
+<p>看一看我们的直通着色器，你会注意到有一个属性被标记为 “varying”，另一个属性被标记为 “uniform”。</p>
+
+<p>这些变量是 GLSL 中的输入和输出。它允许从我们应用的输入，以及在顶点着色器和片段着色器之间进行交流。</p>
+
+<p>在 GLSL 中，实际有三种标签可以赋值给我们的变量：</p>
+
+<ul><br><li>Uniforms</li><br><li>Attributes</li><br><li>Varyings</li><br></ul>
+
+<p>Uniforms 是一种外界和你的着色器交流的方式。Uniforms 是为在一个渲染循环里不变的输入值设计的。如果你正在应用茶色滤镜，并且你已经指定了滤镜的强度，那么这些就是在渲染过程中不需要改变的事情，你可以把它作为 Uniform 输入。 Uniform 在顶点着色器和片段着色器里都可以被访问到。</p>
+
+<p>Attributes 仅仅可以在顶点着色器中被访问。Attribute 是在随着每一个顶点不同而会发生变动的输入值，例如顶点的位置和纹理坐标等。顶点着色器利用这些变量来计算位置，以它们为基础计算一些值，然后把这些值以 varyings 的方式传到片段着色器。</p>
+
+<p>最后，但同样重要的，是 varyings 标签。Varying 在顶点着色器和片段着色器都会出现。Varying 是用来在顶点着色器和片段着色器传递信息的，并且在顶点着色器和片段着色器中必须有匹配的名字。数值在顶点着色器被写入到 varying ，然后在片段着色器被读出。被写入 varying 中的值，在片段着色器中会被以插值的形式插入到两个顶点直接的各个像素中去。</p>
+
+<p>回看我们之前写的简单的着色器的例子，在顶点着色器和片段着色器中都用 varying 声明了 <code>textureCoordinate</code>。我们在顶点着色器中写入 varying 的值。然后我们把它传入片段着色器，并在片段着色器中读取和处理。</p>
+
+<p>在我们继续之前，最后一件要注意的事。看看创建的这些变量。你会注意到纹理坐标有一个叫做 highp 的属性。这个属性负责设置你需要的变量精度。因为 OpenGL ES 被设计为在处理能力有限的系统中使用，精度限制被加入进来可以提高效率。</p>
+
+<p>如果不需要非常高的精度，你可以进行设定，这或许会允许在一个时钟循环内处理更多的值。相反的，在纹理坐标中，我们需要尽可能的确保精确，所以我们具体说明确实需要额外的精度。</p>
+
+<p>精度修饰存在于 OpenGL ES 中，因为它是被设计用在移动设备中的。但是，在老版本的桌面版的 OpenGL 中则没有。因为 OpenGL ES 实际上是 OpenGL 的子集，你几乎总是可以直接把 OpenGL ES 的项目移植到 OpenGL。如果你这样做，记住一定要在你的桌面版着色器中去掉精度修饰。这是很重要的一件事，尤其是当你计划在 iOS 和 OS X 之间移植项目时。</p>
+
+<h2 id="">向量</h2>
+
+<p>在 GLSL 中，你会用到很多向量和向量类型。向量是一个很棘手的话题，它们表面上看起来很直观，但是因为它们有很多用途，这使我们在使用它们时常常会感到迷惑。</p>
+
+<p>在 GLSL 环境中，向量是一个类似数组的特殊的数据类型。每一种类型都有固定的可以保存的元素。深入研究一下，你甚至可以获得数组可以存储的数值的精确的类型。但是在大多数情况下，只要使用通用的向量类型就足够了。</p>
+
+<p>有三种向量类型你会经常看到：</p>
+
+<ul><br><li><code>vec2</code></li><br><li><code>vec3</code></li><br><li><code>vec4</code></li><br></ul>
+
+<p>这些向量类型包含特定数量的浮点数：<code>vec2</code> 包含两个浮点数，<code>vec3</code> 包含三个浮点数，<code>vec4</code> 包含四个浮点数。 </p>
+
+<p>这些类型可以被用在着色器中可能被改变或者持有的多种数据类型中。在片段着色器中，很明显 X 和 Y 坐标是的你想保存的信息。 (X,Y) 存储在 <code>vec2</code> 中就很合适。</p>
+
+<p>在图像处理过程中，另一个你可能想持续追踪的事情就是每个像素的 R，G，B，A 值。这些可以被存储在 <code>vec4</code> 中。</p>
+
+<h2 id="">矩阵</h2>
+
+<p>现在我们已经了解了向量，接下来继续了解矩阵。矩阵和向量很相似，但是它们添加了额外一层的复杂度。矩阵是一个浮点数数组的数组，而不是单个的简单浮点数数组。</p>
+
+<p>类似于向量，你将会经常处理的矩阵对象是：</p>
+
+<ul><br><li><code>mat2</code></li><br><li><code>mat3</code></li><br><li><code>mat4</code></li><br></ul>
+
+<p><code>vec2</code> 保存两个浮点数，<code>mat</code> 保存相当于两个 <code>vec2</code> 对象的值。将向量对象传递到矩阵对象并不是必须的，只需要有足够填充矩阵的浮点数即可。在 <code>mat2</code> 中，你需要传入两个 <code>vec2</code> 或者四个浮点数。因为你可以给向量命名，而且相比于直接传浮点数，你只需要负责两个对象，而不是四个，所以非常推荐使用封装好的值来存储你的数字，这样更利于追踪。对于 <code>mat4</code> 会更复杂一些，因为你要负责 16 个数字，而不是 4 个。</p>
+
+<p>在我们 <code>mat2</code> 的例子中，我们有两个 <code>vec2</code> 对象。每个 <code>vec2</code> 对象代表一行。每个 <code>vec2</code> 对象的第一个元素代表一列。构建你的矩阵对象的时候，确保每个值都放在了正确的行和列上是很重要的，否则使用它们进行运算肯定得不到正确的结果。</p>
+
+<p>既然我们有了矩阵也有了填充矩阵的向量，问题来了：“我们要用它们做什么呢？“ 我们可以存储点和颜色或者其他的一些的信息，但是要如果通过修改它们来做一些很酷的事情呢？</p>
+
+<h2 id="">向量和矩阵运算，也就是初等线性代数</h2>
+
+<p>我找到的最好的关于线性代数和矩阵是如何工作的资源是这个网站的<a href="http://betterexplained.com/articles/linear-algebra-guide/" target="_blank" rel="external">更好的解释</a>。我从这个网站<del>偷来</del>借鉴的一句引述就是：</p>
+
+<blockquote><br>  <p>线性代数课程的幸存者都成为了物理学家，图形程序员或者其他的受虐狂。</p><br></blockquote>
+
+<p>矩阵操作总体来说并不“难”；只不过它们没有被任何上下文解释，所以很难概念化地理解究竟为什么会有人想要和它们打交道。我希望能在给出一些它们在图形编程中的应用背景后，我们可以了解它们怎样帮助我们实现不可思议的东西。</p>
+
+<p>线性代数允许你一次在很多值上进行操作。假想你有一组数，你想要每一个数乘以 2。你一般会一个个地顺次计算数值。但是因为对每一个数都进行的是同样的操作，所以你完全可以并行地实现这个操作。</p>
+
+<p>我们举一个看起来可怕的例子，<code>CGAffineTransforms</code>。仿射转化是很简单的操作，它可以改变具有平行边的形状 (比如正方形或者矩形) 的大小，位置，或者旋转角度。</p>
+
+<p>在这种时候你当然可以坐下来拿出笔和纸，自己去计算这些转化，但这么做其实没什么意义。GLSL 有很多内建的函数来进行这些庞杂的用来计算转换的函数。了解这些函数背后的思想才是最重要的。</p>
+
+<h2 id="glsl">GLSL 特有函数</h2>
+
+<p>这篇文章中，我们不会把所有的 GLSL 内建的函数都过一遍，不过你可以在 <a href="http://www.shaderific.com/glsl-functions" target="_blank" rel="external">Shaderific</a> 上找到很好的相关资源。很多 GLSL 函数都是从 C 语言数学库中的基本的数学运算导出的，所以解释 sin 函数是做什么的真的是浪费时间。我们将集中阐释一些更深奥的函数，从而达到这篇文章的目的，解释怎样才能充分利用 GPU 的性能的一些细节。</p>
+
+<p><strong><code>step()</code>:</strong> GPU 有一个局限性，它并不能很好的处理条件逻辑。GPU 喜欢做的事情是接受一系列的操作，并将它们作用在所有的东西上。分支会在片段着色器上导致明显的性能下降，在移动设备上尤其明显。<code>step()</code> 通过允许在不产生分支的前提下实现条件逻辑，从而在某种程度上可以缓解这种局限性。如果传进 <code>step()</code> 函数的值小于阈值，<code>step()</code> 会返回 0.0。如果大于或等于阈值，则会返回 1.0。通过把这个结果和你的着色器的值相乘，着色器的值就可以被使用或者忽略，而不用使用 <code>if()</code> 语句。</p>
+
+<p><strong><code>mix()</code>:</strong>  mix 函数将两个值 (例如颜色值) 混合为一个变量。如果我们有红和绿两个颜色，我们可以用 <code>mix()</code> 函数线性插值。这在图像处理中很常用，比如在应用程序中通过一组独特的设定来控制效果的强度等。</p>
+
+<p><em>*<code>clamp()</code>:</em> GLSL 中一个比较一致的方面就是它喜欢使用归一化的坐标。它希望收到的颜色分量或者纹理坐标的值在 0.0 和 1.0 之间。为了保证我们的值不会超出这个非常窄的区域，我们可以使用 <code>clamp()</code> 函数。 <code>clamp()</code> 会检查并确保你的值在 0.0 和 1.0 之间。如果你的值小于 0.0，它会把值设为 0.0。这样做是为了防止一些常见的错误，例如当你进行计算时意外的传入了一个负数，或者其他的完全超出了算式范围的值。 </p>
+
+<h2 id="">更复杂的着色器的例子</h2>
+
+<p>我知道数学的洪水一定让你快被淹没了。如果你还能跟上我，我想举几个优美的着色器的例子，这会更有意义，这样你又有机会淹没在 GLSL 的潮水中。</p>
+
+<h3 id="">饱和度调整</h3>
+
+<p><img src="http://img.objccn.io/issue-21/Saturation.png" alt="实践中的饱和度滤镜"></p>
+
+<p>这是一个做饱和度调节的片段着色器。这个着色器出自 《<a href="http://www.amazon.com/Graphics-Shaders-Theory-Practice-Second/dp/1568814348/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1422557718&amp;sr=1-1&amp;keywords=graphics+shaders+theory+and+practice" target="_blank" rel="external">图形着色器：理论和实践</a>》一书，我强烈推荐整本书给所有对着色器感兴趣的人。</p>
+
+<p>饱和度是用来表示颜色的亮度和强度的术语。一件亮红色的毛衣的饱和度要远比北京雾霾时灰色的天空的饱和度高得多。</p>
+
+<p>在这个着色器上，参照人类对颜色和亮度的感知过程，我们有一些优化可以使用。一般而言，人类对亮度要比对颜色敏感的多。这么多年来，压缩软件体积的一个优化方式就是减少存储颜色所用的内存。</p>
+
+<p>人类不仅对亮度比颜色要敏感，同样亮度下，我们对某些特定的颜色反应也更加灵敏，尤其是绿色。这意味着，当你寻找压缩图片的方式，或者以某种方式改变它们的亮度和颜色的时候，多放一些注意力在绿色光谱上是很重要的，因为我们对它最为敏感。</p>
+
+<pre><code class="glsl">varying highp vec2 textureCoordinate;
+
+uniform sampler2D inputImageTexture;  
+uniform lowp float saturation;
+
+const mediump vec3 luminanceWeighting = vec3(0.2125, 0.7154, 0.0721);
+
+void main()  
+{
+   lowp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);
+   lowp float luminance = dot(textureColor.rgb, luminanceWeighting);
+   lowp vec3 greyScaleColor = vec3(luminance);
+
+    gl_FragColor = vec4(mix(greyScaleColor, textureColor.rgb, saturation), textureColor.w);
+
+}
+</code></pre>
+
+<p>我们一行行的看这个片段着色器的代码：</p>
+
+<pre><code class="glsl">varying highp vec2 textureCoordinate;
+
+uniform sampler2D inputImageTexture;  
+uniform lowp float saturation;  
+</code></pre>
+
+<p>再一次，因为这是一个要和基础的顶点着色器通信的片段着色器，我们需要为输入纹理坐标和输入图片纹理声明一个 varyings 变量，这样才能接收到我们需要的信息，并进行过滤处理。这个例子中我们有一个新的 uniform 的变量需要处理，那就是饱和度。饱和度的数值是一个我们从用户界面设置的参数。我们需要知道用户需要多少饱和度，从而展示正确的颜色数量。</p>
+
+<pre><code class="glsl">const mediump vec3 luminanceWeighting = vec3(0.2125, 0.7154, 0.0721);  
+</code></pre>
+
+<p>这就是我们设置三个元素的向量，为我们的亮度来保存颜色比重的地方。这三个值加起来要为 1，这样我们才能把亮度计算为 0.0 - 1.0 之间的值。注意中间的值，就是表示绿色的值，用了 70% 的颜色比重，而蓝色只用了它的 10%。蓝色对我们的展示不是很好，把更多权重放在绿色上是很有意义的。</p>
+
+<pre><code class="glsl">lowp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);  
+</code></pre>
+
+<p>我们需要取样特定像素在我们图片/纹理中的具体坐标来获取颜色信息。我们将会改变它一点点，而不是想直通滤镜那样直接返回。</p>
+
+<pre><code class="glsl">lowp float luminance = dot(textureColor.rgb, luminanceWeighting);  
+</code></pre>
+
+<p>这行代码会让那些没有学过线性代数或者很早以前在学校学过但是很少用过的人看起来不那么熟悉。我们是在使用 GLSL 中的点乘运算。如果你记得在学校里曾用过点运算符来相乘两个数字的话，那么你就能明白是什么回事儿了。点乘计算以包含纹理颜色信息的 <code>vec4</code> 为参数，舍弃 <code>vec4</code> 的最后一个不需要的元素，将它和相对应的亮度权重相乘。然后取出所有的三个值把它们加在一起，计算出这个像素综合的亮度值。</p>
+
+<pre><code class="glsl">lowp vec3 greyScaleColor = vec3(luminance);  
+</code></pre>
+
+<p>我们创建一个三个值都是亮度信息的 <code>vec3</code>。如果你只指定一个值，编译器会帮你把该将向量中的每个分量都设成这个值。</p>
+
+<pre><code class="glsl">gl_FragColor = vec4(mix(greyScaleColor, textureColor.rgb, saturation), textureColor.w);  
+</code></pre>
+
+<p>最后，我们把所有的片段组合起来。为了确定每个新的颜色是什么，我们使用刚刚学过的很好用的 mix 函数。mix 函数会把我们刚刚计算的灰度值和初始的纹理颜色以及我们得到的饱和度的信息相结合。</p>
+
+<p>这就是一个很棒的，好用的着色器，它让你用主函数里的四行代码就可以把图片从彩色变到灰色，或者从灰色变到彩色。还不错，不是吗？</p>
+
+<h3 id="">球形折射</h3>
+
+<p>最后，我们来看一个很漂亮的滤镜，你可以用来向你的朋友炫耀，或者吓唬你的敌人。这个滤镜看起来像是有一个玻璃球在你的图片上。这会比之前的看起来更复杂。但我相信我们可以完成它。</p>
+
+<p><img src="http://img.objccn.io/issue-21/sphereRefraction.png" alt="实践中的球形折射滤镜！"></p>
+
+<pre><code class="glsl">varying highp vec2 textureCoordinate;
+
+uniform sampler2D inputImageTexture;
+
+uniform highp vec2 center;  
+uniform highp float radius;  
+uniform highp float aspectRatio;  
+uniform highp float refractiveIndex;
+
+void main()  
+{
+    highp vec2 textureCoordinateToUse = vec2(textureCoordinate.x, (textureCoordinate.y * aspectRatio + 0.5 - 0.5 * aspectRatio));
+    highp float distanceFromCenter = distance(center, textureCoordinateToUse);
+    lowp float checkForPresenceWithinSphere = step(distanceFromCenter, radius);
+
+    distanceFromCenter = distanceFromCenter / radius;
+
+    highp float normalizedDepth = radius * sqrt(1.0 - distanceFromCenter * distanceFromCenter);
+    highp vec3 sphereNormal = normalize(vec3(textureCoordinateToUse - center, normalizedDepth));
+
+    highp vec3 refractedVector = refract(vec3(0.0, 0.0, -1.0), sphereNormal, refractiveIndex);
+
+    gl_FragColor = texture2D(inputImageTexture, (refractedVector.xy + 1.0) * 0.5) * checkForPresenceWithinSphere;
+}
+</code></pre>
+
+<p>再一次，看起来很熟悉…</p>
+
+<pre><code class="glsl">uniform highp vec2 center;  
+uniform highp float radius;  
+uniform highp float aspectRatio;  
+uniform highp float refractiveIndex;  
+</code></pre>
+
+<p>我们引入了一些参数，用来计算出图片中多大的区域要通过滤镜。因为这是一个球形，我们需要一个中心点和半径来计算球形的边界。宽高比是由你使用的设备的屏幕尺寸决定的，所以不能被硬编码，因为 iPhone 和 iPad 的比例是不相同的。我们的用户或者程序员会决定折射率，从而确定折射看起来是什么样子的。GPUImage 中折射率被设置为 0.71.</p>
+
+<pre><code class="glsl">highp vec2 textureCoordinateToUse = vec2(textureCoordinate.x, (textureCoordinate.y * aspectRatio + 0.5 - 0.5 * aspectRatio));  
+</code></pre>
+
+<p>图像的纹理坐标是在归一化的 0.0-1.0 的坐标空间内。归一化的坐标空间意味着考虑屏幕是一个单位宽和一个单位长，而不是 320 像素宽，480 像素高。因为手机的高度比宽度要长，我们需要为球形计算一个偏移率，这样球就是圆的而不是椭圆的。</p>
+
+<p><img src="http://img.objccn.io/issue-21/aspectRatio.png" alt="我们希望正确的宽高比"></p>
+
+<pre><code class="glsl">highp float distanceFromCenter = distance(center, textureCoordinateToUse);  
+</code></pre>
+
+<p>我们需要计算特定的像素点距离球形的中心有多远。我们使用 GLSL 内建的 <code>distance()</code> 函数，它会使用勾股定律计算出中心坐标和长宽比矫正过的纹理坐标的距离。</p>
+
+<pre><code class="glsl">lowp float checkForPresenceWithinSphere = step(distanceFromCenter, radius);  
+</code></pre>
+
+<p>这里我们计算了片段是否在球体内。我们计算当前点距离球形中心有多远以及球的半径是多少。如果当前距离小于半径，这个片段就在球体内，这个变量被设置为 1.0。否则，如果距离大于半径，这个片段就不在球内，这个变量被设置为 0.0 。</p>
+
+<p><img src="http://img.objccn.io/issue-21/distanceFromCenter2.png" alt="像素在球内或者球外"></p>
+
+<pre><code class="glsl">distanceFromCenter = distanceFromCenter / radius;  
+</code></pre>
+
+<p>By dividing it by the radius, we are making our math calculations easier in the next few lines of code.</p>
+
+<p>既然我们已经计算出哪些像素是在球内的，我们接着要对这些球内的像素进行计算并做些事情。再一次，我们需要标准化到球心的距离。我们直接重新设置 <code>distanceFromCenter</code> 的值，而不是新建一个变量，因为那会增加我们的开销。 通过将它与半径相除，我们可以让之后几行计算代码变得简单一些。</p>
+
+<pre><code class="glsl">highp float normalizedDepth = radius * sqrt(1.0 - distanceFromCenter * distanceFromCenter);  
+</code></pre>
+
+<p>因为我们试图模拟一个玻璃球，我们需要计算球的“深度”是多少。这个虚拟的球，不论怎样，在 Z 轴上，将会延伸图片表面到观察者的距离。这将帮助计算机确定如何表示球内的像素。还有，因为球是圆的，距离球心不同的距离，会有不同的深度。由于球表面方向的不同，球心处和边缘处对光的折射会不相同：</p>
+
+<p><img src="http://img.objccn.io/issue-21/normalizedDepth.png" alt="球有多深?"></p>
+
+<pre><code class="glsl">highp vec3 sphereNormal = normalize(vec3(textureCoordinateToUse - center, normalizedDepth));  
+</code></pre>
+
+<p>这里我们又进行了一次归一化。为了计算球面某个点的方向，我们用 X ，Y 坐标的方式，表示当前像素到球心的距离，然后把这些和计算出的球的深度结合。然后把结果向量进行归一化。</p>
+
+<p>想想当你正在使用 Adobe Illustrator 这样的软件时，你在 Illustrator 中创建一个三角形，但是它太小了。你按住 option 键，放大三角形，但是它现在太大了。你然后把它缩小到你想要的尺寸：</p>
+
+<p><img src="http://img.objccn.io/issue-21/sphereNormal.png" alt="什么是角?"></p>
+
+<pre><code class="glsl">highp vec3 refractedVector = refract(vec3(0.0, 0.0, -1.0), sphereNormal, refractiveIndex);  
+</code></pre>
+
+<p><code>refract()</code> 是一个很有趣的 GLSL 函数。<code>refract()</code> 以我们刚才创建的球法线和折射率来计算当光线通过这样的球时，从任意一个点看起来是怎样的。</p>
+
+<pre><code class="glsl">gl_FragColor = texture2D(inputImageTexture, (refractedVector.xy + 1.0) * 0.5) * checkForPresenceWithinSphere;  
+</code></pre>
+
+<p>最后，通过所有这些障碍后，我们终于凑齐了计算片段使用的颜色所需要的所有信息。折射光向量用来查找读取的输入位于图片哪个位置的，但是因为在那个向量中，坐标是从 -1.0 到 1.0 的，我们需要把它调整到 0.0-1.0 的纹理坐标空间内。</p>
+
+<p>我们然后把我们的结果和球边界检查的值相乘。如果我们的片段没有在球内，一个透明的像素 (0.0, 0.0, 0.0, 0.0) 将被写入。如果片段在球形内，这个结果被使用，然后返回计算好的颜色值。这样我们在着色器中可以就避免昂贵的条件逻辑。</p>
+
+<h2 id="">调试着色器</h2>
+
+<p>着色器调试不是一件直观的工作。普通的程序中，如果程序崩溃了，你可以设置一个断点。这在每秒会被并行调用几百万次的运算中是不可能的。在着色器中使用 <code>printf()</code> 语句来调试哪里出错了也是不可能的，因为输出到哪里呢？考虑你的着色器运行在黑盒中，你怎么才能打开它然后看看为什么它们不工作呢？</p>
+
+<p>你有一个可以使用的输出：我们的老朋友 <code>gl_FragColor</code>。<code>gl_FragColor</code> 会给你一个输出，换一种思路想一想，你可以用它来调试你的代码。</p>
+
+<p>所有你在屏幕上看到的颜色都是由一系列的数字表示的，这些数字是每一个像素的红绿蓝和透明度的百分比。你可以用这些知识来测试着色器的每一部分是不是像你构建的那样工作，从而确定它是不是按照你想的那样在运行。和一般调试不同，你不会得到一个可以打印的值，而是拿到一个颜色以及和它相关的某个指定值，依靠这些你可以进行逆向反推。</p>
+
+<p>如果想知道你的一个在 0 和 1 之间的值，你可以把它设置给一个将要传入 <code>gl_FragColor</code> 的 <code>vec4</code> 中。假设你把它设置进第一部分，就是红色值。这个值会被转换然后渲染到屏幕上，这时候你就可以检查它来确定原始的传进去的值是什么。</p>
+
+<p>你会有几种方法来捕捉到这些值。从着色器输出的图片可以被捕获到然后作为图片写进磁盘里 (最好用户没有压缩过的格式)。这张图片之后就可以放进像 Photoshop 这样的应用，然后检查像素的颜色。</p>
+
+<p>为了更快一些，你可以将图片用 OS X 的程序或者 iOS 的模拟器显示到屏幕上。在你的应用程序文件夹下的实用工具里有一个“数码测色计”的工具可以用来分析这些渲染过的视图。把鼠标放在桌面的任何一个像素点上，它都会精确的展示这个像素点 RGB 的值。因为 RGB 值在数码测色计和 Photoshop 中是从 0 到 255 而不是 从 0 到 1，你需要把你想要的值除以 255 来获得一个近似的输入值。</p>
+
+<p>回顾下我们的球形折射着色器。简直无法想象没有任何测试就可以写下整个程序。我们有很大一块代码来确定当前处理的像素是不是在这个圆形当中。那段代码的结尾用 <code>step()</code> 函数来设置像素的这个值为 0.0 或者 1.0 。</p>
+
+<p>把一个 <code>vec4</code> 的红色分量设为 <code>step()</code> 的输出，其他两个颜色值设为 0，然后传入<code>gl_FragColor</code> 中去。如果你的程序正确的运行，你将看到在黑色的屏幕上一个红色的圈。如果整个屏幕都是黑色，或者都是红色，那么肯定是有什么东西出错了。</p>
+
+<h2 id="">性能调优</h2>
+
+<p>性能测试和调优是非常重要的事情。尤其是你想让你的应用在旧的 iOS 设备上也能流畅运行时。</p>
+
+<p>测试着色器性能很重要，因为你总是不能确定一个东西的性能会怎样。着色器性能变化的很不直观。你会发现 Stack Overflow 上一个非常好的优化方案并不会加速你的着色器，因为你没有优化代码的真正瓶颈。即使仅只是调换你工程里的几行代码都有可能非常大的减少或增加渲染的时间。</p>
+
+<p>分析的时候，我建议测算帧渲染的时间，而不是每秒钟渲染多少帧。帧渲染时间随着着色器的性能线性的增加或减少，这会让你观察你的影响更简单。FPS 是帧时间的倒数，在调优的时候可能会难于理解。最后，如果你使用 iPhone 的相机捕捉图像，它会根据场景的光亮来调整 FPS ，如果你依赖于此，会导致不准确的测量。</p>
+
+<p>帧渲染时间是帧从开始处理到完全结束并且渲染到屏幕或者一张图片所花费的时间。许多移动 GPU 用一种叫做 “延迟渲染” 的技术，它会把渲染指令批量处理，并且只会在需要的时候才会处理。所以，需要计算整个渲染过程，而不是中间的操作过程，因为它们或许会以一种与你想象不同的顺序运行。</p>
+
+<p>不同的设备上，桌面设备和移动设备上，优化也会很不相同。你或许需要在不同类型的设备上进行分析。例如，GPU 的性能在移动 iOS 设备上有了很大的提升。iPhone 5S 的 CPU 比 iPhone 4 快了接近十倍，而 GPU 则快上了好几百倍。</p>
+
+<p>如果你在有着 A7 芯片或者更高的设备上测试你的应用，相比于 iPhone 5 或者更低版本的设备，你会获得非常不同的结果。<a href="http://www.sunsetlakesoftware.com/2013/10/21/optimizing-gaussian-blurs-mobile-gpu" target="_blank" rel="external">Brad Larson 测试了高斯模糊在不同的设备上花费的时间，并且非常清晰的展示了在新设备上性能有着令人惊奇的提升:</a></p>
+
+<table><thead><br><tr><br><th>iPhone 版本</th><br><th> 帧渲染时间 (毫秒)</th><br></tr><br></thead><tbody><br><tr><br><td>iPhone 4</td><br><td>873</td><br></tr><br><tr><br><td>iPhone 4S</td><br><td>145</td><br></tr><br><tr><br><td>iPhone 5</td><br><td>55</td><br></tr><br><tr><br><td>iPhone 5S</td><br><td>3</td><br></tr><br></tbody></table>
+
+<p>你可以下载一个工具，<a href="http://community.imgtec.com/developers/powervr/" target="_blank" rel="external">Imagination Technologies PowerVR SDK</a>，它会帮助你分析你的着色器，并且让你知道着色器渲染性能的最好的和最坏的情况 。为了保持高帧速率，使渲染着色器所需的周期数尽可能的低是很重要的。如果你想达成 60 帧每秒，你只有 16.67 毫秒来完成所有的处理。</p>
+
+<p>这里有一些简单的方式来帮助你达成目标：</p>
+
+<ul><br><li><p><strong>消除条件逻辑:</strong> 有时候条件逻辑是必须得，但尽量最小化它。在着色器中使用像 <code>step()</code>  函数这样的变通方法可以帮助你避免一些昂贵的条件逻辑。</p></li><br><li><p><strong>减少依赖纹理的读取:</strong> 在片段着色器中取样时，如果纹理坐标不是直接以 varying 的方式传递进来，而是在片段着色器中进行计算时，就会发生依赖纹理的读取。依赖纹理的读取不能使用普通的纹理读取的缓存优化，会导致读取更慢。例如，如果你想从附近的像素取样，而不是计算和片段着色器中相邻像素的偏差，最好在顶点着色器中进行计算，然后把结果以 varying 的方式传入片段着色器。在 <a href="http://objccn.io/issue-21-8" target="_blank" rel="external">Brad Larson的文章</a>中关于索贝尔边缘检测的部分有一个这方面的例子。</p></li><br><li><p><strong>让你的计算尽量简单:</strong> 如果你在避免一个昂贵的操作情况下可以获得一个近似的足够精度的值，你应该这样做。昂贵的计算包括调用三角函数 (像<code>sin()</code>, <code>cos()</code>, 和 <code>tan()</code>)。</p></li><br><li><p><strong>如果可以的话，把工作转移到顶点着色器:</strong>  之前讲的关于依赖纹理的读取就是把纹理坐标计算转移到顶点着色器的很有意义的一种情况。如果一个计算在图片上会有相同的结果，或者线性的变化，看看能不能把计算移到顶点着色器进行。顶点着色器对每个顶点运行一次，片段着色器在每个像素上运行一次，所以在前者上的计算会比后者少很多。</p></li><br><li><p><strong>在移动设备上使用合适的精度</strong> 在特定的移动设备上，在向量上使用低精度的值会变得更快。在这些设备上，两个 <code>lowp vec4</code> 相加的操作可以在一个时钟周期内完成，而两个 <code>highp vec4</code> 相加则需要四个时钟周期。但是在桌面 GPU 和最近的移动 GPU 上，这变得不再那么重要，因为它们对低精度值的优化不同。</p></li><br></ul>
+
+<h2 id="">结论和资源</h2>
+
+<p>着色器刚开始看起来很吓人，但它们也仅仅是改装的 C 程序而已。创建着色器相关的所有事情，我们大多数都在某些情况下处理过，只不过在不同的上下文中罢了。</p>
+
+<p>对于想深入了解着色器的人，我非常推荐的一件事就是回顾下三角学和线性代数。做相关工作的时候，我遇到的最大的阻力就是忘了很多大学学过的数学，因为我已经很长时间没有实际使用过它们了。</p>
+
+<p>如果你的数学有些生疏了，我有一些书可以推荐给你：</p>
+
+<ul><br><li><a href="http://www.amazon.com/Math-Primer-Graphics-Game-Development/dp/1568817231/ref=sr_1_1?ie=UTF8&amp;qid=1422837187&amp;sr=8-1&amp;keywords=3d+math+primer+for+graphics+and+game+development" target="_blank" rel="external">3D Math Primer for Graphics and Game Development</a></li><br><li><a href="http://natureofcode.com" target="_blank" rel="external">The Nature of Code</a></li><br><li><a href="http://www.amazon.com/Computational-Beauty-Nature-Explorations-Adaptation/dp/0262561271/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1422837256&amp;sr=1-1&amp;keywords=computational+beauty+of+nature" target="_blank" rel="external">The Computational Beauty of Nature</a></li><br></ul>
+
+<p>也有数不清的关于GLSL书和特殊着色器被我们行业突出的人士创造出来：</p>
+
+<ul><br><li><a href="http://www.amazon.com/Graphics-Shaders-Theory-Practice-Second/dp/1568814348/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1422837351&amp;sr=1-1&amp;keywords=graphics+shaders+theory+and+practice" target="_blank" rel="external">Graphics Shaders: Theory and Practice</a></li><br><li><a href="http://www.amazon.com/OpenGL-Shading-Language-Randi-Rost/dp/0321637631/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1422896457&amp;sr=1-1&amp;keywords=opengl+shading+language" target="_blank" rel="external">The OpenGL Shading Language</a></li><br><li><a href="http://www.amazon.com/OpenGL-Shading-Language-Cookbook-Second/dp/1782167021/ref=sr_1_2?s=books&amp;ie=UTF8&amp;qid=1422896457&amp;sr=1-2&amp;keywords=opengl+shading+language" target="_blank" rel="external">OpenGL 4 Shading Language Cookbook</a></li><br><li><a href="http://http.developer.nvidia.com/GPUGems/gpugems_part01.html" target="_blank" rel="external">GPU Gems</a></li><br><li><a href="http://www.amazon.com/GPU-Pro-Advanced-Rendering-Techniques/dp/1568814720/ref=sr_1_4?s=books&amp;ie=UTF8&amp;qid=1422837427&amp;sr=1-4&amp;keywords=gpu+pro" target="_blank" rel="external">GPU Pro: Advanced Rendering Techniques</a></li><br></ul>
+
+<p>还有，再一次强调，<a href="https://github.com/BradLarson/GPUImage" target="_blank" rel="external">GPUImage</a>是一个开源的资源，里面有一些非常酷的着色器。一个非常好的学习着色器的方式，就是拿一个你觉得很有意思的着色器，然后一行一行看下去，搜寻任何你不理解的部分。GPUImage 还有一个<a href="https://github.com/BradLarson/GPUImage/tree/master/examples/Mac/ShaderDesigner" target="_blank" rel="external">着色器设计</a>的 Mac 端应用，可以让你测试着色器而不用准备 OpenGL 的代码。</p>
+
+<p>学习有效的在代码中实现着色器可以给你带来很大的性能提升。不仅如此，着色器也使你可以做以前不可能做出来的东西。</p>
+
+<p>学习着色器需要一些坚持和好奇心，但是并不是不可能的。如果一个 33 岁的还在康复中的新闻专业的人都能够克服她对数学的恐惧来处理着色器的话，那么你肯定也可以。</p>
+
+<p>原文 <a href="http://www.objc.io/issue-21/gpu-accelerated-image-processing.html" target="_blank" rel="external">GPU-Accelerated Image Processing</a> <a href="http://objccn.io/issue-21-7/" target="_blank" rel="external">译文</a></p>
+<p>扩展阅读 <a href="https://github.com/100mango/zen/blob/master/WWDC心得：Advanced%20Graphics%20and%20Animations%20for%20iOS%20Apps/Advanced%20Graphics%20and%20Animations%20for%20iOS%20Apps.md" target="_blank" rel="external">Advanced Graphics and Animations for iOS Apps</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/iOS/">iOS</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a><a href="/tags/图像处理/">图像处理</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/10/GPU-加速下的图像处理/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/10/GPU-加速下的图像处理/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+  
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/03/sip-xmpp/" title="sip&amp;xmpp" itemprop="url">sip&amp;xmpp</a>
   </h1>
   <p class="article-author">By
@@ -95,15 +598,15 @@
     <div class="article-content">
         
         <p>XMPP和SIP都是应用层协议,主要用于互联网上发送语音和即时通讯。 SIP在RFC 3621中定义,XMPP在RFC 3920中定义。XMPP是从即时通讯中演变而来,SIP是从VOIP中演变而来,XMPP为了会话协商添加了一个扩展叫做Jingle,SIP为了即时通讯业务添加了一个扩展叫做SIMPLE。</p>
-<h1 id="SIP_(Session_Initiation_Protocol)">SIP (Session Initiation Protocol)</h1><p>SIP是一个应用层协议,是用在类似VOIP这样的场合,用来建立、修改、中止会话,同时在多人会议中他也能在已有会话中加入新的会话。基本上SIP是VOIP中的信令协议,它处理呼叫建立,呼叫转移和产生CDR(Call Detail Record,供通话计费用)。</p>
-<h1 id="XMPP_(Extensible_Messaging_Presence_Protocol)">XMPP (Extensible Messaging Presence Protocol)</h1><p>XMPP是一个为即时通讯和请求响应业务服务的XML协议，最早由Jabber开源社区在1999年开发,2002年XMPP工作组为了更适合即时通讯对Jabber进行了扩展。</p>
-<h1 id="SIP和XMPP的异同">SIP和XMPP的异同</h1><p>其实我们不能简单地拿SIP和XMPP做比对,就像我们不能直接比较苹果和橘子,前者主要是为了会话协商,后者主要是为了结构化数据交换,只不过随着各自对Simple和Jingle的引入,他们有了一些相似。</p>
+<p>#SIP (Session Initiation Protocol)<br>SIP是一个应用层协议,是用在类似VOIP这样的场合,用来建立、修改、中止会话,同时在多人会议中他也能在已有会话中加入新的会话。基本上SIP是VOIP中的信令协议,它处理呼叫建立,呼叫转移和产生CDR(Call Detail Record,供通话计费用)。</p>
+<p>#XMPP (Extensible Messaging Presence Protocol)<br>XMPP是一个为即时通讯和请求响应业务服务的XML协议，最早由Jabber开源社区在1999年开发,2002年XMPP工作组为了更适合即时通讯对Jabber进行了扩展。</p>
+<p>#SIP和XMPP的异同<br>其实我们不能简单地拿SIP和XMPP做比对,就像我们不能直接比较苹果和橘子,前者主要是为了会话协商,后者主要是为了结构化数据交换,只不过随着各自对Simple和Jingle的引入,他们有了一些相似。</p>
 <p>1、SIP提供连接的建立、修改和终止，而XMPP在客户端内部提供流管道、交换结构化数据。</p>
 <p>也就是说：SIP的重点是终端之间连接的建立和维护，连接以后的数据和信息传送他不关注；而XMPP重点是考虑终端内部的数据交换，连接建立是基本的功能，而不是重点。所以，XMPP对应用的支持和扩展性的考虑很充分,比SIP天生要好。</p>
 <p>2、SIP的信令和消息传送是基于文本的，不太好解析,或者说解析起来缺少规律性,在新增数据消息体的时候缺少继承性,需要开发新的代码来封装和解析,原有代码的继承性比较差。而XMPP采用XML，是一种结构化的消息结构，能够方便地表达层次化的内容，以及内容之间的内在逻辑。这种XML结构对应用的扩展和内容的解析带来极大的方便，大量软件代码可以复用。</p>
 <p>3、SIP信令由header和body两部分组成，也就是说，SIP报文格式的header已经包含了部分内容,类似于HTTP,与具体的上层应用直接关联，而不是通用的报文格式；而XMPP所有信息都是采用XML在流管道之间透明传送。</p>
-<p>SIP的连接建立通道与数据传送通道是各自独立的，连接建立在SIP client与Server之间，而数据传送通道是在Client—Client之间直接进行的。这个对视频、语音和文件传送业务很合适，但是不适合其他形式的应用。</p>
-<p>XMPP的控制和数据通道是一体的，Clent只与Server建立连接，而Client与Client之间是没有之间连接的。Client之间传送的通道是：Client1—-〉Server1—-〉Server2—-〉Client2。这种方式看起来扩展性差，server压力很大，但是能够实现很好的业务功能，比如留言、广播、群聊、状态更新、Blog、微博、数据共享等等。</p>
+<p>SIP的连接建立通道与数据传送通道是各自独立的，连接建立在SIP client与Server之间，而数据传送通道是在Client–Client之间直接进行的。这个对视频、语音和文件传送业务很合适，但是不适合其他形式的应用。</p>
+<p>XMPP的控制和数据通道是一体的，Clent只与Server建立连接，而Client与Client之间是没有之间连接的。Client之间传送的通道是：Client1—〉Server1—〉Server2—〉Client2。这种方式看起来扩展性差，server压力很大，但是能够实现很好的业务功能，比如留言、广播、群聊、状态更新、Blog、微博、数据共享等等。</p>
 <p>这种C-S模型，很多业务的控制在Server上完成，新功能的增加在server上实现，在server上定义新的XML对象和逻辑，客户端只要负责XML数据流的解析和呈现就可以了, 所以，终端实现简单。</p>
 <p>4、SIP可以使用UDP,TCP,TLS进行传送,而XMPP仅仅使用TCP和TLS进行发送.</p>
 <p>5、SIP是双向对称，客户端和服务器都可以主动发起连接请求并响应，这种对称连接的方式在穿越NAT和Firewall的时候很麻烦，无法保证穿越NAT。而XMPP是单向的连接，只有Client可以向Server发起连接请求，Server不会向Client发起连接。这样便于NAT和Firewall的穿越。</p>
@@ -171,7 +674,7 @@
 </header>
     <div class="article-content">
         
-        <h1 id="UIViewControllerTransitioning">UIViewControllerTransitioning</h1><h2 id="UIViewControllerAnimatedTransitioning">UIViewControllerAnimatedTransitioning</h2><p>采用UIViewControllerAnimatedTransitioning协议实现自定义转场动画，它提供了两个方法：</p>
+        <h1 id="UIViewControllerTransitioning"><a href="#UIViewControllerTransitioning" class="headerlink" title="UIViewControllerTransitioning"></a>UIViewControllerTransitioning</h1><p>##UIViewControllerAnimatedTransitioning<br>采用UIViewControllerAnimatedTransitioning协议实现自定义转场动画，它提供了两个方法：</p>
 <p>1、transitionDuration:指定转场的过渡时间。</p>
 <p>2、animateTransition:创建转场动画。</p>
 <p>在转场中涉及到的信息通过一个实现了UIViewControllerContextTransitioning的transitionContext上下文对象进行传递，使用这个transitionContext参数能移动或关闭目标控制器以及控制这个过程中持续的时间。</p>
@@ -180,11 +683,11 @@
 <figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@interface</span> <span class="attribute">CustomPresentAnimation </span>: NSObject &lt;UIViewControllerAnimatedTransitioning&gt;</span><br><span class="line"></span><br><span class="line"><span class="variable">@end</span></span><br></pre></td></tr></table></figure>
 <p><strong>CustomPresentAnimation.m</strong></p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">CustomPresentAnimation</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="built_in">NSTimeInterval</span>)transitionDuration:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1.0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)animateTransition:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerContextTransitioning</span>&gt;)transitionContext</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//使用transitionContext可以得到参与切换的两个ViewController的信息</span></span><br><span class="line">    <span class="built_in">UIViewController</span> *toVC= [transitionContext viewControllerForKey:<span class="built_in">UITransitionContextToViewControllerKey</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//将控制器视图初始位置设置到屏幕下边缘，从而从屏幕下方出现</span></span><br><span class="line">    <span class="built_in">CGRect</span> finalRect=[transitionContext finalFrameForViewController:toVC];</span><br><span class="line">    toVC<span class="variable">.view</span><span class="variable">.frame</span>=<span class="built_in">CGRectOffset</span>(finalRect, <span class="number">0</span>, [[<span class="built_in">UIScreen</span> mainScreen] bounds]<span class="variable">.size</span><span class="variable">.height</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//所有的动画视图都必须放在transitionContext的containerView里</span></span><br><span class="line">    [[transitionContext containerView] addSubview:toVC<span class="variable">.view</span>];</span><br><span class="line">    </span><br><span class="line">    [<span class="built_in">UIView</span> animateWithDuration:[<span class="keyword">self</span> transitionDuration:transitionContext] delay:<span class="number">0.0</span> usingSpringWithDamping:<span class="number">0.5</span> initialSpringVelocity:<span class="number">0.5</span> options:<span class="built_in">UIViewAnimationOptionCurveEaseInOut</span> animations:^&#123;</span><br><span class="line">        toVC<span class="variable">.view</span><span class="variable">.frame</span>=finalRect;</span><br><span class="line">    &#125; completion:^(<span class="built_in">BOOL</span> finished) &#123;</span><br><span class="line">        <span class="comment">//动画完成或者取消之后必须得调用的方法，系统接收到这个消息后将对控制器的状态进行维护</span></span><br><span class="line">        [transitionContext completeTransition:<span class="literal">YES</span>];</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="UIViewControllerTransitioningDelegate">UIViewControllerTransitioningDelegate</h2><p>实现UIViewControllerTransitioningDelegate协议的对象在控制器 <em>presented</em> 或者 <em>dismissed</em> 时返回上面继承自NSObject并遵守UIViewControllerAnimatedTransitioning协议的CustomPresentAnimation对象。这个接口的作用比较单一，在需要控制器切换的时候会向实现了这个接口的对象询问是否需要使用自定义的切换效果。我们可以让需要实现切换的控制器实现这个协议。</p>
+<p>##UIViewControllerTransitioningDelegate<br>实现UIViewControllerTransitioningDelegate协议的对象在控制器 <em>presented</em> 或者 <em>dismissed</em> 时返回上面继承自NSObject并遵守UIViewControllerAnimatedTransitioning协议的CustomPresentAnimation对象。这个接口的作用比较单一，在需要控制器切换的时候会向实现了这个接口的对象询问是否需要使用自定义的切换效果。我们可以让需要实现切换的控制器实现这个协议。</p>
 <p><strong>PresentedViewController.m</strong></p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">PresentedViewController</span> () &lt;<span class="title">UIViewControllerTransitioningDelegate</span>&gt;</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) CustomPresentAnimation *presentAnimation;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">PresentedViewController</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span><span class="variable">.transitioningDelegate</span>=<span class="keyword">self</span>;</span><br><span class="line">    <span class="keyword">self</span><span class="variable">.presentAnimation</span>=[[CustomPresentAnimation alloc] init];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">IBAction</span>)clickDismmissButton:(<span class="built_in">UIButton</span> *)sender &#123;</span><br><span class="line">    </span><br><span class="line">    [<span class="keyword">self</span> dismissViewControllerAnimated:<span class="literal">YES</span> completion:^&#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"clickDismmissButton"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerAnimatedTransitioning</span>&gt;)animationControllerForPresentedController:(<span class="built_in">UIViewController</span> *)presented presentingController:(<span class="built_in">UIViewController</span> *)presenting sourceController:(<span class="built_in">UIViewController</span> *)source</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span><span class="variable">.presentAnimation</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
 <p>UIViewController中自定义转场动画到这就结束了，<a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">点击</a>查看的完整代码。</p>
-<h1 id="让你的app绚起来">让你的app绚起来</h1><p><a href="http://www.cnblogs.com/kenshincui/p/3972100.html" target="_blank" rel="external">iOS开发系列—让你的应用“动”起来</a></p>
+<h1 id="让你的app绚起来"><a href="#让你的app绚起来" class="headerlink" title="让你的app绚起来"></a>让你的app绚起来</h1><p><a href="http://www.cnblogs.com/kenshincui/p/3972100.html" target="_blank" rel="external">iOS开发系列–让你的应用“动”起来</a></p>
 <p><a href="http://kittenyang.com/uiviewcontrollertransitioning/" target="_blank" rel="external">iOS自定义转场详解</a></p>
 <p><a href="http://www.jianshu.com/p/38cd35968864" target="_blank" rel="external">关于自定义转场动画，我都告诉你。</a></p>
 <p><a href="http://www.cocoachina.com/ios/20151119/14303.html" target="_blank" rel="external">iOS自定义转场</a></p>
@@ -253,15 +756,15 @@
     <div class="article-content">
         
         <p>Git 是一个开源的分布式版本控制系统，用以有效、高速的处理从很小到非常大的项目版本管理。Git 是 Linux Torvalds 为了帮助管理 Linux 内核开发而开发的一个开放源码的版本控制软件。 在分布式版本控制上，使用 Git 会比其他解决方案更可靠。</p>
-<h1 id="前提">前提</h1><p>默认进入到了工程目录，即 cd xxx。</p>
+<p>#前提<br>默认进入到了工程目录，即 cd xxx。</p>
 <p>在安装好git后第一件是是设置你的名字和电子邮箱，因为每次提交都要用到这些信息：</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --user<span class="class">.name</span> <span class="string">"Your name"</span></span><br><span class="line">git config --user<span class="class">.email</span> <span class="string">"Your email"</span></span><br></pre></td></tr></table></figure>
-<h1 id="查看其他指令的用途及配置指令">查看其他指令的用途及配置指令</h1><p>1、git help</p>
+<p>#查看其他指令的用途及配置指令<br>1、git help</p>
 <p>2、git config user.name ‘zhuli8’</p>
 <p>3、git config user.email ‘zhuli1228@163.com’</p>
-<p>4、git config —list：查看配置</p>
+<p>4、git config –list：查看配置</p>
 <p>5、git log：查看日志</p>
-<h1 id="操作github上的已有项目">操作github上的已有项目</h1><p>注意：</p>
+<p>#操作github上的已有项目<br>注意：</p>
 <pre><code>使用Xcode工具连接github仓库时使用的用户名必须是自己GitHub上的账号名而不是邮箱。
 </code></pre><p>1、clone远程仓库</p>
 <p>git clone <a href="https://github.com/zhuli8com/transition.git" target="_blank" rel="external">https://github.com/zhuli8com/transition.git</a></p>
@@ -275,7 +778,7 @@
 <p>git delete test.txt，重复3、4步骤</p>
 <p>6、从远程更新本地代码</p>
 <p>git pull origin master</p>
-<h1 id="创建本地仓库并上传github">创建本地仓库并上传github</h1><p>1、初始化一个版本仓库</p>
+<p>#创建本地仓库并上传github<br>1、初始化一个版本仓库</p>
 <p>git init</p>
 <p>2、添加远程版本库</p>
 <p>git remote add [shortname] [url]</p>
@@ -290,19 +793,19 @@
 <p>git commit -m ‘注释’</p>
 <p>7、提交到github，将本地分支推到远程主分支</p>
 <p>git push origin master</p>
-<h1 id="tag">tag</h1><p>用git tag打标签只是在本地仓库打标签而已，为了能把标签同步到远程服务器，我们可以这样做：</p>
+<h1 id="tag"><a href="#tag" class="headerlink" title="tag"></a>tag</h1><p>用git tag打标签只是在本地仓库打标签而已，为了能把标签同步到远程服务器，我们可以这样做：</p>
 <p>默认情况下，git push并不会把tag标签传送到远端服务器上，只有通过显式命令才能分享标签到远端仓库。</p>
 <ol>
 <li>push单个tag，命令格式为：git push origin [tagname]</li>
 </ol>
 <p>例如：<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">git</span> <span class="keyword">push </span>origin <span class="literal">v1</span>.<span class="number">0</span> #将本地<span class="literal">v1</span>.<span class="number">0</span>的tag推送到远端服务器</span><br></pre></td></tr></table></figure></p>
 <ol>
-<li>push所有tag，命令格式为：git push [origin] —tags</li>
+<li>push所有tag，命令格式为：git push [origin] –tags</li>
 </ol>
 <p>例如：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git push <span class="comment">--tags</span></span><br><span class="line">或</span><br><span class="line">git push origin <span class="comment">--tags</span></span><br></pre></td></tr></table></figure></p>
 <p>删除分支</p>
 <figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git tag -d &lt;tagname&gt;</span><br><span class="line">git push origin <span class="symbol">:refs/tags/&lt;tagname&gt;</span></span><br></pre></td></tr></table></figure>
-<h1 id="参考">参考</h1><p><a href="http://roclinux.cn/?p=2129" target="_blank" rel="external">GIT分支管理是一门艺术</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://roclinux.cn/?p=2129" target="_blank" rel="external">GIT分支管理是一门艺术</a></p>
 <p><a href="http://www.cnblogs.com/tugenhua0707/p/4050072.html#!comments" target="_blank" rel="external">Git使用教程</a></p>
 <p><a href="http://justcoding.iteye.com/blog/1830388" target="_blank" rel="external">git常用命令</a></p>
 <p><a href="http://jingyan.baidu.com/article/ab0b5630936ab6c15afa7d1c.html" target="_blank" rel="external">Xcode 6.3 用 GitHub 托管项目</a></p>
@@ -370,30 +873,31 @@
 </header>
     <div class="article-content">
         
-        <h1 id="宏定义">宏定义</h1><h2 id="不带参数的宏定义">不带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名 字符串</span><br></pre></td></tr></table></figure>
+        <p>#宏定义</p>
+<h2 id="不带参数的宏定义"><a href="#不带参数的宏定义" class="headerlink" title="不带参数的宏定义"></a>不带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名 字符串</span><br></pre></td></tr></table></figure>
 <p>它的作用是在编译预处理时，将源程序中所有”宏名”替换成右边的”字符串”，常用来定义常量。</p>
 <blockquote>
 <p>1.宏名一般用大写字母，以便与变量名区别开来，但用小写也没有语法错误</p>
 <p>2.在编译预处理用字符串替换宏名时，不作语法检查，只是简单的字符串替换。只有在编译的时候才对已经展开宏名的源程序进行语法检查</p>
 <p>3.宏名的有效范围是从定义位置到文件结束。如果需要终止宏定义的作用域，可以用#undef命令</p>
 </blockquote>
-<h2 id="带参数的宏定义">带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名(参数列表) 字符串</span><br></pre></td></tr></table></figure>
+<h2 id="带参数的宏定义"><a href="#带参数的宏定义" class="headerlink" title="带参数的宏定义"></a>带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名(参数列表) 字符串</span><br></pre></td></tr></table></figure>
 <p>在编译预处理时，将源程序中所有宏名替换成字符串，并且将 字符串中的参数 用 宏名右边参数列表 中的参数替换</p>
 <blockquote>
 <p>1.宏名和参数列表之间不能有空格，否则空格后面的所有字符串都作为替换的字符串</p>
 <p>2.带参数的宏在展开时，只作简单的字符和参数的替换，不进行任何计算操作。所以在定义宏时，一般用一个小括号括住字符串的参数。</p>
 <p>3.计算结果最好也用括号括起来</p>
 </blockquote>
-<h1 id="条件编译">条件编译</h1><p>在很多情况下，我们希望程序的其中一部分代码只有在满足一定条件时才进行编译，否则不参与编译(只有参与编译的代码最终才能被执行)，这就是条件编译。</p>
+<h1 id="条件编译"><a href="#条件编译" class="headerlink" title="条件编译"></a>条件编译</h1><p>在很多情况下，我们希望程序的其中一部分代码只有在满足一定条件时才进行编译，否则不参与编译(只有参与编译的代码最终才能被执行)，这就是条件编译。</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#if</span> 条件<span class="number">1</span></span><br><span class="line"> ..<span class="class">.code1</span>...</span><br><span class="line"><span class="id">#elif</span> 条件<span class="number">2</span></span><br><span class="line"> ..<span class="class">.code2</span>...</span><br><span class="line"><span class="id">#else</span></span><br><span class="line"> ..<span class="class">.code3</span>...</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>#if 和 #elif后面的条件一般是判断宏定义而不是判断变量，因为条件编译是在编译之前做的判断，宏定义也是编译之前定义的，而变量是在运行时才产生的、才有使用的意义</p>
 </blockquote>
-<h2 id="其他">其他</h2><ol>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ol>
 <li>#if defined()和#if !defined()</li>
 <li>#ifdef和#ifndef</li>
 </ol>
-<h1 id="文件包含">文件包含</h1><blockquote>
+<h1 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h1><blockquote>
 <p>#include的作用纯粹就是内容拷贝</p>
 </blockquote>
 <figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>　<span class="string">&lt;文件名&gt;</span></span></span><br></pre></td></tr></table></figure>
@@ -404,7 +908,7 @@
 <blockquote>
 <p>系统会先在源程序当前目录下寻找，若找不到，再到操作系统的path路径中查找，最后才到C语言库函数头文件所在目录中查找</p>
 </blockquote>
-<h2 id="其他-1">其他</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">one.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifndef</span> _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">tow.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifndef</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"one.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">main.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"one.h"</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"two.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="其他-1"><a href="#其他-1" class="headerlink" title="其他"></a>其他</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">one.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifndef</span> _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">tow.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifndef</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"one.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">main.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"one.h"</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"two.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>最后的main.h的文件相当于下面的代码：</p>
 </blockquote>
@@ -474,25 +978,25 @@
     <div class="article-content">
         
         <p><a href="http://coolshell.cn/articles/3125.html" target="_blank" rel="external">vim的学习曲线</a>相当的大，下面推荐一个靠谱的<a href="http://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/" target="_blank" rel="external">文章</a>。</p>
-<h1 id="存活">存活</h1><p>mac系统自带vim，当在终端输入“vim/vi 文件名”时会启动vim，默认在<code>normal</code>模式，按下键 <strong>i</strong> 进入<code>insert</code>模式（此时可以输入文本，就像用记事本一样），如果你想返回normal模式按 <strong>esc</strong> 键。</p>
+<h1 id="存活"><a href="#存活" class="headerlink" title="存活"></a>存活</h1><p>mac系统自带vim，当在终端输入“vim/vi 文件名”时会启动vim，默认在<code>normal</code>模式，按下键 <strong>i</strong> 进入<code>insert</code>模式（此时可以输入文本，就像用记事本一样），如果你想返回normal模式按 <strong>esc</strong> 键。</p>
 <pre><code>i → Insert 模式，按 ESC 回到 Normal 模式.
 x → 删当前光标所在的一个字符。
-<span class="attribute">:wq → 存盘 + 退出 (:w</span> 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）
+:wq → 存盘 + 退出 (:w 存盘, :q 退出)   （陈皓注：:w 后可以跟文件名）
 dd → 删除当前行，并把删除的行存到剪贴板里
 p → 粘贴剪贴板
 u → 撤销上一步的操作
 Ctrl+r → 恢复上一步被撤销的操作
 </code></pre><p>推荐:</p>
 <pre><code>hjkl (强例推荐使用其移动光标，但不必需) →你也可以使用光标键 (←↓↑→). 注: j 就像下箭头。
-<span class="attribute">:help &lt;command&gt; → 显示相关命令的帮助。你也可以就输入 :help</span> 而不跟命令。（退出帮助需要输入:q）
-</code></pre><h1 id="感觉良好">感觉良好</h1><p>所有的命令都需要在Normal模式下使用，如果你不知道现在在什么样的模式，你就狂按几次ESC键。</p>
-<h2 id="插入">插入</h2><pre><code>o → 在当前行后插入一个新行
-<span class="keyword">O</span> → 在当前行前插入一个新行
-</code></pre><h2 id="移动光标">移动光标</h2><pre><code>^ → 到本行第一个不是<span class="keyword">blank</span>字符的位置（所谓<span class="keyword">blank</span>字符就是空格，tab，换行，回车等）
+:help &lt;command&gt; → 显示相关命令的帮助。你也可以就输入 :help 而不跟命令。（退出帮助需要输入:q）
+</code></pre><h1 id="感觉良好"><a href="#感觉良好" class="headerlink" title="感觉良好"></a>感觉良好</h1><p>所有的命令都需要在Normal模式下使用，如果你不知道现在在什么样的模式，你就狂按几次ESC键。</p>
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><pre><code>o → 在当前行后插入一个新行
+O → 在当前行前插入一个新行
+</code></pre><h2 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h2><pre><code>^ → 到本行第一个不是blank字符的位置（所谓blank字符就是空格，tab，换行，回车等）
 $ → 到本行行尾
 /pattern → 搜索 pattern 的字符串（如果搜索出多个匹配，可按n键到下一个）
-</code></pre><h2 id="拷贝/粘贴">拷贝/粘贴</h2><p>p/P都可以，p是表示在当前位置之后，P表示在当前位置之前。</p>
-<pre><code><span class="title">yy</span> → 拷贝当前行当行于 ddP
+</code></pre><h2 id="拷贝-粘贴"><a href="#拷贝-粘贴" class="headerlink" title="拷贝/粘贴"></a>拷贝/粘贴</h2><p>p/P都可以，p是表示在当前位置之后，P表示在当前位置之前。</p>
+<pre><code>yy → 拷贝当前行当行于 ddP
 P → 粘贴
 </code></pre>
         
@@ -558,21 +1062,21 @@ P → 粘贴
 </header>
     <div class="article-content">
         
-        <h1 id="respondsToSelector&amp;instancesRespondToSelector">respondsToSelector&amp;instancesRespondToSelector</h1><p>respondsToSelector既可以检查类（是否响应指定类方法），也可以检查实例（是否响应制定实例）。</p>
+        <h1 id="respondsToSelector-amp-instancesRespondToSelector"><a href="#respondsToSelector-amp-instancesRespondToSelector" class="headerlink" title="respondsToSelector&amp;instancesRespondToSelector"></a>respondsToSelector&amp;instancesRespondToSelector</h1><p>respondsToSelector既可以检查类（是否响应指定类方法），也可以检查实例（是否响应制定实例）。</p>
 <p>instancesRespondToSelector只能响应类方法。</p>
-<h1 id="isKindOfClass&amp;isMemberOfClass">isKindOfClass&amp;isMemberOfClass</h1><p>isKindOfClass判断是否是这个类或者这个类的子类的实例。</p>
+<h1 id="isKindOfClass-amp-isMemberOfClass"><a href="#isKindOfClass-amp-isMemberOfClass" class="headerlink" title="isKindOfClass&amp;isMemberOfClass"></a>isKindOfClass&amp;isMemberOfClass</h1><p>isKindOfClass判断是否是这个类或者这个类的子类的实例。</p>
 <p>isMemberOfClass判断是否是这个类的实例。</p>
-<h1 id="static&amp;extern">static&amp;extern</h1><p>extern定义和声明外部函数，是默认值；static定义和声明内部函数。</p>
+<h1 id="static-amp-extern"><a href="#static-amp-extern" class="headerlink" title="static&amp;extern"></a>static&amp;extern</h1><p>extern定义和声明外部函数，是默认值；static定义和声明内部函数。</p>
 <p>extern声明外部全局变量，用在const常量优化，头文件用；static定义局部变量，延长生命周期。</p>
-<h1 id="const">const</h1><h2 id="用const修饰一般变量">用const修饰一般变量</h2><p>在C语言中，用const修饰的变量必须在声明时进行初始化(用来修饰函数的形参除外)。</p>
+<h1 id="const"><a href="#const" class="headerlink" title="const"></a>const</h1><h2 id="用const修饰一般变量"><a href="#用const修饰一般变量" class="headerlink" title="用const修饰一般变量"></a>用const修饰一般变量</h2><p>在C语言中，用const修饰的变量必须在声明时进行初始化(用来修饰函数的形参除外)。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> n;  这种声明方式是错误的</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> n=<span class="number">5</span>; 正确</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> n)</span></span>; 正确</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> a; 错误</span><br><span class="line"><span class="keyword">char</span> * <span class="keyword">const</span> p;  错误</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *p;正确(注意这种为什么是正确的),因为这里<span class="keyword">const</span>是修饰p指向的变量,而不是指针变量p本身</span><br></pre></td></tr></table></figure>
-<h2 id="const与指针搭配使用">const与指针搭配使用</h2><p>因为指针本身也是一个变量，只不过指针存放的是地址而已，而一旦指针变成了常量，即指针本身的值是不可变的，此时指针只能指向固定的存储单元;指针一般会指向一个变量，如果该变量成为一个常量，那么该变量的值就不能被修改，即常量指针，指针指向的是一个不可变的变量。</p>
+<h2 id="const与指针搭配使用"><a href="#const与指针搭配使用" class="headerlink" title="const与指针搭配使用"></a>const与指针搭配使用</h2><p>因为指针本身也是一个变量，只不过指针存放的是地址而已，而一旦指针变成了常量，即指针本身的值是不可变的，此时指针只能指向固定的存储单元;指针一般会指向一个变量，如果该变量成为一个常量，那么该变量的值就不能被修改，即常量指针，指针指向的是一个不可变的变量。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">3</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *p=&amp;a;</span><br><span class="line"><span class="keyword">int</span> <span class="keyword">const</span> *p1=&amp;a;</span><br><span class="line">*p=<span class="number">4</span>;</span><br><span class="line">a=<span class="number">4</span>;</span><br></pre></td></tr></table></figure>
 <p>第2行和第3行是等价的；第4行错误，因为用const限定p指向的变量的值是不可以修改的，即不可以通过指针p去修改变量a的值；第5行是正确的，因为a本身没用const进行修饰，即a本事的值事可以修改的。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> b=<span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span>*p;</span><br><span class="line"><span class="keyword">int</span> <span class="keyword">const</span>*p1;</span><br><span class="line"><span class="keyword">int</span>* <span class="keyword">const</span> p2;</span><br><span class="line"><span class="keyword">int</span>* <span class="keyword">const</span> p3=&amp;b</span><br><span class="line">p=&amp;a;</span><br><span class="line">p1=&amp;a;</span><br><span class="line">p2=&amp;b;</span><br><span class="line">p3=&amp;a;</span><br></pre></td></tr></table></figure>
 <p>第3、4、6、7、8行是正确的；第5、10行是错误的，因为const在*后面表示是来修饰指针变量本身，因此在声明时必须进行初始化，并且在后面不能再指向其他的变量。</p>
-<h2 id="C++中的const">C++中的const</h2><p> C语言和C++中的const有很大区别。在C语言中用const修饰的变量仍然是一个变量;而在C++中用const修饰过后，就变成常量了。</p>
-<h2 id="总结:">总结:</h2><blockquote>
+<h2 id="C-中的const"><a href="#C-中的const" class="headerlink" title="C++中的const"></a>C++中的const</h2><p> C语言和C++中的const有很大区别。在C语言中用const修饰的变量仍然是一个变量;而在C++中用const修饰过后，就变成常量了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h2><blockquote>
 <p>(1)在C语言中用const去修饰一个变量，表示这个变量是只读的，不可通过显式的调用a去修改a的值，并且此时a仍然是一个变 量，不能等同于常量;</p>
 <p>(2)要注意const在声明变量时所处的位置，位置不同，在意义上可能会有很大的不同。(前固值，后固址。)</p>
 <p>如果const在’*’左边，则表示指针指向的变量的值不可变;</p>
@@ -580,15 +1084,15 @@ P → 粘贴
 </blockquote>
 <figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function_or_atom">const</span> <span class="function_or_atom">int</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">const</span> <span class="function_or_atom">int</span> *<span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> *<span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> * <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="function_or_atom">int</span> <span class="function_or_atom">const</span> * <span class="function_or_atom">const</span> <span class="function_or_atom">a</span>;</span><br><span class="line"><span class="prompt">1&gt; </span>前两个的作用是一样：<span class="function_or_atom">a</span> 是一个常整型数</span><br><span class="line"><span class="prompt">2&gt; </span>第三、四个意味着 <span class="function_or_atom">a</span> 是一个指向常整型数的指针(整型数是不可修改的，但指针可以)</span><br><span class="line"><span class="prompt">3&gt; </span>第五个的意思：<span class="function_or_atom">a</span> 是一个指向整型数的常指针(指针指向的整型数是可以修改的，但指针是不可修改的)</span><br><span class="line"><span class="prompt">4&gt; </span>最后一个意味着：<span class="function_or_atom">a</span> 是一个指向常整型数的常指针(指针指向的整型数是不可修改的，同时指针也是不可修改的)</span><br></pre></td></tr></table></figure>
 <p><strong>注：a是指针变量，*a是取指针对应的地址中的数据；一般修改变量其地址不变，修改指针即为修改指针变量的地址其内容不变</strong></p>
-<h1 id="NSTimer">NSTimer</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti target:(<span class="keyword">id</span>)aTarget selector:(SEL)aSelector userInfo:(nullable <span class="keyword">id</span>)userInfo repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti invocation:(<span class="built_in">NSInvocation</span> *)invocation repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br></pre></td></tr></table></figure>
+<h1 id="NSTimer"><a href="#NSTimer" class="headerlink" title="NSTimer"></a>NSTimer</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti target:(<span class="keyword">id</span>)aTarget selector:(SEL)aSelector userInfo:(nullable <span class="keyword">id</span>)userInfo repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti invocation:(<span class="built_in">NSInvocation</span> *)invocation repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br></pre></td></tr></table></figure>
 <p>schedule…方法默认加入到default运行循环（默认运行循环监听普通的点击等事件，滑动等事件需要common模式）。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="built_in">NSTimer</span> *)timerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti target:(<span class="keyword">id</span>)aTarget selector:(SEL)aSelector userInfo:(nullable <span class="keyword">id</span>)userInfo repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br><span class="line"></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)timerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)ti invocation:(<span class="built_in">NSInvocation</span> *)invocation repeats:(<span class="built_in">BOOL</span>)yesOrNo;</span><br></pre></td></tr></table></figure>
 <p>timer…默认没有加到任何runloop。</p>
 <p>NSTimer不精确，适用于周期较长不精确的计时，否则使用CADisplayLink。</p>
-<h1 id="delegate命名">delegate命名</h1><p>should表示一个动作发生前，通常带有返回值，可以在动作发生之前改变对象状态。</p>
+<h1 id="delegate命名"><a href="#delegate命名" class="headerlink" title="delegate命名"></a>delegate命名</h1><p>should表示一个动作发生前，通常带有返回值，可以在动作发生之前改变对象状态。</p>
 <p>will在动作发生前，委托可以对动作做出响应，但不带有返回值。</p>
 <p>did在动作发生后做出的响应。</p>
-<h1 id="load&amp;initialize">load&amp;initialize</h1><p>+load 方法是当类或分类被添加到 Objective-C runtime 时被调用的，实现这个方法可以让我们在类加载的时候执行一些类相关的行为。子类的 +load 方法会在它的所有父类的 +load 方法之后执行，而分类的 +load 方法会在它的主类的 +load 方法之后执行。但是不同的类之间的 +load 方法的调用顺序是不确定的。</p>
+<h1 id="load-amp-initialize"><a href="#load-amp-initialize" class="headerlink" title="load&amp;initialize"></a>load&amp;initialize</h1><p>+load 方法是当类或分类被添加到 Objective-C runtime 时被调用的，实现这个方法可以让我们在类加载的时候执行一些类相关的行为。子类的 +load 方法会在它的所有父类的 +load 方法之后执行，而分类的 +load 方法会在它的主类的 +load 方法之后执行。但是不同的类之间的 +load 方法的调用顺序是不确定的。</p>
 <p>子类、父类和分类中的 +load 方法的实现是被区别对待的。也就是说如果子类没有实现 +load 方法，那么当它被加载时 runtime 是不会去调用父类的 +load 方法的。同理，当一个类和它的分类都实现了 +load 方法时，两个方法都会被调用。因此，我们常常可以利用这个特性做一些“邪恶”的事情，比如说方法混淆（Method Swizzling）。</p>
 <p>+initialize 方法是在类或它的子类收到第一条消息之前被调用的，这里所指的消息包括实例方法和类方法的调用。也就是说 +initialize 方法是以懒加载的方式被调用的，如果程序一直没有给某个类或它的子类发送消息，那么这个类的 +initialize 方法是永远不会被调用的。那这样设计有什么好处呢？好处是显而易见的，那就是节省系统资源，避免浪费。</p>
 <p>如果一个子类没有实现 +initialize 方法，那么父类的实现是会被执行多次的。有时候，这可能是你想要的；但如果我们想确保自己的 +initialize 方法只执行一次，避免多次执行可能带来的副作用时，我们可以使用下面的代码来实现：</p>
@@ -659,7 +1163,7 @@ P → 粘贴
         
         <p>C语言代码是以文件为单位来组织的，在一个源程序的所有源文件中，一个外部变量（注意不是局部变量）或者函数只能在一个源程序中定义一次，如果有重复定义的话编译器就会报错。伴随着不同源文件变量和函数之间的相互饮用以及相互独立的关系，产生了extern和static关键字。</p>
 <p>下面，详细分析一下static关键字在编写程序时有的三大类用法：</p>
-<h1 id="static全局变量">static全局变量</h1><p>我们知道，一个进程在内存中的布局如图1所示：</p>
+<h1 id="static全局变量"><a href="#static全局变量" class="headerlink" title="static全局变量"></a>static全局变量</h1><p>我们知道，一个进程在内存中的布局如图1所示：</p>
 <p><img src="http://hi.csdn.net/attachment/201108/22/0_13139841062Z8o.gif" alt=""></p>
 <p>其中.text段保存进程所执行的程序二进制文件，.data段保存进程所有的已初始化的全局变量，.bss段保存进程未初始化的全局变量（其他段中还有很多乱七八糟的段，暂且不表）。在进程的整个生命周期中，.data段和.bss段内的数据时跟整个进程同生共死的，也就是在进程结束之后这些数据才会寿终就寝。</p>
 <p>当一个进程的全局变量被声明为static之后，它的中文名叫<strong>静态全局变量</strong>。静态全局变量和其他的全局变量的存储点并没有区别，都是在.data段（已初始化）或者.bss段（未初始化）内，但是<code>它只在定义它的源文件内有效，其他源文件无法访问它</code>。所以，普通全局变量穿上statci外衣后，它就变成来新娘，已心有所属，只能被定义它的源文件（新郎）中的变量或函数访问。</p>
@@ -669,13 +1173,13 @@ P → 粘贴
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">char</span>* hello = <span class="string">"hello cobing!"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printStr</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, hello);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>flie2.c</strong></p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	printStr();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%s\n"</span>, hello);<span class="comment">//有错</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="static局部变量">static局部变量</h1><p>普通的局部变量在栈空间上分配，这个局部变量所在的函数被多次调用时，每次调用这个局部变量在栈上的位置都不一定相同。局部变量也可以在堆上动态分配，但是记得使用完这个堆空间后要释放之。</p>
+<h1 id="static局部变量"><a href="#static局部变量" class="headerlink" title="static局部变量"></a>static局部变量</h1><p>普通的局部变量在栈空间上分配，这个局部变量所在的函数被多次调用时，每次调用这个局部变量在栈上的位置都不一定相同。局部变量也可以在堆上动态分配，但是记得使用完这个堆空间后要释放之。</p>
 <p>static局部变量中文名叫<strong>静态局部变量</strong>。它与普通的局部变量比起来有如下几个区别：</p>
-<pre><code><span class="number">1</span>）位置：静态局部变量被编译器放在全局存储区<span class="preprocessor">.data</span>（注意：不在.<span class="keyword">bss段内，原因见3）），所以它虽然是局部的，但是在程序的整个生命周期中存在。
-</span>
-<span class="number">2</span>）访问权限：静态局部变量只能被其作用域内的变量或函数访问。也就是说虽然它会在程序的整个生命周期中存在，由于它是static的，它不能被其他的函数和源文件访问。
+<pre><code>1）位置：静态局部变量被编译器放在全局存储区.data（注意：不在.bss段内，原因见3）），所以它虽然是局部的，但是在程序的整个生命周期中存在。
 
-<span class="number">3</span>）值：静态局部变量如果没有被用户初始化，则会被编译器自动赋值为<span class="number">0</span>，以后每次调用静态局部变量的时候都用上次调用后的值。这个比较好理解，每次函数调用静态局部变量的时候都修改它然后离开，下次读的时候从全局存储区读出的静态局部变量就是上次修改后的值。
+2）访问权限：静态局部变量只能被其作用域内的变量或函数访问。也就是说虽然它会在程序的整个生命周期中存在，由于它是static的，它不能被其他的函数和源文件访问。
+
+3）值：静态局部变量如果没有被用户初始化，则会被编译器自动赋值为0，以后每次调用静态局部变量的时候都用上次调用后的值。这个比较好理解，每次函数调用静态局部变量的时候都修改它然后离开，下次读的时候从全局存储区读出的静态局部变量就是上次修改后的值。
 </code></pre><p>file1.h的内容和上例中的相同，file1.c的内容如下：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printStr</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> normal = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">int</span> stat = <span class="number">0</span>;	<span class="comment">//this is a static local var</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"normal = %d ---- stat = %d\n"</span>,normal, stat);</span><br><span class="line">	normal++;</span><br><span class="line">	stat++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>flie2.c</strong></p>
@@ -686,7 +1190,7 @@ P → 粘贴
 <blockquote>
 <p>需要注意的是由于static局部变量的这种特性，使得含静态局部变量的函数变得不可重入，即每次调用可能会产生不同的结果。这在多线程编程时可能会成为一种隐患。需要多加注意。</p>
 </blockquote>
-<h1 id="static函数">static函数</h1><p>相信大家还记得C++面向对象编程中的private函数，私有函数只有该类的成员变量或成员函数可以访问。在C语言中，也有“private函数”，它就是接下来要说的static函数，完成面向对象编程中private函数的功能。</p>
+<h1 id="static函数"><a href="#static函数" class="headerlink" title="static函数"></a>static函数</h1><p>相信大家还记得C++面向对象编程中的private函数，私有函数只有该类的成员变量或成员函数可以访问。在C语言中，也有“private函数”，它就是接下来要说的static函数，完成面向对象编程中private函数的功能。</p>
 <p>当你的程序中有很多个源文件的时候，你肯定会让某个源文件只提供一些外界需要的接口，其他的函数可能是为了实现这些接口而编写，这些其他的函数你可能并不希望被外界（非本源文件）所看到，这时候就可以用static修饰这些“其他的函数”。</p>
 <blockquote>
 <p>所以static函数的作用域是本源文件，把它想象为面向对象中的private函数就可以了。</p>
@@ -698,12 +1202,12 @@ P → 粘贴
 <p><strong>file2.c</strong></p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"file1.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> val;</span><br><span class="line">	val = called();<span class="comment">//报错</span></span><br><span class="line">	printStr();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>static函数可以很好地解决不同原文件中函数同名的问题，因为一个源文件对于其他源文件中的static函数是不可见的。</strong></p>
-<h1 id="我的小结">我的小结</h1><h2 id="static的作用？">static的作用？</h2><p>static修饰的函数是一个内部函数，只能在本文件中调用，其他文件不能调用；</p>
+<h1 id="我的小结"><a href="#我的小结" class="headerlink" title="我的小结"></a>我的小结</h1><h2 id="static的作用？"><a href="#static的作用？" class="headerlink" title="static的作用？"></a>static的作用？</h2><p>static修饰的函数是一个内部函数，只能在本文件中调用，其他文件不能调用；</p>
 <p>static修饰的全部变量都是一个内部变量，只能在本文件中使用，其他文件中不能使用；</p>
 <p>static修饰的局部变量只会初始化一次，只能被其作用域内的变量或函数访问，并且在程序退出时才会回收内存。</p>
-<h2 id="函数:外部和内部">函数:外部和内部</h2><p>extern定义和声明外部函数，默认值。</p>
+<h2 id="函数-外部和内部"><a href="#函数-外部和内部" class="headerlink" title="函数:外部和内部"></a>函数:外部和内部</h2><p>extern定义和声明外部函数，默认值。</p>
 <p>static定义和声明内部函数。</p>
-<h2 id="变量:全局和局部">变量:全局和局部</h2><p>extern声明全局变量，用在const常量优化，头文件用。</p>
+<h2 id="变量-全局和局部"><a href="#变量-全局和局部" class="headerlink" title="变量:全局和局部"></a>变量:全局和局部</h2><p>extern声明全局变量，用在const常量优化，头文件用。</p>
 <p>static定义局部变量，延长生命周期。</p>
 <p><a href="http://blog.csdn.net/keyeagle/article/details/6708077" target="_blank" rel="external">原文链接</a></p>
 
@@ -775,7 +1279,7 @@ P → 粘贴
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>15</sup></a></li>
 		  
 		
 		  
@@ -804,7 +1308,7 @@ P → 粘贴
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>19</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>20</sup></a></li>
 			
 		
 			

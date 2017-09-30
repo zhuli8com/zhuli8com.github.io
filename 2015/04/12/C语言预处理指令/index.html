@@ -94,34 +94,35 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#宏定义"><span class="toc-number">1.</span> <span class="toc-text">宏定义</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#不带参数的宏定义"><span class="toc-number">1.1.</span> <span class="toc-text">不带参数的宏定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#带参数的宏定义"><span class="toc-number">1.2.</span> <span class="toc-text">带参数的宏定义</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#条件编译"><span class="toc-number">2.</span> <span class="toc-text">条件编译</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">2.1.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件包含"><span class="toc-number">3.</span> <span class="toc-text">文件包含</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#其他-1"><span class="toc-number">3.1.</span> <span class="toc-text">其他</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#不带参数的宏定义"><span class="toc-number">1.</span> <span class="toc-text">不带参数的宏定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#带参数的宏定义"><span class="toc-number">2.</span> <span class="toc-text">带参数的宏定义</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#条件编译"><span class="toc-number"></span> <span class="toc-text">条件编译</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">1.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件包含"><span class="toc-number"></span> <span class="toc-text">文件包含</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#其他-1"><span class="toc-number">1.</span> <span class="toc-text">其他</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="宏定义">宏定义</h1><h2 id="不带参数的宏定义">不带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名 字符串</span><br></pre></td></tr></table></figure>
+		<p>#宏定义</p>
+<h2 id="不带参数的宏定义"><a href="#不带参数的宏定义" class="headerlink" title="不带参数的宏定义"></a>不带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名 字符串</span><br></pre></td></tr></table></figure>
 <p>它的作用是在编译预处理时，将源程序中所有”宏名”替换成右边的”字符串”，常用来定义常量。</p>
 <blockquote>
 <p>1.宏名一般用大写字母，以便与变量名区别开来，但用小写也没有语法错误</p>
 <p>2.在编译预处理用字符串替换宏名时，不作语法检查，只是简单的字符串替换。只有在编译的时候才对已经展开宏名的源程序进行语法检查</p>
 <p>3.宏名的有效范围是从定义位置到文件结束。如果需要终止宏定义的作用域，可以用#undef命令</p>
 </blockquote>
-<h2 id="带参数的宏定义">带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名(参数列表) 字符串</span><br></pre></td></tr></table></figure>
+<h2 id="带参数的宏定义"><a href="#带参数的宏定义" class="headerlink" title="带参数的宏定义"></a>带参数的宏定义</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hexcolor">#def</span>ine 宏名(参数列表) 字符串</span><br></pre></td></tr></table></figure>
 <p>在编译预处理时，将源程序中所有宏名替换成字符串，并且将 字符串中的参数 用 宏名右边参数列表 中的参数替换</p>
 <blockquote>
 <p>1.宏名和参数列表之间不能有空格，否则空格后面的所有字符串都作为替换的字符串</p>
 <p>2.带参数的宏在展开时，只作简单的字符和参数的替换，不进行任何计算操作。所以在定义宏时，一般用一个小括号括住字符串的参数。</p>
 <p>3.计算结果最好也用括号括起来</p>
 </blockquote>
-<h1 id="条件编译">条件编译</h1><p>在很多情况下，我们希望程序的其中一部分代码只有在满足一定条件时才进行编译，否则不参与编译(只有参与编译的代码最终才能被执行)，这就是条件编译。</p>
+<h1 id="条件编译"><a href="#条件编译" class="headerlink" title="条件编译"></a>条件编译</h1><p>在很多情况下，我们希望程序的其中一部分代码只有在满足一定条件时才进行编译，否则不参与编译(只有参与编译的代码最终才能被执行)，这就是条件编译。</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="id">#if</span> 条件<span class="number">1</span></span><br><span class="line"> ..<span class="class">.code1</span>...</span><br><span class="line"><span class="id">#elif</span> 条件<span class="number">2</span></span><br><span class="line"> ..<span class="class">.code2</span>...</span><br><span class="line"><span class="id">#else</span></span><br><span class="line"> ..<span class="class">.code3</span>...</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>#if 和 #elif后面的条件一般是判断宏定义而不是判断变量，因为条件编译是在编译之前做的判断，宏定义也是编译之前定义的，而变量是在运行时才产生的、才有使用的意义</p>
 </blockquote>
-<h2 id="其他">其他</h2><ol>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ol>
 <li>#if defined()和#if !defined()</li>
 <li>#ifdef和#ifndef</li>
 </ol>
-<h1 id="文件包含">文件包含</h1><blockquote>
+<h1 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h1><blockquote>
 <p>#include的作用纯粹就是内容拷贝</p>
 </blockquote>
 <figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>　<span class="string">&lt;文件名&gt;</span></span></span><br></pre></td></tr></table></figure>
@@ -132,7 +133,7 @@
 <blockquote>
 <p>系统会先在源程序当前目录下寻找，若找不到，再到操作系统的path路径中查找，最后才到C语言库函数头文件所在目录中查找</p>
 </blockquote>
-<h2 id="其他-1">其他</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">one.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifndef</span> _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">tow.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifndef</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"one.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">main.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"one.h"</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"two.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="其他-1"><a href="#其他-1" class="headerlink" title="其他"></a>其他</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">one.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifndef</span> _ONE_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _ONE_H_</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">one</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">tow.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">ifndef</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> _TWO_H_</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"one.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">two</span><span class="params">()</span></span>;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">main.h</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"one.h"</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"two.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>最后的main.h的文件相当于下面的代码：</p>
 </blockquote>
@@ -159,7 +160,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/04/12/C语言预处理指令/" data-title="C语言预处理指令 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2015/04/12/C语言预处理指令/" data-title="C语言预处理指令 | zhuli8’blog" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -203,7 +204,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#宏定义"><span class="toc-number">1.</span> <span class="toc-text">宏定义</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#不带参数的宏定义"><span class="toc-number">1.1.</span> <span class="toc-text">不带参数的宏定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#带参数的宏定义"><span class="toc-number">1.2.</span> <span class="toc-text">带参数的宏定义</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#条件编译"><span class="toc-number">2.</span> <span class="toc-text">条件编译</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">2.1.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件包含"><span class="toc-number">3.</span> <span class="toc-text">文件包含</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#其他-1"><span class="toc-number">3.1.</span> <span class="toc-text">其他</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#不带参数的宏定义"><span class="toc-number">1.</span> <span class="toc-text">不带参数的宏定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#带参数的宏定义"><span class="toc-number">2.</span> <span class="toc-text">带参数的宏定义</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#条件编译"><span class="toc-number"></span> <span class="toc-text">条件编译</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-number">1.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文件包含"><span class="toc-number"></span> <span class="toc-text">文件包含</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#其他-1"><span class="toc-number">1.</span> <span class="toc-text">其他</span></a></li></ol>
  
   </div>
 
@@ -225,7 +226,7 @@
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>15</sup></a></li>
 		  
 		
 		  
@@ -254,7 +255,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>19</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>20</sup></a></li>
 			
 		
 			

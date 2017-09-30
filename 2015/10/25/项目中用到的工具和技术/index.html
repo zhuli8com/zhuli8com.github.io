@@ -94,19 +94,19 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#图标"><span class="toc-number">1.</span> <span class="toc-text">图标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CocoaPods"><span class="toc-number">2.</span> <span class="toc-text">CocoaPods</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程方案"><span class="toc-number">3.</span> <span class="toc-text">线程方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RunLoop"><span class="toc-number">4.</span> <span class="toc-text">RunLoop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS8适配"><span class="toc-number">5.</span> <span class="toc-text">iOS8适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS9适配"><span class="toc-number">6.</span> <span class="toc-text">iOS9适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS性能调优"><span class="toc-number">7.</span> <span class="toc-text">iOS性能调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze静态分析"><span class="toc-number">7.1.</span> <span class="toc-text">Analyze静态分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Leaks内存泄露"><span class="toc-number">7.2.</span> <span class="toc-text">Leaks内存泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#补充"><span class="toc-number">7.2.1.</span> <span class="toc-text">补充</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Allocation内存使用"><span class="toc-number">7.3.</span> <span class="toc-text">Allocation内存使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zombies僵尸对象（EXC_BAD_ACCESS）"><span class="toc-number">7.4.</span> <span class="toc-text">Zombies僵尸对象（EXC_BAD_ACCESS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">7.5.</span> <span class="toc-text">参考文章</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自动化部署"><span class="toc-number">8.</span> <span class="toc-text">自动化部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#stackoverflow"><span class="toc-number">9.</span> <span class="toc-text">stackoverflow</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">10.</span> <span class="toc-text">其他</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#图标"><span class="toc-number">1.</span> <span class="toc-text">图标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CocoaPods"><span class="toc-number">2.</span> <span class="toc-text">CocoaPods</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程方案"><span class="toc-number">3.</span> <span class="toc-text">线程方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RunLoop"><span class="toc-number">4.</span> <span class="toc-text">RunLoop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS8适配"><span class="toc-number">5.</span> <span class="toc-text">iOS8适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS9适配"><span class="toc-number">6.</span> <span class="toc-text">iOS9适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS性能调优"><span class="toc-number">7.</span> <span class="toc-text">iOS性能调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze静态分析"><span class="toc-number">7.1.</span> <span class="toc-text">Analyze静态分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Leaks内存泄露"><span class="toc-number">7.2.</span> <span class="toc-text">Leaks内存泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#补充"><span class="toc-number">7.2.1.</span> <span class="toc-text">补充</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Allocation内存使用"><span class="toc-number">7.3.</span> <span class="toc-text">Allocation内存使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zombies僵尸对象（EXC-BAD-ACCESS）"><span class="toc-number">7.4.</span> <span class="toc-text">Zombies僵尸对象（EXC_BAD_ACCESS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">7.5.</span> <span class="toc-text">参考文章</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自动化部署"><span class="toc-number">8.</span> <span class="toc-text">自动化部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#stackoverflow"><span class="toc-number">9.</span> <span class="toc-text">stackoverflow</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">10.</span> <span class="toc-text">其他</span></a></li></ol>
 		
 		</div>
 		
 		<p>总结一下项目中用到的工具和技术，以便以后的查看。</p>
-<h1 id="图标">图标</h1><p><a href="http://devhelpers.com/app/icon/resizer/" target="_blank" rel="external">在线通过1024 * 1024图片生成iPhone 1倍、2倍、3倍图片</a></p>
-<h1 id="CocoaPods">CocoaPods</h1><p><a href="http://blog.csdn.net/wzzvictory/article/details/18737437" target="_blank" rel="external">CocoaPods详解之——使用篇</a></p>
-<p><a href="http://blog.csdn.net/wzzvictory/article/details/19178709" target="_blank" rel="external">CocoaPods详解之——进阶篇</a></p>
-<p><a href="http://blog.csdn.net/wzzvictory/article/details/20067595" target="_blank" rel="external">CocoaPods详解之——制作篇</a></p>
+<h1 id="图标"><a href="#图标" class="headerlink" title="图标"></a>图标</h1><p><a href="http://devhelpers.com/app/icon/resizer/" target="_blank" rel="external">在线通过1024 * 1024图片生成iPhone 1倍、2倍、3倍图片</a></p>
+<h1 id="CocoaPods"><a href="#CocoaPods" class="headerlink" title="CocoaPods"></a>CocoaPods</h1><p><a href="http://blog.csdn.net/wzzvictory/article/details/18737437" target="_blank" rel="external">CocoaPods详解之—-使用篇</a></p>
+<p><a href="http://blog.csdn.net/wzzvictory/article/details/19178709" target="_blank" rel="external">CocoaPods详解之—-进阶篇</a></p>
+<p><a href="http://blog.csdn.net/wzzvictory/article/details/20067595" target="_blank" rel="external">CocoaPods详解之—-制作篇</a></p>
 <p><a href="http://www.cocoachina.com/swift/20150630/12305.html" target="_blank" rel="external">怎样在Swift中使用CocoaPods</a></p>
 <p><a href="http://www.cocoachina.com/swift/20150806/12831.html" target="_blank" rel="external">怎样在swift中创建一个CocoaPods</a></p>
 <p><a href="http://blog.wtlucky.com/blog/2015/02/26/create-private-podspec/" target="_blank" rel="external">使用Cocoapods创建私有podspec</a></p>
-<h1 id="线程方案">线程方案</h1><p>在iOS开发中其实有4套多线程方案，他们分别是：</p>
+<h1 id="线程方案"><a href="#线程方案" class="headerlink" title="线程方案"></a>线程方案</h1><p>在iOS开发中其实有4套多线程方案，他们分别是：</p>
 <p><strong> pthreads </strong></p>
 <blockquote>
 <p>POSIX线程（POSIX threads），简称pthreads，是线程的POSIX标准。该标准定义了创建和操作线程的一整套API。在类Unix操作系统（Unix、Linux、Mac OS X等）中都使用pthreads作为操作系统的线程。</p>
@@ -117,58 +117,58 @@
 <p><a href="http://blog.leichunfeng.com/blog/2015/07/29/ios-concurrency-programming-operation-queues/" target="_blank" rel="external">iOS 并发编程之 Operation Queues</a></p>
 <p><a href="http://blog.xcodev.com/archives/operation-queue-intro/" target="_blank" rel="external">并发编程之Operation Queue</a></p>
 <p><a href="http://www.jianshu.com/p/0b0d9b1f1f19#" target="_blank" rel="external">关于iOS多线程，你看我就够了</a></p>
-<h1 id="RunLoop">RunLoop</h1><p><a href="http://www.jianshu.com/p/b35793b3749d" target="_blank" rel="external">RunLoop的简单介绍</a></p>
-<h1 id="iOS8适配">iOS8适配</h1><p><a href="http://www.jianshu.com/p/86f933850df8" target="_blank" rel="external">在iOS 8中使用UIAlertController</a></p>
+<h1 id="RunLoop"><a href="#RunLoop" class="headerlink" title="RunLoop"></a>RunLoop</h1><p><a href="http://www.jianshu.com/p/b35793b3749d" target="_blank" rel="external">RunLoop的简单介绍</a></p>
+<h1 id="iOS8适配"><a href="#iOS8适配" class="headerlink" title="iOS8适配"></a>iOS8适配</h1><p><a href="http://www.jianshu.com/p/86f933850df8" target="_blank" rel="external">在iOS 8中使用UIAlertController</a></p>
 <p><a href="http://www.cocoachina.com/industry/20140729/9269.html" target="_blank" rel="external">WWDC 2014 Session笔记 - iOS界面开发的大一统</a></p>
 <p><a href="http://www.jianshu.com/p/f1208b5e42d9" target="_blank" rel="external">Alamofire网络库基础教程</a></p>
-<h1 id="iOS9适配">iOS9适配</h1><p><a href="http://www.liuchungui.com/blog/2015/10/11/ios9zhi-gua-pei-ats/" target="_blank" rel="external">iOS9之适配ATS</a></p>
+<h1 id="iOS9适配"><a href="#iOS9适配" class="headerlink" title="iOS9适配"></a>iOS9适配</h1><p><a href="http://www.liuchungui.com/blog/2015/10/11/ios9zhi-gua-pei-ats/" target="_blank" rel="external">iOS9之适配ATS</a></p>
 <p><a href="http://www.cocoachina.com/ios/20150821/13140.html" target="_blank" rel="external">如何使用ATS提高应用的安全性</a></p>
 <p><a href="http://www.cocoachina.com/ios/20150717/12650.html" target="_blank" rel="external">苹果新『应用通信安全』的理解和使用</a></p>
 <p><a href="http://www.cocoachina.com/ios/20150820/13118.html" target="_blank" rel="external">UIStackView如何让你的开发更简单</a></p>
 <p><a href="http://www.cnblogs.com/dsxniubility/p/4821184.html" target="_blank" rel="external">整理iOS9适配中出现的坑（图文）</a></p>
-<h1 id="iOS性能调优">iOS性能调优</h1><h2 id="Analyze静态分析">Analyze静态分析</h2><p>逻辑错误、声明错误、api调用错误基本在编译时都会有警告，Analyze的主要的优势在于静态分析内存泄露及代码逻辑错误。</p>
+<h1 id="iOS性能调优"><a href="#iOS性能调优" class="headerlink" title="iOS性能调优"></a>iOS性能调优</h1><h2 id="Analyze静态分析"><a href="#Analyze静态分析" class="headerlink" title="Analyze静态分析"></a>Analyze静态分析</h2><p>逻辑错误、声明错误、api调用错误基本在编译时都会有警告，Analyze的主要的优势在于静态分析内存泄露及代码逻辑错误。</p>
 <ol>
 <li>逻辑错误：访问空指针或未初始化的变量等。</li>
 <li>内存管理错误：如内存泄露等。</li>
 <li>声明错误：从未使用过的变量。</li>
 <li>api调用错误：未包含使用的库和框架。</li>
 </ol>
-<h2 id="Leaks内存泄露">Leaks内存泄露</h2><p>把Snapshot Interval 间隔时间设置为10秒，勾选Automatic Snapshotting，Leaks会自动进行内存捕捉分析。在你怀疑有内存泄露的操作前和操作后点击Snapshot Now进行手动捕捉。</p>
+<h2 id="Leaks内存泄露"><a href="#Leaks内存泄露" class="headerlink" title="Leaks内存泄露"></a>Leaks内存泄露</h2><p>把Snapshot Interval 间隔时间设置为10秒，勾选Automatic Snapshotting，Leaks会自动进行内存捕捉分析。在你怀疑有内存泄露的操作前和操作后点击Snapshot Now进行手动捕捉。</p>
 <p>Leaked Object的表格中显示了内存泄露的类型、数量及内存空间。</p>
 <p>点击具体的某个内存泄露对象，在右侧Detail窗口中会出现导致泄露可能的位置，其中黑色部分代表了最可能的位置。双击即可进入代码。</p>
 <p><strong>开启了ARC并不是就不会存在内存问题，苹果有句名言：ARC is only for NSObject。</strong></p>
-<h3 id="补充">补充</h3><p>1、正常编译没问题，在Profile 中就编译通不过。</p>
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>1、正常编译没问题，在Profile 中就编译通不过。</p>
 <p>选择Profile，将Build Configuration设置为Debug,这样在.pch文件中，#ifdef DEBUG 编译条件下定义的宏才生效。</p>
 <p>2、Symbol Name 列的友好显示。</p>
-<p>BuildOpthions—&gt;DebugInfomationFormat=DWARF with dSYM File</p>
+<p>BuildOpthions–&gt;DebugInfomationFormat=DWARF with dSYM File</p>
 <p>Xcode编译项目后，我们会看到一个同名的 dSYM 文件，dSYM 是保存 16 进制函数地址映射信息的中转文件，我们调试的 symbols 都会包含在这个文件中，并且每次编译项目的时候都会生成一个新的 dSYM 文件。</p>
-<h2 id="Allocation内存使用">Allocation内存使用</h2><ol>
+<h2 id="Allocation内存使用"><a href="#Allocation内存使用" class="headerlink" title="Allocation内存使用"></a>Allocation内存使用</h2><ol>
 <li>在进入一个视图前或操作前，我们在Allocation面板左侧点击Mark Generation，这时候会产生Generation A节点，显示内存当前的情况。</li>
 <li>在进入视图后再点一次Mark Generation。</li>
 <li>在视图退出后再点一次Mark</li>
 </ol>
 <p>这样三次产生的 Generation分别记录了进入前、进入后、关闭后，在最后一个Generation应该内存被合理释放，否则就代表了在这个视图或操作中有泄漏或不合理的地方。</p>
-<h2 id="Zombies僵尸对象（EXC_BAD_ACCESS）">Zombies僵尸对象（EXC_BAD_ACCESS）</h2><p>用于查找那些被过度释放的僵尸对象（overreleased objects）。</p>
+<h2 id="Zombies僵尸对象（EXC-BAD-ACCESS）"><a href="#Zombies僵尸对象（EXC-BAD-ACCESS）" class="headerlink" title="Zombies僵尸对象（EXC_BAD_ACCESS）"></a>Zombies僵尸对象（EXC_BAD_ACCESS）</h2><p>用于查找那些被过度释放的僵尸对象（overreleased objects）。</p>
 <ol>
 <li>启动Instruments，选择Zombies。</li>
 <li>对之前产生EXC_BAD_ACCESS的测试用例重新运行，直到程序崩溃，如果发生EXC_BAD_ACCESS错误，会出现对应界面。</li>
 <li>通过滑动箭头来查看错误细节，例如可以看到该对象的内存操作过程，如malloc、autorelease、retain、release等操作。</li>
 <li>查看底部的详细历史，选择相应的行可以定位到相应的代码，找出产生错误的代码</li>
 </ol>
-<h2 id="参考文章">参考文章</h2><p><a href="http://yyny.me/ios/一次TableView性能优化经历/" target="_blank" rel="external">一次TableView性能优化经历</a></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="http://yyny.me/ios/一次TableView性能优化经历/" target="_blank" rel="external">一次TableView性能优化经历</a></p>
 <p><a href="http://www.cnblogs.com/ym123/category/668845.html" target="_blank" rel="external">iOS性能调优系列</a></p>
-<h1 id="自动化部署">自动化部署</h1><p>deliver用于上传应用的二进制代码、应用截屏和原数据到应用商店</p>
+<h1 id="自动化部署"><a href="#自动化部署" class="headerlink" title="自动化部署"></a>自动化部署</h1><p>deliver用于上传应用的二进制代码、应用截屏和原数据到应用商店</p>
 <p>snapshot可以自动化iOS应用在每个设备上的本地化截屏过程</p>
 <p>frameit用于在应用截屏外添加设备框架</p>
 <p>PEM可以自动化地生成和更新应用推送通知描述文件</p>
 <p>sigh可以生成并下载开发者的应用商店配置文件</p>
 <p><a href="http://www.infoq.com/cn/news/2015/01/fastlane-ios-continuous-deploy" target="_blank" rel="external">Fastlane为iOS带来持续部署</a></p>
 <p><a href="http://www.jianshu.com/users/384f80cdc57b/latest_articles" target="_blank" rel="external">马建成系列</a></p>
-<h1 id="stackoverflow">stackoverflow</h1><p>stackoverflow在中国被墙了，不能登陆进行答题和收藏，所以在此记录工作中有所帮助的问题！根据链家基本上就能看出大概的问题了，以此来纪念那些被解决的问题！</p>
+<h1 id="stackoverflow"><a href="#stackoverflow" class="headerlink" title="stackoverflow"></a>stackoverflow</h1><p>stackoverflow在中国被墙了，不能登陆进行答题和收藏，所以在此记录工作中有所帮助的问题！根据链家基本上就能看出大概的问题了，以此来纪念那些被解决的问题！</p>
 <p><a href="http://stackoverflow.com/questions/26865132/strings-in-switch-statements-string-does-not-conform-to-protocol-intervaltyp#" target="_blank" rel="external">http://stackoverflow.com/questions/26865132/strings-in-switch-statements-string-does-not-conform-to-protocol-intervaltyp#</a></p>
 <p><a href="http://stackoverflow.com/questions/25951195/swift-print-vs-println-vs-nslog#" target="_blank" rel="external">http://stackoverflow.com/questions/25951195/swift-print-vs-println-vs-nslog#</a></p>
 <p><a href="http://stackoverflow.com/questions/28427458/ios-webrtc-library-supporting-both-armv7-arm64" target="_blank" rel="external">http://stackoverflow.com/questions/28427458/ios-webrtc-library-supporting-both-armv7-arm64</a></p>
-<h1 id="其他">其他</h1><p><a href="http://www.jianshu.com/p/802f52c5f13a" target="_blank" rel="external">如何利用搜索框</a></p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p><a href="http://www.jianshu.com/p/802f52c5f13a" target="_blank" rel="external">如何利用搜索框</a></p>
 <p><a href="http://blog.sina.com.cn/s/blog_4caf02490102vr4s.html" target="_blank" rel="external">Xcode各版本官方下载及百度云盘下载, Mac和IOS及Xcode版本历史.</a></p>
   
 	</div>
@@ -192,7 +192,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/10/25/项目中用到的工具和技术/" data-title="项目中用到的工具和技术 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2015/10/25/项目中用到的工具和技术/" data-title="项目中用到的工具和技术 | zhuli8’blog" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -236,7 +236,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#图标"><span class="toc-number">1.</span> <span class="toc-text">图标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CocoaPods"><span class="toc-number">2.</span> <span class="toc-text">CocoaPods</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程方案"><span class="toc-number">3.</span> <span class="toc-text">线程方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RunLoop"><span class="toc-number">4.</span> <span class="toc-text">RunLoop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS8适配"><span class="toc-number">5.</span> <span class="toc-text">iOS8适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS9适配"><span class="toc-number">6.</span> <span class="toc-text">iOS9适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS性能调优"><span class="toc-number">7.</span> <span class="toc-text">iOS性能调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze静态分析"><span class="toc-number">7.1.</span> <span class="toc-text">Analyze静态分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Leaks内存泄露"><span class="toc-number">7.2.</span> <span class="toc-text">Leaks内存泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#补充"><span class="toc-number">7.2.1.</span> <span class="toc-text">补充</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Allocation内存使用"><span class="toc-number">7.3.</span> <span class="toc-text">Allocation内存使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zombies僵尸对象（EXC_BAD_ACCESS）"><span class="toc-number">7.4.</span> <span class="toc-text">Zombies僵尸对象（EXC_BAD_ACCESS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">7.5.</span> <span class="toc-text">参考文章</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自动化部署"><span class="toc-number">8.</span> <span class="toc-text">自动化部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#stackoverflow"><span class="toc-number">9.</span> <span class="toc-text">stackoverflow</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">10.</span> <span class="toc-text">其他</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#图标"><span class="toc-number">1.</span> <span class="toc-text">图标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CocoaPods"><span class="toc-number">2.</span> <span class="toc-text">CocoaPods</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程方案"><span class="toc-number">3.</span> <span class="toc-text">线程方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RunLoop"><span class="toc-number">4.</span> <span class="toc-text">RunLoop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS8适配"><span class="toc-number">5.</span> <span class="toc-text">iOS8适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS9适配"><span class="toc-number">6.</span> <span class="toc-text">iOS9适配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS性能调优"><span class="toc-number">7.</span> <span class="toc-text">iOS性能调优</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyze静态分析"><span class="toc-number">7.1.</span> <span class="toc-text">Analyze静态分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Leaks内存泄露"><span class="toc-number">7.2.</span> <span class="toc-text">Leaks内存泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#补充"><span class="toc-number">7.2.1.</span> <span class="toc-text">补充</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Allocation内存使用"><span class="toc-number">7.3.</span> <span class="toc-text">Allocation内存使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zombies僵尸对象（EXC-BAD-ACCESS）"><span class="toc-number">7.4.</span> <span class="toc-text">Zombies僵尸对象（EXC_BAD_ACCESS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">7.5.</span> <span class="toc-text">参考文章</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#自动化部署"><span class="toc-number">8.</span> <span class="toc-text">自动化部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#stackoverflow"><span class="toc-number">9.</span> <span class="toc-text">stackoverflow</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#其他"><span class="toc-number">10.</span> <span class="toc-text">其他</span></a></li></ol>
  
   </div>
 
@@ -258,7 +258,7 @@
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>15</sup></a></li>
 		  
 		
 		  
@@ -287,7 +287,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>19</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>20</sup></a></li>
 			
 		
 			

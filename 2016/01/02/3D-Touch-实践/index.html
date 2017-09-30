@@ -94,16 +94,16 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Home_Screen_Quick_Actions"><span class="toc-number">1.</span> <span class="toc-text">Home Screen Quick Actions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#静态标签"><span class="toc-number">1.1.</span> <span class="toc-text">静态标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态标签"><span class="toc-number">1.2.</span> <span class="toc-text">动态标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#peep/pop"><span class="toc-number">2.</span> <span class="toc-text">peep/pop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Force_Properties"><span class="toc-number">3.</span> <span class="toc-text">Force Properties</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Home-Screen-Quick-Actions"><span class="toc-number">1.</span> <span class="toc-text">Home Screen Quick Actions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#静态标签"><span class="toc-number">1.1.</span> <span class="toc-text">静态标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态标签"><span class="toc-number">1.2.</span> <span class="toc-text">动态标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#peep-pop"><span class="toc-number">2.</span> <span class="toc-text">peep/pop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Force-Properties"><span class="toc-number">3.</span> <span class="toc-text">Force Properties</span></a></li></ol>
 		
 		</div>
 		
 		<p>iphone6s的一个显著卖点应该是3D Touch，其原理是增加了一个压力感触，通过区分轻按和重按来进行不同的用户交互。</p>
 <p>我们可以通过3D手势，在主屏幕上的应用Icon处，直接进入应用的响应功能模块。用户可以通过3D Touch手势在view上来预览一些预加载信息，这样的设计可以使app更加简洁大方，交互性也更强，也是对app的一个优化。</p>
-<h1 id="Home_Screen_Quick_Actions">Home Screen Quick Actions</h1><p>通过主屏幕的应用Icon，我们可以用3D Touch呼出一个菜单，进行快速定位应用功能模块相关功能的开发。</p>
-<h2 id="静态标签">静态标签</h2><p>静态标签是我们在项目的配置plist文件中配置的标签，在用户安装程序后就可以使用，并且排序会在动态标签的前面。</p>
+<h1 id="Home-Screen-Quick-Actions"><a href="#Home-Screen-Quick-Actions" class="headerlink" title="Home Screen Quick Actions"></a>Home Screen Quick Actions</h1><p>通过主屏幕的应用Icon，我们可以用3D Touch呼出一个菜单，进行快速定位应用功能模块相关功能的开发。</p>
+<h2 id="静态标签"><a href="#静态标签" class="headerlink" title="静态标签"></a>静态标签</h2><p>静态标签是我们在项目的配置plist文件中配置的标签，在用户安装程序后就可以使用，并且排序会在动态标签的前面。</p>
 <p>在Info.plist文件中添加UIApplicationShortcutItems数组，在改数组下建立一个包括UIApplicationShortcutItemTitle、UIApplicationShortcutSubtitle、UIApplicationShortcutItemIconFile、UIApplicationShortcutType键值对的字典即可,系统并没有提示，只能手打上去。</p>
-<h2 id="动态标签">动态标签</h2><p>动态标签是我们在程序中，通过代码添加的，与之相关的类，主要有三个：UIApplicationShortcutItem、UIMutableApplicationShortcutItem、UIApplicationShortcutIcon。</p>
+<h2 id="动态标签"><a href="#动态标签" class="headerlink" title="动态标签"></a>动态标签</h2><p>动态标签是我们在程序中，通过代码添加的，与之相关的类，主要有三个：UIApplicationShortcutItem、UIMutableApplicationShortcutItem、UIApplicationShortcutIcon。</p>
 <p>在appDelegate的-application:didFinishLaunchingWithOptions:方法中添加如下代码：</p>
 <p>1.图标<br>UIApplicationShortcutIcon *icon1=[UIApplicationShortcutIcon iconWithTemplateImageName:@”iCon1”];</p>
 <p>系统自带图标:[UIApplicationShortcutIcon iconWithType:UIApplicationShortcutIconTypeSearch]</p>
@@ -113,7 +113,7 @@
 <p>4.当前所有的shortcut item赋值给当前应用程序<br>NSArray *updateItems=[existingItems arrayByAddingObjectsFromArray:@[item1]];<br>[UIApplication sharedApplication].shortcutItems=updateItems;</p>
 <p>到此动态创建3d touch已经基本完成。如果要响应标签的行为，需要实现appDelegate中的一个方法-application:willFinishLaunchingWithOptions: </p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)application:(<span class="built_in">UIApplication</span> *)application performActionForShortcutItem:(<span class="built_in">UIApplicationShortcutItem</span> *)shortcutItem completionHandler:(<span class="keyword">void</span> (^)(<span class="built_in">BOOL</span>))completionHandler&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> ([shortcutItem<span class="variable">.type</span> isEqualToString:<span class="string">@"com.zhuli8.deep1"</span>]) &#123;</span><br><span class="line">        ZLSecondeViewController *secondVC=[[ZLSecondeViewController alloc] init];</span><br><span class="line">        <span class="keyword">self</span><span class="variable">.window</span><span class="variable">.rootViewController</span>=secondVC;</span><br><span class="line">        [<span class="keyword">self</span><span class="variable">.window</span> makeKeyAndVisible];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="peep/pop">peep/pop</h1><p>这个功能是一套全新的用户交互机制，在使用3D Touch时，ViewController中会有如下三个交互阶段：</p>
+<h1 id="peep-pop"><a href="#peep-pop" class="headerlink" title="peep/pop"></a>peep/pop</h1><p>这个功能是一套全新的用户交互机制，在使用3D Touch时，ViewController中会有如下三个交互阶段：</p>
 <ol>
 <li>提示用户这里有3D Touch的交互，会使交互控件周围模糊</li>
 <li>继续深按，会出现预览视图</li>
@@ -127,7 +127,7 @@
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">UIViewController</span> *)previewingContext:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext viewControllerForLocation:(<span class="built_in">CGPoint</span>)location&#123;</span><br><span class="line">    <span class="comment">//check if we're not already displaying a preview controller</span></span><br><span class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span><span class="variable">.presentedViewController</span> isKindOfClass:[ZLPreviewViewController class]]) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ZLPreviewViewController *previewVC=[[ZLPreviewViewController alloc] init];</span><br><span class="line">    <span class="keyword">return</span> previewVC;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)previewingContext:(<span class="keyword">id</span>&lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext commitViewController:(<span class="built_in">UIViewController</span> *)viewControllerToCommit&#123;</span><br><span class="line">    <span class="comment">//deep press:bring up the commit view controller(pop)</span></span><br><span class="line">    ZLCommitViewController *commitVC=[[ZLCommitViewController alloc] init];</span><br><span class="line">    [<span class="keyword">self</span> showViewController:commitVC sender:<span class="keyword">self</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>重写父类的previewActionItems方法配置preview菜单</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSArray</span>&lt;<span class="keyword">id</span>&lt;<span class="built_in">UIPreviewActionItem</span>&gt;&gt; *)previewActionItems&#123;</span><br><span class="line">    <span class="built_in">UIPreviewAction</span> *action1=[<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@"action 1"</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</span><br><span class="line">        ZLLogDebug(<span class="string">@"UIPreviewActionStyleDefault trggered"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIPreviewAction</span> *action2=[<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@"destructive action"</span> style:<span class="built_in">UIPreviewActionStyleDestructive</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</span><br><span class="line">        ZLLogDebug(<span class="string">@"UIPreviewActionStyleDestructive trggered"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIPreviewAction</span> *action3=[<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@"selected action"</span> style:<span class="built_in">UIPreviewActionStyleSelected</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</span><br><span class="line">        ZLLogDebug(<span class="string">@"UIPreviewActionStyleSelected trggered"</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIPreviewActionGroup</span> *group1=[<span class="built_in">UIPreviewActionGroup</span> actionGroupWithTitle:<span class="string">@"action group"</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> actions:@[action1,action2,action3]];<span class="comment">//可以返回组</span></span><br><span class="line">    <span class="keyword">return</span> @[action1,action2,action3];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="Force_Properties">Force Properties</h1><p>iOS9为我们提供了一个新的交互参数:力度。我们可以检测某一交互的力度值，来做相应的交互处理。例如，我们可以通过力度来控制快进的快慢，音量增加的快慢等。</p>
+<h1 id="Force-Properties"><a href="#Force-Properties" class="headerlink" title="Force Properties"></a>Force Properties</h1><p>iOS9为我们提供了一个新的交互参数:力度。我们可以检测某一交互的力度值，来做相应的交互处理。例如，我们可以通过力度来控制快进的快慢，音量增加的快慢等。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -150,7 +150,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2016/01/02/3D-Touch-实践/" data-title="3D Touch 实践 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2016/01/02/3D-Touch-实践/" data-title="3D Touch 实践 | zhuli8’blog" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -163,6 +163,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2017/09/29/xcode9/" title="xcode9">
+  <strong>上一篇：</strong><br/>
+  <span>
+  xcode9</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/10/25/项目中用到的工具和技术/"  title="项目中用到的工具和技术">
@@ -186,7 +194,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Home_Screen_Quick_Actions"><span class="toc-number">1.</span> <span class="toc-text">Home Screen Quick Actions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#静态标签"><span class="toc-number">1.1.</span> <span class="toc-text">静态标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态标签"><span class="toc-number">1.2.</span> <span class="toc-text">动态标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#peep/pop"><span class="toc-number">2.</span> <span class="toc-text">peep/pop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Force_Properties"><span class="toc-number">3.</span> <span class="toc-text">Force Properties</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Home-Screen-Quick-Actions"><span class="toc-number">1.</span> <span class="toc-text">Home Screen Quick Actions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#静态标签"><span class="toc-number">1.1.</span> <span class="toc-text">静态标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态标签"><span class="toc-number">1.2.</span> <span class="toc-text">动态标签</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#peep-pop"><span class="toc-number">2.</span> <span class="toc-text">peep/pop</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Force-Properties"><span class="toc-number">3.</span> <span class="toc-text">Force Properties</span></a></li></ol>
  
   </div>
 
@@ -208,7 +216,7 @@
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>15</sup></a></li>
 		  
 		
 		  
@@ -237,7 +245,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>19</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>20</sup></a></li>
 			
 		
 			

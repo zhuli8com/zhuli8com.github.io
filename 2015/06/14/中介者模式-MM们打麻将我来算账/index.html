@@ -11,26 +11,26 @@
     
 
     
-    <meta name="description" content="中介者模式比喻四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。
-中介者模式意图中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
-中介者模式类图
-中介者模式实现抽象中介者，">
+    <meta name="description" content="#中介者模式比喻四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。
+#中介者模式意图中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
+#中介者模式类图
+#中介者模式实现抽象">
 <meta property="og:type" content="article">
 <meta property="og:title" content="swift版设计模式之中介者模式-MM们打麻将我来算账">
 <meta property="og:url" content="http://www.zhuli8.com/2015/06/14/中介者模式-MM们打麻将我来算账/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
-<meta property="og:description" content="中介者模式比喻四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。
-中介者模式意图中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
-中介者模式类图
-中介者模式实现抽象中介者，">
+<meta property="og:description" content="#中介者模式比喻四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。
+#中介者模式意图中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
+#中介者模式类图
+#中介者模式实现抽象">
 <meta property="og:image" content="http://www.zhuli8.com/photos/designpattern/mediator.gif">
 <meta property="og:updated_time" content="2015-07-20T02:18:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="swift版设计模式之中介者模式-MM们打麻将我来算账">
-<meta name="twitter:description" content="中介者模式比喻四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。
-中介者模式意图中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
-中介者模式类图
-中介者模式实现抽象中介者，">
+<meta name="twitter:description" content="#中介者模式比喻四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。
+#中介者模式意图中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
+#中介者模式类图
+#中介者模式实现抽象">
 
     
     <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
@@ -104,14 +104,14 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式比喻"><span class="toc-number">1.</span> <span class="toc-text">中介者模式比喻</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式意图"><span class="toc-number">2.</span> <span class="toc-text">中介者模式意图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式类图"><span class="toc-number">3.</span> <span class="toc-text">中介者模式类图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式实现"><span class="toc-number">4.</span> <span class="toc-text">中介者模式实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式总结"><span class="toc-number">5.</span> <span class="toc-text">中介者模式总结</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h1 id="中介者模式比喻">中介者模式比喻</h1><p>四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。</p>
-<h1 id="中介者模式意图">中介者模式意图</h1><p>中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
-<h1 id="中介者模式类图">中介者模式类图</h1><p><img src="http://www.zhuli8.com/photos/designpattern/mediator.gif" alt=""></p>
-<h1 id="中介者模式实现">中介者模式实现</h1><p>抽象中介者，定义了MM需要什么样的中介者</p>
+		<p>#中介者模式比喻<br>四个MM打麻将，相互之间谁应该给谁多少钱算不清楚了，幸亏当时我在旁边，按照各自的筹码数算钱，赚了钱的从我这里拿，赔了钱的也付给我，一切就OK啦，俺得到了四个MM的电话。</p>
+<p>#中介者模式意图<br>中介者模式(Mediator)用一个中介对象来封装一系列的对象交互。中介者使各个对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
+<p>#中介者模式类图<br><img src="http://www.zhuli8.com/photos/designpattern/mediator.gif" alt=""></p>
+<p>#中介者模式实现<br>抽象中介者，定义了MM需要什么样的中介者</p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Mediator</span></span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(money:Double,girl:Girl)</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>具体中介者对象，实现抽象类的方法，他需要知道所有具体的MM，并给MM核算服务</p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Boy</span>: <span class="title">Mediator</span> </span>&#123;</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl1:<span class="type">FirstGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl2:<span class="type">SecondGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl3:<span class="type">ThirdGirl</span>?</span><br><span class="line">    <span class="keyword">weak</span> <span class="keyword">var</span> girl4:<span class="type">FourthGirl</span>?</span><br><span class="line">    </span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">calculate</span><span class="params">(<span class="keyword">var</span> money: Double, girl: Girl)</span></span> &#123;</span><br><span class="line">        money=money*<span class="number">10</span><span class="comment">////中介者的处理，此处业务比较简单假设一个筹码代表10</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> girl===girl1&#123;</span><br><span class="line">            girl1?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl2&#123;</span><br><span class="line">            girl2?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl3&#123;</span><br><span class="line">            girl3?.getResult(money)</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> girl===girl4&#123;</span><br><span class="line">            girl4?.getResult(money)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -127,7 +127,7 @@
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FourthGirl</span>: <span class="title">Girl</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">getResult</span><span class="params">(money:Double)</span></span>&#123;</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"The FourthGirl have:<span class="subst">\(money)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>中介者模式客户端应用</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">var</span> boy=<span class="function"><span class="title">Boy</span><span class="params">()</span></span><span class="comment">//核算中介</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个打麻将的MM</span></span><br><span class="line"><span class="tag">var</span> girl1=<span class="function"><span class="title">FirstGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl2=<span class="function"><span class="title">SecondGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl3=<span class="function"><span class="title">ThirdGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"><span class="tag">var</span> girl4=<span class="function"><span class="title">FourthGirl</span><span class="params">(mediator: boy)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//四个MM让我调节</span></span><br><span class="line">boy.girl1=girl1</span><br><span class="line">boy.girl2=girl2</span><br><span class="line">boy.girl3=girl3</span><br><span class="line">boy.girl4=girl4</span><br><span class="line">girl1.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">10</span>)</span></span></span><br><span class="line">girl2.<span class="function"><span class="title">notify</span><span class="params">(<span class="number">20</span>)</span></span></span><br><span class="line">girl3.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">20</span>)</span></span></span><br><span class="line">girl4.<span class="function"><span class="title">notify</span><span class="params">(-<span class="number">10</span>)</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="中介者模式总结">中介者模式总结</h1><p>中介者的出现减少了MM们的耦合，使得可以独立地改变和复用各个Mediator和Girl，具体女孩类的改变不会影响到其他女孩类，而只是Boy发生变化。Boy把对象如何协作进行了抽象，将中介作为一个独立的概念并将其封装在一个对象中，关注的对象就从对象各自本身的行为转移到她们之间的交互上来。即中介者模式包装了一系列对象相互作用的方式，使得这些对象不必相互明显作用。从而是它们可以松散耦合。当某些对象之间的作用发生改变时，不会立即影响其他的一些对象，保证这些作用可以彼此独立的变化。中介者模式将多对多的相互作用转化为一对多的相互作用。中介者模式将对象的行为和协作抽象化，把对象在小尺度的行为上与其他对象的相互作用分开处理。</p>
+<p>#中介者模式总结<br>中介者的出现减少了MM们的耦合，使得可以独立地改变和复用各个Mediator和Girl，具体女孩类的改变不会影响到其他女孩类，而只是Boy发生变化。Boy把对象如何协作进行了抽象，将中介作为一个独立的概念并将其封装在一个对象中，关注的对象就从对象各自本身的行为转移到她们之间的交互上来。即中介者模式包装了一系列对象相互作用的方式，使得这些对象不必相互明显作用。从而是它们可以松散耦合。当某些对象之间的作用发生改变时，不会立即影响其他的一些对象，保证这些作用可以彼此独立的变化。中介者模式将多对多的相互作用转化为一对多的相互作用。中介者模式将对象的行为和协作抽象化，把对象在小尺度的行为上与其他对象的相互作用分开处理。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -150,7 +150,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://www.zhuli8.com/2015/06/14/中介者模式-MM们打麻将我来算账/" data-title="swift版设计模式之中介者模式-MM们打麻将我来算账 | zhuli8’blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://www.zhuli8.com/2015/06/14/中介者模式-MM们打麻将我来算账/" data-title="swift版设计模式之中介者模式-MM们打麻将我来算账 | zhuli8’blog" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -194,7 +194,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式比喻"><span class="toc-number">1.</span> <span class="toc-text">中介者模式比喻</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式意图"><span class="toc-number">2.</span> <span class="toc-text">中介者模式意图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式类图"><span class="toc-number">3.</span> <span class="toc-text">中介者模式类图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式实现"><span class="toc-number">4.</span> <span class="toc-text">中介者模式实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中介者模式总结"><span class="toc-number">5.</span> <span class="toc-text">中介者模式总结</span></a></li></ol>
+ 
  
   </div>
 
@@ -216,7 +216,7 @@
 		  
 		
 		  
-			<li><a href="/categories/iOS/" title="iOS">iOS<sup>14</sup></a></li>
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>15</sup></a></li>
 		  
 		
 		  
@@ -245,7 +245,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/iOS/" title="iOS">iOS<sup>19</sup></a></li>
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>20</sup></a></li>
 			
 		
 			

@@ -97,7 +97,7 @@
         <h1 id="在全屏模式下使用xcode模拟器"><a href="#在全屏模式下使用xcode模拟器" class="headerlink" title="在全屏模式下使用xcode模拟器"></a>在全屏模式下使用xcode模拟器</h1><ul>
 <li>开启模拟器Internal菜单</li>
 </ul>
-<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> /AppleInternal</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /AppleInternal</span><br><span class="line"></span><br><span class="line">OSX10.<span class="number">11</span>的一个新特性 Rootless,也叫System Integrity Protection（SIP）和SELinux差不多，都是限制root用户的权限。其实可以在RecoveryMode关闭这个特性，这样就直接可以读写/usr/bin了，不过不建议。（关闭方法：开机的时候按住option出现选择磁盘的界面按<span class="built_in">command</span> + R进入RecoveryMode，选择实用工具终端，输入csrutil <span class="built_in">disable</span>回车搞定）</span><br></pre></td></tr></table></figure>
 <ul>
 <li>设置模拟器允许全屏模式</li>
 </ul>

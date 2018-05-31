@@ -746,7 +746,7 @@ Mac中：/Users/你的用户名/Desktop
     <link href="http://www.zhuli8.com/2015/07/19/%E6%9E%84%E5%BB%BA%E6%94%AF%E6%8C%81armv7%E5%92%8Carm64%E7%9A%84webRTC%E9%9D%99%E6%80%81%E5%BA%93/"/>
     <id>http://www.zhuli8.com/2015/07/19/构建支持armv7和arm64的webRTC静态库/</id>
     <published>2015-07-19T04:13:57.000Z</published>
-    <updated>2015-08-19T10:12:18.000Z</updated>
+    <updated>2018-02-23T07:30:00.000Z</updated>
     <content type="html"><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集中的新特性，同理，iPhone5的处理器标配armv7s指令集，同时也支持armv7指令集，只是无法进行相关的性能优化，从而导致程序的执行效率没那么高。需要注意的是iOS模拟器没有运行arm指令集，编译运行的是x86指令集，所以，只有在iOS设备上，才会执行设备对应的arm指令集。</p>
 <p><strong>目前为止Apple移动设备默认指令集</strong></p>
 <hr>
@@ -827,6 +827,7 @@ Mac中：/Users/你的用户名/Desktop
 <li>对于i386则不用上述那么麻烦，直接用第一句-extract_family指令就能分离出只含i386版本的库<br>lipo -extract_family i386 -output libDomobOfferWallSDK_i386.a libDomobOfferWallSDK.a</li>
 <li><a href="http://www.cnblogs.com/wengzilin/p/3800856.html" target="_blank" rel="external">http://www.cnblogs.com/wengzilin/p/3800856.html</a></li>
 </ol>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a href="https://www.jianshu.com/p/60ac3ded34a0" target="_blank" rel="external">自建framework提交审核报错 ERROR ITMS-90087解决办法</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色]]>

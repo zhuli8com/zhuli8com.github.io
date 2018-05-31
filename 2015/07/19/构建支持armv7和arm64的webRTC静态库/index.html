@@ -17,7 +17,7 @@
 <meta property="og:url" content="http://www.zhuli8.com/2015/07/19/构建支持armv7和arm64的webRTC静态库/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
 <meta property="og:description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
-<meta property="og:updated_time" content="2015-08-19T10:12:18.000Z">
+<meta property="og:updated_time" content="2018-02-23T07:30:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="构建支持armv7和arm64的webRTC静态库">
 <meta name="twitter:description" content="概述arm处理器，因为其低功耗和小尺寸而闻名，几乎所有的手机处理器都基于arm，其在嵌入式系统中的应用非常广泛，它的性能在同等功耗产品中也很出色。armv7、armv7s、arm64都是arm处理器的指令集，所有指令集原则上都是向下兼容的，如iPhone4S的CPU默认指令集为armv7指令集，但它同时也兼容armv6指令集，只是使用armv6指令集时无法充分发挥其性能，即无法使用armv7指令集">
@@ -94,7 +94,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文档"><span class="toc-number">2.</span> <span class="toc-text">参考文档</span></a></li></ol>
 		
 		</div>
 		
@@ -178,6 +178,7 @@
 <li>对于i386则不用上述那么麻烦，直接用第一句-extract_family指令就能分离出只含i386版本的库<br>lipo -extract_family i386 -output libDomobOfferWallSDK_i386.a libDomobOfferWallSDK.a</li>
 <li><a href="http://www.cnblogs.com/wengzilin/p/3800856.html" target="_blank" rel="external">http://www.cnblogs.com/wengzilin/p/3800856.html</a></li>
 </ol>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a href="https://www.jianshu.com/p/60ac3ded34a0" target="_blank" rel="external">自建framework提交审核报错 ERROR ITMS-90087解决办法</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -244,7 +245,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文档"><span class="toc-number">2.</span> <span class="toc-text">参考文档</span></a></li></ol>
  
   </div>
 
@@ -438,7 +439,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
 		
 		<a href="/about" target="_blank" title="朱利">朱利</a>
 		

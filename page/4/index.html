@@ -4,24 +4,22 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>C语言中的static 详细分析 | zhuli8’blog</title>
+    <title>zhuli8’blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="朱利">
     
 
     
-    <meta name="description" content="C语言中的static 详细分析">
-<meta property="og:type" content="article">
-<meta property="og:title" content="C语言中的static 详细分析">
-<meta property="og:url" content="http://www.zhuli8.com/2013/01/05/C语言中的static-详细分析/index.html">
+    <meta name="description" content="朱利,iOS,架构设计,zhuli,zhuli8,zhuli8com">
+<meta property="og:type" content="website">
+<meta property="og:title" content="zhuli8’blog">
+<meta property="og:url" content="http://www.zhuli8.com/page/4/index.html">
 <meta property="og:site_name" content="zhuli8’blog">
-<meta property="og:description" content="C语言中的static 详细分析">
-<meta property="og:image" content="http://hi.csdn.net/attachment/201108/22/0_13139841062Z8o.gif">
-<meta property="og:updated_time" content="2015-11-27T03:37:55.000Z">
+<meta property="og:description" content="朱利,iOS,架构设计,zhuli,zhuli8,zhuli8com">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C语言中的static 详细分析">
-<meta name="twitter:description" content="C语言中的static 详细分析">
+<meta name="twitter:title" content="zhuli8’blog">
+<meta name="twitter:description" content="朱利,iOS,架构设计,zhuli,zhuli8,zhuli8com">
 
     
     <link rel="alternative" href="/atom.xml" title="zhuli8’blog" type="application/atom+xml">
@@ -73,10 +71,14 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+      <div id="main">
+
   
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+
+ 
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2013/01/05/C语言中的static-详细分析/" title="C语言中的static 详细分析" itemprop="url">C语言中的static 详细分析</a>
@@ -90,16 +92,9 @@
     
   </p>
 </header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#static全局变量"><span class="toc-number">1.</span> <span class="toc-text">static全局变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static局部变量"><span class="toc-number">2.</span> <span class="toc-text">static局部变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static函数"><span class="toc-number">3.</span> <span class="toc-text">static函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#我的小结"><span class="toc-number">4.</span> <span class="toc-text">我的小结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#static的作用？"><span class="toc-number">4.1.</span> <span class="toc-text">static的作用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数-外部和内部"><span class="toc-number">4.2.</span> <span class="toc-text">函数:外部和内部</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量-全局和局部"><span class="toc-number">4.3.</span> <span class="toc-text">变量:全局和局部</span></a></li></ol></li></ol>
-		
-		</div>
-		
-		<p>C语言代码是以文件为单位来组织的，在一个源程序的所有源文件中，一个外部变量（注意不是局部变量）或者函数只能在一个源程序中定义一次，如果有重复定义的话编译器就会报错。伴随着不同源文件变量和函数之间的相互饮用以及相互独立的关系，产生了extern和static关键字。</p>
+    <div class="article-content">
+        
+        <p>C语言代码是以文件为单位来组织的，在一个源程序的所有源文件中，一个外部变量（注意不是局部变量）或者函数只能在一个源程序中定义一次，如果有重复定义的话编译器就会报错。伴随着不同源文件变量和函数之间的相互饮用以及相互独立的关系，产生了extern和static关键字。</p>
 <p>下面，详细分析一下static关键字在编写程序时有的三大类用法：</p>
 <h1 id="static全局变量"><a href="#static全局变量" class="headerlink" title="static全局变量"></a>static全局变量</h1><p>我们知道，一个进程在内存中的布局如图1所示：</p>
 <p><img src="http://hi.csdn.net/attachment/201108/22/0_13139841062Z8o.gif" alt=""></p>
@@ -148,9 +143,14 @@
 <h2 id="变量-全局和局部"><a href="#变量-全局和局部" class="headerlink" title="变量:全局和局部"></a>变量:全局和局部</h2><p>extern声明全局变量，用在const常量优化，头文件用。</p>
 <p>static定义局部变量，延长生命周期。</p>
 <p><a href="http://blog.csdn.net/keyeagle/article/details/6708077" target="_blank" rel="external">原文链接</a></p>
-  
-	</div>
-		<footer class="article-footer clearfix">
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
@@ -168,47 +168,31 @@
 
 
 
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://www.zhuli8.com/2013/01/05/C语言中的static-详细分析/" data-title="C语言中的static 详细分析 | zhuli8’blog" data-tsina="" class="share clearfix">
-	  </div>
-	
-	</div>
 
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2013/01/05/C语言中的static-详细分析/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/01/05/C语言中的static-详细分析/" data-count-type="comments">&nbsp;</a>
+	
+</div>
 
 </footer>
 
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2013/02/03/iOS易混淆语法小结/" title="iOS易混淆语法小结">
-  <strong>上一篇：</strong><br/>
-  <span>
-  iOS易混淆语法小结</span>
-</a>
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+  </nav>
+
 </div>
-
-
-</nav>
-
-	
-<section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2013/01/05/C语言中的static-详细分析/" data-title="C语言中的static 详细分析" data-url="http://www.zhuli8.com/2013/01/05/C语言中的static-详细分析/"></div>
-</section>
-
-
-</div>  
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#static全局变量"><span class="toc-number">1.</span> <span class="toc-text">static全局变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static局部变量"><span class="toc-number">2.</span> <span class="toc-text">static局部变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#static函数"><span class="toc-number">3.</span> <span class="toc-text">static函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#我的小结"><span class="toc-number">4.</span> <span class="toc-text">我的小结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#static的作用？"><span class="toc-number">4.1.</span> <span class="toc-text">static的作用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数-外部和内部"><span class="toc-number">4.2.</span> <span class="toc-text">函数:外部和内部</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量-全局和局部"><span class="toc-number">4.3.</span> <span class="toc-text">变量:全局和局部</span></a></li></ol></li></ol>
- 
-  </div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -460,69 +444,12 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
         
     }
   });
 });
 </script>
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<a href="#" class="overlay" id="qrcode"></a>',
-  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-  $('.article-share-qrcode').click(function(){
-    var imgSrc = $('#qrcode-pic').attr('data-src');
-    $('#qrcode-pic').attr('src', imgSrc);
-    $('#qrcode-pic').load(function(){
-        $('.qrcode strong').text(' ');
-    });
-  });
-});     
-</script>
 
 
 
@@ -597,4 +524,4 @@ $(document).ready(function(){
 <!-- Tiny_search End -->
 
   </body>
-</html>
+ </html>

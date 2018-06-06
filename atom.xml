@@ -79,12 +79,20 @@
     <link href="http://www.zhuli8.com/2017/05/31/http-server/"/>
     <id>http://www.zhuli8.com/2017/05/31/http-server/</id>
     <published>2017-05-31T03:10:27.000Z</published>
-    <updated>2018-06-01T06:24:08.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>全局安装http-server</p>
+    <updated>2018-06-06T10:20:41.000Z</updated>
+    <content type="html"><![CDATA[<p>最近调试iOS移动端H5遇到两个问题，一个是访问本地站点文件，一个是使用Chrome调试。</p>
+<h1 id="http-server快速创建node-js-静态服务器"><a href="#http-server快速创建node-js-静态服务器" class="headerlink" title="http-server快速创建node.js 静态服务器"></a>http-server快速创建node.js 静态服务器</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>全局安装http-server</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="operator"><span class="keyword">install</span> -<span class="keyword">g</span> <span class="keyword">http</span>-<span class="keyword">server</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><p>进入自己的文件目录，运行</p>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>进入自己的文件目录，运行</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http-server -a <span class="number">192.168</span><span class="number">.91</span><span class="number">.218</span> -p <span class="number">8080</span></span><br></pre></td></tr></table></figure>
 <p>启动node.js静态服务器，监听8080端口，静态目录就是当前运行命令所在的目录。</p>
+<h1 id="Chrome-DevTool调试iOS设备的webView"><a href="#Chrome-DevTool调试iOS设备的webView" class="headerlink" title="Chrome DevTool调试iOS设备的webView"></a>Chrome DevTool调试iOS设备的webView</h1><p><a href="https://github.com/google/ios-webkit-debug-proxy" target="_blank" rel="external">iOS WebKit Debug Proxy</a></p>
+<h2 id="启动proxy"><a href="#启动proxy" class="headerlink" title="启动proxy"></a>启动proxy</h2><p>终端执行</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ios_webkit_debug_proxy -f chrome-<span class="string">devtools:</span><span class="comment">//devtools/bundled/inspector.html</span></span><br></pre></td></tr></table></figure>
+<p>返回结果为</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Listing devices on :9221</span><br><span class="line">Connected :9222 to “lizhu”的 iPhone (f<span class="number">008f6196</span>e<span class="number">655d8d30</span>aa00ab<span class="number">943508a72</span><span class="number">6f1f562</span>)</span><br></pre></td></tr></table></figure>
+<p>在chrome中打开 localhost:9221 ，可以看到当前已连接的设备列表才算成功。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.jianshu.com/p/19c18c924f91" target="_blank" rel="external">使用Chrome DevTool调试iOS设备的webView</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[快速创建node.js静态服务器]]>
